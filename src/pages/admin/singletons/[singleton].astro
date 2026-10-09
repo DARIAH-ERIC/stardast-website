@@ -1,0 +1,29 @@
+---
+import { EntryEditor } from "#/src/components/admin/entry-editor.tsx";
+import { getSingleton, loadReferenceOptions } from "#/src/cms/admin.ts";
+import { drafts } from "#/src/cms/api.ts";
+import AdminLayout from "#/src/layouts/admin-layout.astro";
+
+const name = Astro.params.singleton!;
+const singleton = getSingleton(name);
+
+if (singleton == null) {
+	return new Response(null, { status: 404 });
+}
+
+const target = { kind: "singleton", singleton: name } as const;
+const { published, draft } = await drafts.load(target);
+const referenceOptions = await loadReferenceOptions(singleton.fields, published.revision);
+---
+
+<AdminLayout title={singleton.label}>
+	<EntryEditor
+		client:only="react"
+		target={target}
+		revision={draft?.revision ?? published.revision}
+		initialData={draft?.data ?? published.data ?? singleton.defaultValue()}
+		hasDraft={draft != null}
+		isPublished={published.data !== undefined}
+		referenceOptions={referenceOptions}
+	/>
+</AdminLayout>

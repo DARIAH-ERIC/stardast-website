@@ -1,0 +1,33 @@
+---
+import { EntryEditor } from "#/src/components/admin/entry-editor.tsx";
+import { getCollection, getLatestRevision, loadReferenceOptions } from "#/src/cms/admin.ts";
+import { mediaCollectionName } from "#/src/cms/config.ts";
+import AdminLayout from "#/src/layouts/admin-layout.astro";
+
+const name = Astro.params.collection!;
+const collection = getCollection(name);
+
+if (collection == null) {
+	return new Response(null, { status: 404 });
+}
+
+/** Media is managed in the media library, and created by uploading. */
+if (name === mediaCollectionName) {
+	return Astro.redirect("/admin/media");
+}
+
+const revision = await getLatestRevision();
+const referenceOptions = await loadReferenceOptions(collection.fields, revision);
+---
+
+<AdminLayout title={`New ${collection.label}`}>
+	<EntryEditor
+		client:only="react"
+		target={{ kind: "collection", collection: name }}
+		revision={revision}
+		initialData={collection.defaultValue()}
+		hasDraft={false}
+		isPublished={false}
+		referenceOptions={referenceOptions}
+	/>
+</AdminLayout>

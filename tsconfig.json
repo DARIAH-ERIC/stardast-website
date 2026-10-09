@@ -1,0 +1,22 @@
+{
+	"$schema": "https://www.schemastore.org/tsconfig",
+	"extends": "./configs/typescript/base.json",
+	"compilerOptions": {
+		/**
+		 * Duplicates the `imports` map in `package.json`, which bun fails to resolve when the specifier starts with `#/`.
+		 *
+		 * @see {@link https://github.com/oven-sh/bun/issues/28995}
+		 */
+		"paths": {
+			"#/*": ["./*"]
+		}
+	},
+	/**
+	 * Lets `tsc` type-check `.astro` files. Requires TypeScript 7.1+, and the `--runExternalCode` flag.
+	 *
+	 * @see {@link https://github.com/withastro/astro/tree/main/packages/language-tools/ts-content-mapper}
+	 */
+	"contentMappers": [{ "package": "@astrojs/ts-content-mapper", "extensions": [".astro"] }],
+	"include": [".astro/types.d.ts", "**/*"],
+	"exclude": ["dist/", "node_modules/", "public/"]
+}

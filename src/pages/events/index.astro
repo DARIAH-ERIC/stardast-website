@@ -1,0 +1,168 @@
+---
+import EventCard from "#/src/components/event-card.astro";
+import PageHeader from "#/src/components/page-header.astro";
+import Pagination from "#/src/components/pagination.astro";
+import Sections from "#/src/components/sections/sections.astro";
+import { eventInvolvements } from "#/src/cms/config.ts";
+import PageLayout from "#/src/layouts/page-layout.astro";
+import { limitMaxAge } from "#/src/lib/cms/astro.ts";
+import { getSecondsUntilTomorrow, getToday, isUpcoming } from "#/src/lib/events.ts";
+import { paginate, parsePageParam } from "#/src/lib/pagination.ts";
+
+type Involvement = (typeof eventInvolvements)[number]["value"];
+
+const pageSize = 9;
+
+/** Unknown filters and pages are not found, rather than ignored, so that each listing has exactly one url. */
+const involvementParam = Astro.url.searchParams.get("involvement");
+const involvement = eventInvolvements.find((option) => option.value === involvementParam);
+const pageParam = parsePageParam(Astro.url.searchParams.get("page"));
+
+if ((involvementParam != null && involvement == null) || pageParam == null) {
+	return new Response(null, { status: 404 });
+}
+
+const { content } = Astro.locals;
+
+const [page, entries] = await Promise.all([content.singleton("eventsPage"), content.list("events")]);
+
+/** Created with the repository, like the home page - see `tests/cms/content.test.ts`. */
+if (page == null) {
+	throw new Error('The "eventsPage" singleton has not been created.');
+}
+
+/** Which events are upcoming changes with the date. */
+limitMaxAge(Astro, getSecondsUntilTomorrow());
+
+const today = getToday();
+const filtered = entries.filter((entry) => involvement == null || entry.data.involvement === involvement.value);
+
+/**
+ * Sorted latest first - see the collection's `sort`. Upcoming events are all shown on the first page, next one first,
+ * and only past events are paginated - there are few upcoming events at any time.
+ */
+const upcomingEvents = filtered.filter((entry) => isUpcoming(entry.data, today)).toReversed();
+const pastEvents = paginate(
+	filtered.filter((entry) => !isUpcoming(entry.data, today)),
+	pageParam,
+	pageSize,
+);
+
+if (pastEvents == null) {
+	return new Response(null, { status: 404 });
+}
+
+function getHref(params: { involvement?: Involvement; page?: number }): string {
+	const searchParams = new URLSearchParams();
+
+	if (params.involvement != null) {
+		searchParams.set("involvement", params.involvement);
+	}
+
+	if (params.page != null && params.page > 1) {
+		searchParams.set("page", String(params.page));
+	}
+
+	const search = searchParams.toString();
+
+	return search === "" ? "/events" : `/events?${search}`;
+}
+
+const filters = [{ value: undefined, label: "All" }, ...eventInvolvements];
+
+const documentTitle = [
+	page.title,
+	involvement?.label,
+	pastEvents.page > 1 ? `Page ${String(pastEvents.page)}` : undefined,
+]
+	.filter((part) => part != null)
+	.join(" - ");
+
+const isFirstPage = pastEvents.page === 1;
+---
+
+<PageLayout
+	title={documentTitle}
+	description={page.intro}
+	canonical={getHref({ involvement: involvement?.value, page: pastEvents.page })}
+>
+	<PageHeader title={page.title} heading={page.heading} intro={page.intro} />
+	<div class="content-container section-spacing">
+		<nav aria-label="Event types" class="border-b border-border-strong pb-3">
+			<ul class="flex flex-wrap gap-1" role="list">
+				{
+					filters.map((filter) => {
+						const isCurrent = filter.value === involvement?.value;
+
+						return (
+							<li>
+								<a
+									href={getHref({ involvement: filter.value })}
+									aria-current={isCurrent ? "page" : undefined}
+									class:list={[
+										"inline-block px-3 py-2.5 mono-label transition-colors",
+										isCurrent
+											? "bg-foreground-strong text-background"
+											: "text-foreground-strong hover:bg-background-hover",
+									]}
+								>
+									{filter.label}
+								</a>
+							</li>
+						);
+					})
+				}
+			</ul>
+		</nav>
+
+		{
+			isFirstPage && (
+				<section aria-labelledby="upcoming-events" class="mt-12">
+					<h2 id="upcoming-events" class="text-headline text-foreground-strong">
+						Upcoming events
+					</h2>
+					{upcomingEvents.length > 0 ? (
+						<ul class="mt-6 grid border-t border-l border-border-strong sm:grid-cols-2 lg:grid-cols-3" role="list">
+							{upcomingEvents.map((entry) => {
+								return (
+									<li class="border-r border-b border-border-strong">
+										<EventCard id={entry.id} data={entry.data} headingLevel={3} />
+									</li>
+								);
+							})}
+						</ul>
+					) : (
+						<p class="mt-6 border border-dashed border-border-strong p-8 mono-label text-foreground-muted">
+							Coming soon
+						</p>
+					)}
+				</section>
+			)
+		}
+
+		{
+			pastEvents.items.length > 0 && (
+				<section aria-labelledby="past-events" class="mt-16">
+					<h2 id="past-events" class="text-headline text-foreground-strong">
+						Past events
+					</h2>
+					<ul class="mt-6 grid border-t border-l border-border-strong sm:grid-cols-2 lg:grid-cols-3" role="list">
+						{pastEvents.items.map((entry) => {
+							return (
+								<li class="border-r border-b border-border-strong">
+									<EventCard id={entry.id} data={entry.data} headingLevel={3} />
+								</li>
+							);
+						})}
+					</ul>
+					<Pagination
+						page={pastEvents.page}
+						pageCount={pastEvents.pageCount}
+						getHref={(number) => getHref({ involvement: involvement?.value, page: number })}
+					/>
+				</section>
+			)
+		}
+	</div>
+	<Sections value={page.sections} />
+</PageLayout>

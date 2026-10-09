@@ -1,0 +1,29 @@
+---
+import { env } from "#/configs/env.config.ts";
+
+const siteId = env.PUBLIC_APP_MATOMO_ID;
+const baseUrl = `${env.PUBLIC_APP_MATOMO_BASE_URL.replace(/\/$/, "")}/`;
+
+/** Editors previewing drafts are not visitors. */
+const isEnabled = siteId != null && Astro.locals.preview == null;
+---
+
+{
+	isEnabled && (
+		<>
+			{/*
+			 * Without cookies, so that no consent is needed - returning visitors are only recognised within a day, by a
+			 * hash of e.g. their ip address and user agent.
+			 */}
+			<script is:inline define:vars={{ trackerUrl: `${baseUrl}matomo.php`, siteId }}>
+				const queue = (window._paq = window._paq || []);
+				queue.push(["disableCookies"]);
+				queue.push(["setTrackerUrl", trackerUrl]);
+				queue.push(["setSiteId", siteId]);
+				queue.push(["trackPageView"]);
+				queue.push(["enableLinkTracking"]);
+			</script>
+			<script is:inline async src={`${baseUrl}matomo.js`} />
+		</>
+	)
+}

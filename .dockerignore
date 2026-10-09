@@ -1,0 +1,13 @@
+# Only what `astro build` needs. Notably excludes `.env*` files, `content/` - read from github at runtime - and
+# `node_modules/`.
+*
+# `tailwindcss` uses `.gitignore` to determine which files it can skip when scanning for class names.
+!.gitignore
+!astro.config.ts
+!bun.lock
+!configs/
+!package.json
+!patches/
+!public/
+!src/
+!tsconfig.json

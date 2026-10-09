@@ -1,0 +1,293 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/** In the theme layer, next to tailwind's own theme variables. */
+@import "./palette.css" layer(theme);
+
+@plugin "@tailwindcss/typography";
+
+@theme {
+	/** Remove all of tailwind's default colours, so only the semantic tokens below are available as utilities. */
+	--color-*: initial;
+
+	/**
+	 * Semantic tokens: the only colours components should use. They map onto the value tokens in `palette.css`. The
+	 * admin ui has its own tokens, see `admin.css`. Brand-coloured bands redefine them, see `scheme-brand`.
+	 */
+	--color-background: var(--palette-white);
+	--color-background-muted: var(--palette-neutral-100);
+	--color-background-hover: var(--palette-neutral-100);
+
+	/** Highlighted text, e.g. search matches. */
+	--color-background-highlight: var(--palette-blue-100);
+	--color-foreground: var(--palette-neutral-700);
+	--color-foreground-strong: var(--palette-neutral-950);
+	--color-foreground-muted: var(--palette-neutral-600);
+
+	/** Hairlines, e.g. between list items. */
+	--color-border: var(--palette-neutral-200);
+
+	/** Structural lines, e.g. around grids and between page sections - the design is built on these. */
+	--color-border-strong: var(--palette-neutral-950);
+
+	/** The border of a focused field, or a pressed checkbox. */
+	--color-border-focus: var(--palette-blue);
+
+	/** Code blocks in rich text. */
+	--color-background-code: var(--palette-neutral-800);
+	--color-foreground-code: var(--palette-neutral-200);
+	--color-backdrop: color-mix(in oklab, var(--palette-black) 40%, transparent);
+	--color-focus-ring: var(--palette-blue);
+	--color-primary: var(--palette-blue-deep);
+	--color-primary-hover: var(--palette-blue);
+	--color-primary-foreground: var(--palette-white);
+
+	/** Brand-coloured bands, e.g. the home hero - see `scheme-brand`. */
+	--color-brand: var(--palette-blue-deep);
+	--color-danger: var(--palette-red);
+
+	/**
+	 * Text fields keep their colours on brand-coloured bands too, and are not redefined by `scheme-brand` - see
+	 * `inputStyles`.
+	 */
+	--color-field: var(--palette-white);
+	--color-field-foreground: var(--palette-neutral-950);
+	--color-field-placeholder: var(--palette-neutral-500);
+	--color-field-border: var(--palette-neutral-950);
+	--font-sans: var(--font-roboto);
+
+	/** For short labels only, e.g. dates, navigation, and buttons - never for running text. */
+	--font-mono: var(--font-roboto-mono);
+
+	/**
+	 * Text styles, named by role rather than by heading level, which depends on where a component is used. Each
+	 * generates a `text-*` utility, which sets size, line height, weight, and letter spacing together - colour, font
+	 * family, and text transform are set separately. Tailwind's default sizes, e.g. `text-sm`, remain for small print
+	 * and controls.
+	 *
+	 * The large styles scale with the viewport. They are not known to `tailwind-merge`, which would treat them as
+	 * colours in `tv()`.
+	 */
+
+	/** Page and hero titles. 36px on narrow screens, 60px on wide ones. */
+	--text-display: clamp(2.25rem, 1.5rem + 3vw, 3.75rem);
+	--text-display--line-height: 1.06;
+	--text-display--font-weight: 700;
+	--text-display--letter-spacing: -0.02em;
+
+	/** Section titles. 26px on narrow screens, 36px on wide ones. */
+	--text-headline: clamp(1.625rem, 1.3rem + 1.2vw, 2.25rem);
+	--text-headline--line-height: 1.15;
+	--text-headline--font-weight: 700;
+	--text-headline--letter-spacing: -0.01em;
+
+	/** Titles of cards, list items, and teasers. */
+	--text-title: 1.125rem;
+	--text-title--line-height: 1.35;
+	--text-title--font-weight: 700;
+
+	/** Introductions below page and section titles. */
+	--text-lead: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
+	--text-lead--line-height: 1.55;
+
+	/** Running text - the default, see `body`, and in rich text, see `prose`. */
+	--text-body: 1.0625rem;
+	--text-body--line-height: 1.75rem;
+
+	/** Short, uppercase labels, set in `font-mono` - e.g. above titles, dates, navigation, and buttons. */
+	--text-label: 0.75rem;
+	--text-label--line-height: 1rem;
+	--text-label--font-weight: 500;
+	--text-label--letter-spacing: 0.06em;
+}
+
+/** Layered, so that utilities, e.g. `outline-none`, can still override these. */
+@layer base {
+	html {
+		color-scheme: light;
+		height: 100%;
+		font-family: var(--font-sans);
+	}
+
+	body {
+		height: 100%;
+		font-size: var(--text-body);
+		line-height: var(--text-body--line-height);
+		color: var(--color-foreground);
+		background-color: var(--color-background);
+	}
+
+	/** Even line lengths in headings, and no single word on the last line of a paragraph. */
+	:is(h1, h2, h3, h4, h5, h6) {
+		text-wrap: balance;
+	}
+
+	p {
+		text-wrap: pretty;
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--color-focus-ring);
+		outline-offset: 2px;
+	}
+
+	/** The page behind a modal dialog is inert, so it should not scroll either. */
+	html:has(dialog:modal) {
+		overflow: hidden;
+	}
+}
+
+/**
+ * Centred, width-capped column with responsive side padding. Header, footer, and page sections all use it, so their
+ * contents line up, while their backgrounds can still span the full viewport width.
+ */
+@utility content-container {
+	inline-size: 100%;
+	max-inline-size: 78rem;
+	margin-inline: auto;
+	padding-inline: --spacing(4);
+
+	@variant sm {
+		padding-inline: --spacing(8);
+	}
+}
+
+/**
+ * A line above a section, across the whole viewport - also for sections which are themselves a `content-container`,
+ * whose own border would only be as wide as their contents. The border image extends 100vw to either side; it is only
+ * painted there, and does not count towards the page's scrollable width.
+ */
+@utility section-separator {
+	border-top: 1px solid var(--color-border-strong);
+	border-image: linear-gradient(var(--color-border-strong), var(--color-border-strong)) 1 / 1px 0 0 / 0 100vw;
+}
+
+/**
+ * A band in the brand colour, e.g. the home hero or the newsletter signup. Redefines the semantic tokens for its
+ * subtree, so that components inside it - text, lines, buttons, focus rings - need no variants of their own. Text
+ * fields keep their colours, see `--color-field`.
+ */
+@utility scheme-brand {
+	--color-background: var(--palette-blue-deep);
+	--color-background-muted: color-mix(in oklab, var(--palette-white) 8%, transparent);
+	--color-background-hover: color-mix(in oklab, var(--palette-white) 10%, transparent);
+	--color-foreground: var(--palette-blue-50);
+	--color-foreground-strong: var(--palette-white);
+	--color-foreground-muted: var(--palette-blue-200);
+	--color-border: color-mix(in oklab, var(--palette-white) 26%, transparent);
+	--color-border-strong: var(--palette-white);
+	--color-focus-ring: var(--palette-white);
+	--color-primary: var(--palette-white);
+	--color-primary-hover: var(--palette-blue-100);
+	--color-primary-foreground: var(--palette-blue-deep);
+	--color-danger: var(--palette-red-200);
+
+	color: var(--color-foreground);
+	background-color: var(--color-background);
+}
+
+/**
+ * Short uppercase labels in the monospace face - e.g. dates, navigation, and buttons. Colour is set separately.
+ */
+@utility mono-label {
+	font-family: var(--font-mono);
+	font-size: var(--text-label);
+	line-height: var(--text-label--line-height);
+	font-weight: var(--text-label--font-weight);
+	letter-spacing: var(--text-label--letter-spacing);
+	text-transform: uppercase;
+}
+
+/** A small square in the primary colour before a label, e.g. above the hero title. */
+@utility label-marker {
+	display: inline-flex;
+	gap: --spacing(2.5);
+	align-items: center;
+
+	&::before {
+		content: "";
+		flex-shrink: 0;
+		inline-size: --spacing(2);
+		block-size: --spacing(2);
+		background-color: var(--color-primary);
+	}
+}
+
+/** The branded placeholder for missing images: a fine diagonal hatch. */
+@utility hatch {
+	background-color: var(--color-background-muted);
+	background-image: repeating-linear-gradient(-45deg, var(--color-border) 0 1px, transparent 1px 10px);
+}
+
+/** The vertical padding of page sections: 56px on narrow screens, up to 120px on wide ones. */
+@utility section-spacing {
+	padding-block: clamp(3.5rem, 3rem + 4vw, 7.5rem);
+}
+
+/**
+ * Sets the first paragraph of rich text as a lead-in - larger, and in the strong text colour - to set it apart from
+ * the running text after it. Combine with `prose`.
+ */
+@utility lead-in {
+	& > p:first-child {
+		font-size: 1.1875rem;
+		line-height: 1.6;
+		color: var(--color-foreground-strong);
+	}
+}
+
+/**
+ * Extends the hit area of small controls, e.g. icon buttons, to at least 44 x 44px (WCAG 2.5.5), without changing their
+ * size or layout. An invisible pseudo-element is centred over the element and grows past its edges only where the element
+ * is smaller than the minimum - `inset` percentages resolve against the element's own block and inline size.
+ *
+ * Sets `position: relative` to anchor the pseudo-element, so it cannot be combined with `absolute`, `fixed`, or
+ * `sticky`. Neighbouring controls need enough spacing that the extended areas do not overlap.
+ */
+@utility touch-area {
+	position: relative;
+
+	&::after {
+		content: "";
+		position: absolute;
+		inset: min(0px, calc((100% - --spacing(11)) / 2));
+	}
+}
+
+/**
+ * Points the typography plugin's colours at the semantic tokens - by default it uses tailwind's untinted `gray`
+ * palette. Declared after the plugin, so these win over its defaults. The `prose-invert` colours are not mapped, since
+ * the site has no dark mode.
+ */
+@utility prose {
+	--tw-prose-body: var(--color-foreground);
+	--tw-prose-headings: var(--color-foreground-strong);
+	--tw-prose-lead: var(--color-foreground-muted);
+	--tw-prose-links: var(--color-foreground-strong);
+	--tw-prose-bold: var(--color-foreground-strong);
+	--tw-prose-counters: var(--color-foreground-muted);
+	--tw-prose-bullets: var(--color-border-strong);
+	--tw-prose-hr: var(--color-border);
+	--tw-prose-quotes: var(--color-foreground-strong);
+	--tw-prose-quote-borders: var(--color-border);
+	--tw-prose-captions: var(--color-foreground-muted);
+	--tw-prose-kbd: var(--color-foreground-strong);
+	--tw-prose-kbd-shadows: color-mix(in oklab, var(--color-foreground-strong) 10%, transparent);
+	--tw-prose-code: var(--color-foreground-strong);
+	--tw-prose-pre-code: var(--color-foreground-code);
+	--tw-prose-pre-bg: var(--color-background-code);
+	--tw-prose-th-borders: var(--color-border-strong);
+	--tw-prose-td-borders: var(--color-border);
+
+	/**
+	 * The plugin's default is 16px - running text uses the body style everywhere. Like tailwind's own `text-*`
+	 * utilities, a `leading-*` utility overrides the line height.
+	 */
+	font-size: var(--text-body);
+	line-height: var(--tw-leading, var(--text-body--line-height));
+
+	/** Matches link hover styles elsewhere on the site. Skips `not-prose` subtrees, like the plugin's own rules. */
+	& :where(a):not(:where([class~="not-prose"], [class~="not-prose"] *)):hover {
+		color: var(--color-primary-hover);
+	}
+}

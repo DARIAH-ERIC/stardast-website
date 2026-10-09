@@ -1,0 +1,25 @@
+---
+import PageHeader, { type Breadcrumb } from "#/src/components/page-header.astro";
+import PageLayout, { type Props as PageLayoutProps } from "#/src/layouts/page-layout.astro";
+
+export interface Props extends PageLayoutProps {
+	/** Rendered as the page heading, and used for the document title. */
+	title: string;
+	/** The listing the page belongs to, e.g. news. */
+	parent: Breadcrumb;
+}
+
+const { title, description, parent } = Astro.props;
+---
+
+<PageLayout title={title} description={description}>
+	<article>
+		<PageHeader title={title} parents={[parent]} />
+		<div class="content-container section-spacing">
+			{/* Tighter than the body style elsewhere, which is airier than long articles need. */}
+			<div class="prose leading-normal">
+				<slot />
+			</div>
+		</div>
+	</article>
+</PageLayout>

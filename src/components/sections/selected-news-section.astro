@@ -1,0 +1,13 @@
+---
+import NewsList from "#/src/components/sections/news-list.astro";
+import type { SectionData } from "#/src/cms/config.ts";
+
+export type Props = SectionData<"selectedNews">;
+
+const { anchor, eyebrow, title, entries: ids } = Astro.props;
+
+/** In the editor's order. Entries deleted since are left out. */
+const entries = await Astro.locals.content.entries("news", ids);
+---
+
+<NewsList anchor={anchor} eyebrow={eyebrow} title={title} entries={entries} />

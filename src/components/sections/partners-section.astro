@@ -1,0 +1,62 @@
+---
+import CmsImage from "#/src/components/cms-image.astro";
+import SectionHeader from "#/src/components/sections/section-header.astro";
+import type { SectionData } from "#/src/cms/config.ts";
+import { fillPartnerCount } from "#/src/lib/partner-count.ts";
+
+export type Props = SectionData<"partners">;
+
+const { anchor, eyebrow, title, lead, links } = Astro.props;
+
+/** Sorted by name - see the collection's `sort`. */
+const partners = await Astro.locals.content.list("partners");
+
+/** Cells of a grid which share their dividing lines: each draws its own right and bottom edge. */
+const cellClass = "flex h-32 w-full items-center justify-center p-6";
+---
+
+<section id={anchor} class="content-container section-spacing">
+	<SectionHeader
+		eyebrow={eyebrow}
+		title={fillPartnerCount(title, partners.length)}
+		lead={lead != null ? fillPartnerCount(lead, partners.length) : undefined}
+	/>
+	<ul class="grid grid-cols-2 border-t border-l border-border-strong sm:grid-cols-3 lg:grid-cols-4" role="list">
+		{
+			partners.map((partner) => {
+				const { name, shortName, logo, url } = partner.data;
+				const label = shortName != null ? `${name} (${shortName})` : name;
+
+				/** The logo identifies the partner - its alternative text is the full name, and so the link's name. */
+				const image = (
+					<CmsImage id={logo} alt={label} sizes="12rem" widths={[192, 384]} class="h-14 w-full object-contain" />
+				);
+
+				return (
+					<li class="border-r border-b border-border-strong">
+						{url != null ? (
+							<a href={url} class:list={[cellClass, "transition-colors hover:bg-background-hover"]}>
+								{image}
+							</a>
+						) : (
+							<div class={cellClass}>{image}</div>
+						)}
+					</li>
+				);
+			})
+		}
+	</ul>
+	{
+		links.length > 0 && (
+			<div class="mt-8 flex flex-wrap gap-4">
+				{links.map((link) => {
+					return (
+						<a href={link.href} class="mono-label text-primary hover:text-primary-hover hover:underline underline-offset-4">
+							{link.label} <span aria-hidden="true">&rarr;</span>
+						</a>
+					);
+				})}
+			</div>
+		)
+	}
+</section>

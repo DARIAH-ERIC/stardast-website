@@ -1,0 +1,98 @@
+---
+import SectionHeader from "#/src/components/sections/section-header.astro";
+import type { SectionData } from "#/src/cms/config.ts";
+import { limitMaxAge } from "#/src/lib/cms/astro.ts";
+import { getSecondsUntilTomorrow, getToday, isUpcoming } from "#/src/lib/events.ts";
+import { formatDate, formatDateRange } from "#/src/lib/format-date.ts";
+
+/**
+ * An alternative to `news-and-events-section.astro`, from the design mockup: news and events in one list, each row
+ * tagged with its type. Not in use - swap it in in `sections.astro` to compare the two.
+ */
+export type Props = SectionData<"newsAndEvents">;
+
+const { anchor, eyebrow, title, count } = Astro.props;
+
+const { content } = Astro.locals;
+
+/** News are sorted newest first, and events latest first - see the collections' `sort`. */
+const [news, events] = await Promise.all([content.list("news"), content.list("events")]);
+
+const today = getToday();
+
+/** Upcoming events first, next one first, then the latest news, newest first. */
+const entries = [
+	...events
+		.filter((entry) => isUpcoming(entry.data, today))
+		.toReversed()
+		.slice(0, count)
+		.map((entry) => {
+			return {
+				kind: "Event",
+				href: `/events/${entry.id}`,
+				title: entry.data.title,
+				summary: entry.data.summary,
+				datetime: entry.data.startDate,
+				date: formatDateRange(entry.data.startDate, entry.data.endDate),
+			};
+		}),
+	...news.slice(0, count).map((entry) => {
+		return {
+			kind: "News",
+			href: `/news/${entry.id}`,
+			title: entry.data.title,
+			summary: entry.data.summary,
+			datetime: entry.data.publicationDate,
+			date: formatDate(entry.data.publicationDate),
+		};
+	}),
+];
+
+/** Which events are upcoming changes with the date. */
+limitMaxAge(Astro, getSecondsUntilTomorrow());
+---
+
+<section id={anchor} class="content-container section-spacing">
+	<SectionHeader eyebrow={eyebrow} title={title} />
+	{
+		entries.length === 0 ? (
+			<p class="border border-dashed border-border-strong p-8 mono-label text-foreground-muted">Coming soon</p>
+		) : (
+			<ul class="flex flex-col border-t border-border-strong" role="list">
+				{entries.map((entry) => {
+					return (
+						<li class="group relative grid items-baseline gap-x-6 gap-y-1.5 border-b border-border py-5 md:grid-cols-[15rem_minmax(0,1fr)_auto]">
+							<div class="flex flex-wrap items-center gap-3 mono-label text-foreground-muted">
+								<span class="border border-foreground-strong px-2 py-0.5 text-foreground-strong">{entry.kind}</span>
+								<time datetime={entry.datetime}>{entry.date}</time>
+							</div>
+							<div class="flex flex-col gap-1">
+								<h3 class="text-title text-foreground-strong">
+									{/* Stretched over the whole row, so that its text stays selectable rather than being a link label. */}
+									<a
+										href={entry.href}
+										class="after:absolute after:inset-0 group-hover:text-primary-hover group-hover:underline underline-offset-4"
+									>
+										{entry.title}
+									</a>
+								</h3>
+								<p class="text-foreground-muted">{entry.summary}</p>
+							</div>
+							<span aria-hidden="true" class="hidden font-mono text-foreground-strong md:block">
+								&rarr;
+							</span>
+						</li>
+					);
+				})}
+			</ul>
+		)
+	}
+	<p class="mt-7 flex flex-wrap gap-x-8 gap-y-3">
+		<a href="/news" class="mono-label text-primary hover:text-primary-hover hover:underline underline-offset-4">
+			All news <span aria-hidden="true">&rarr;</span>
+		</a>
+		<a href="/events" class="mono-label text-primary hover:text-primary-hover hover:underline underline-offset-4">
+			All events <span aria-hidden="true">&rarr;</span>
+		</a>
+	</p>
+</section>

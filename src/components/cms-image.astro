@@ -1,0 +1,44 @@
+---
+import { getImageSrcSet, getImageUrl } from "#/src/cms/media.ts";
+
+export interface Props {
+	/** The id of a media entry. */
+	id: string;
+	/** Overrides the media entry's alternative text. */
+	alt?: string;
+	/** Matches the image's rendered width at different viewport sizes, e.g. `(min-width: 48rem) 48rem, 100vw`. */
+	sizes?: string;
+	widths?: ReadonlyArray<number>;
+	loading?: "eager" | "lazy";
+	class?: string;
+}
+
+const {
+	id,
+	alt,
+	sizes = "100vw",
+	widths = [320, 640, 960, 1280, 1920],
+	loading = "lazy",
+	class: className,
+} = Astro.props;
+
+/** Tags the page, so that e.g. editing the alternative text in the media library updates it. */
+const entry = await Astro.locals.content.entry("media", id);
+const data = entry?.data;
+---
+
+{
+	data != null && data.contentType.startsWith("image/") && (
+		<img
+			src={getImageUrl(id, data, { width: 960 })}
+			srcset={getImageSrcSet(id, data, widths)}
+			sizes={sizes}
+			alt={alt ?? data.alt}
+			width={data.width}
+			height={data.height}
+			loading={loading}
+			decoding="async"
+			class={className}
+		/>
+	)
+}

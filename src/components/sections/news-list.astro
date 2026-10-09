@@ -1,0 +1,35 @@
+---
+import NewsTeaser from "#/src/components/news-teaser.astro";
+import SectionHeader from "#/src/components/sections/section-header.astro";
+import type { NewsEntryData } from "#/src/cms/config.ts";
+
+export interface Props {
+	anchor?: string;
+	eyebrow?: string;
+	title: string;
+	entries: ReadonlyArray<{ id: string; data: NewsEntryData }>;
+}
+
+const { anchor, eyebrow, title, entries } = Astro.props;
+---
+
+{
+	entries.length > 0 && (
+		<section id={anchor} class="content-container section-spacing">
+			<SectionHeader eyebrow={eyebrow} title={title}>
+				<a slot="action" href="/news" class="mono-label text-primary hover:text-primary-hover hover:underline underline-offset-4">
+					All news <span aria-hidden="true">&rarr;</span>
+				</a>
+			</SectionHeader>
+			<ul class="grid border-t border-border-strong md:grid-cols-2 md:gap-x-8 lg:grid-cols-3" role="list">
+				{entries.map((entry) => {
+					return (
+						<li class="border-b border-border">
+							<NewsTeaser id={entry.id} data={entry.data} headingLevel={3} />
+						</li>
+					);
+				})}
+			</ul>
+		</section>
+	)
+}

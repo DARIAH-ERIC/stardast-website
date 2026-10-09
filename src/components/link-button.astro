@@ -1,0 +1,15 @@
+---
+import { type ButtonVariant, buttonStyles } from "#/src/components/button-styles.ts";
+
+export interface Props {
+	href: string;
+	variant?: ButtonVariant;
+}
+
+const { href, variant } = Astro.props;
+---
+
+<a href={href} class={buttonStyles({ variant })}>
+	<slot />
+	<span aria-hidden="true">&rarr;</span>
+</a>

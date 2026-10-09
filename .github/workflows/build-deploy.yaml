@@ -1,0 +1,76 @@
+name: Build and deploy
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}-build-deploy"
+  cancel-in-progress: false
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+env:
+  # Container image names must be lowercase.
+  IMAGE: "ghcr.io/dariah-eric/stardast-website"
+
+jobs:
+  build:
+    name: Build and push docker image
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up docker buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Sign in to the container registry
+        uses: docker/login-action@v4
+        with:
+          registry: "ghcr.io"
+          username: "${{ github.actor }}"
+          password: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Extract metadata (tags, labels) for docker image
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: "${{ env.IMAGE }}"
+          tags: |
+            type=raw,value={{sha}}
+            type=ref,event=branch
+
+      - name: Build and push docker image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: "${{ steps.meta.outputs.tags }}"
+          labels: "${{ steps.meta.outputs.labels }}"
+          # Inlined at build time, see `configs/env.schema.ts`.
+          build-args: |
+            "PUBLIC_APP_BASE_URL=${{ vars.PUBLIC_APP_BASE_URL }}"
+            "PUBLIC_APP_GOOGLE_SITE_VERIFICATION=${{ vars.PUBLIC_APP_GOOGLE_SITE_VERIFICATION }}"
+            "PUBLIC_APP_MATOMO_BASE_URL=${{ vars.PUBLIC_APP_MATOMO_BASE_URL }}"
+            "PUBLIC_APP_MATOMO_ID=${{ vars.PUBLIC_APP_MATOMO_ID }}"
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy docker image
+    needs: [build]
+    uses: dariah-eric/gl-autodevops-minimal-port/.github/workflows/deploy.yml@main
+    # Runtime configuration is passed to the app from `K8S_SECRET_`-prefixed variables and secrets.
+    secrets: inherit
+    with:
+      default_port: "3000"
+      environment: production
+      APP_NAME: "stardast-website"
+      APP_ROOT: "/"
+      DOCKER_TAG: "ghcr.io/dariah-eric/stardast-website"
+      PUBLIC_URL: "${{ vars.PUBLIC_APP_BASE_URL }}"

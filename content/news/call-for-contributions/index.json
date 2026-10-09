@@ -1,0 +1,16 @@
+{
+	"title": "Call for contributions",
+	"summary": "We invite contributions to the first project workshop.",
+	"publicationDate": "2026-10-01",
+	"authors": ["john-roe"],
+	"tags": ["call"],
+	"content": {
+		"type": "doc",
+		"content": [
+			{
+				"type": "paragraph",
+				"content": [{ "type": "text", "text": "This is placeholder content." }]
+			}
+		]
+	}
+}

@@ -1,0 +1,126 @@
+---
+import Icon from "#/src/components/icon.astro";
+import { contactEmail, funding, socialLinks } from "#/src/config/project.ts";
+
+const year = new Date().getFullYear();
+
+const disclaimer = [
+	`Funded by the European Union under Grant Agreement No ${funding.grantAgreementNumber}.`,
+	"Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the",
+	`European Union or ${funding.grantingAuthority}.`,
+	"Neither the European Union nor the granting authority can be held responsible for them.",
+].join(" ");
+
+/** Renders without links rather than failing every page - `tests/cms/content.test.ts` checks that it exists. */
+const navigation = await Astro.locals.content.singleton("navigation");
+/** Menus are flattened, so that all pages are linked without javascript, which the header's menus require. */
+const mainNavigation = (navigation?.main ?? []).flatMap((entry) =>
+	entry.type === "menu" ? entry.data.links : [entry.data],
+);
+const legalNavigation = navigation?.legal ?? [];
+
+---
+
+<footer class="bg-background text-sm text-foreground">
+	<div class="content-container flex flex-col gap-8 pt-12 pb-10">
+		<div class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+			<a href="/" class="shrink-0 self-start lg:self-auto">
+				<img
+					src="/assets/images/logo-stardast-horizontal-black.svg"
+					alt="STARDAST - Home"
+					width="584"
+					height="137"
+					loading="lazy"
+					class="h-9 w-auto"
+				/>
+			</a>
+
+			<div class="flex flex-wrap items-center gap-x-8 gap-y-4">
+				{
+					mainNavigation.length > 0 && (
+						<nav aria-label="Footer">
+							<ul class="flex flex-wrap gap-x-6 gap-y-3" role="list">
+								{mainNavigation.map((link) => {
+									return (
+										<li>
+											<a href={link.href} class="mono-label text-foreground-strong hover:text-primary-hover hover:underline underline-offset-4">
+												{link.label}
+											</a>
+										</li>
+									);
+								})}
+							</ul>
+						</nav>
+					)
+				}
+				{
+					socialLinks.length > 0 && (
+						<ul class="flex gap-3" role="list">
+							{socialLinks.map((link) => {
+								return (
+									<li>
+										<a
+											href={link.href}
+											rel="me"
+											class="inline-flex size-10 items-center justify-center border border-foreground-strong text-foreground-strong transition-colors hover:bg-foreground-strong hover:text-background"
+										>
+											<Icon name={link.icon} class="size-4" />
+											<span class="sr-only">{link.label}</span>
+										</a>
+									</li>
+								);
+							})}
+						</ul>
+					)
+				}
+			</div>
+		</div>
+
+		{
+			contactEmail != null && (
+				<p>
+					Contact:{" "}
+					<a href={`mailto:${contactEmail}`} class="text-foreground-strong underline hover:text-primary-hover">
+						{contactEmail}
+					</a>
+				</p>
+			)
+		}
+
+		{/* The emblem and the disclaimer are one funding acknowledgement, so they stand together. */}
+		<div class="flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:gap-8">
+			<img
+				src="/assets/images/eu-funding-acknowledgement-logo/horizontal-pos.svg"
+				alt="Funded by the European Union"
+				width="990"
+				height="220"
+				loading="lazy"
+				class="h-11 w-auto shrink-0 self-start sm:self-auto"
+			/>
+			<p class="max-w-[72ch] text-[0.8125rem]/relaxed text-foreground-muted">{disclaimer}</p>
+		</div>
+
+		<div class="border-t border-border pt-6">
+			<div class="flex flex-col gap-4 mono-label text-foreground-muted sm:flex-row sm:items-center sm:justify-between">
+				<p>&copy; {year} STARDAST</p>
+				{
+					legalNavigation.length > 0 && (
+						<nav aria-label="Legal">
+							<ul class="flex flex-wrap gap-x-6 gap-y-2" role="list">
+								{legalNavigation.map((link) => {
+									return (
+										<li>
+											<a href={link.href} class="hover:text-foreground-strong hover:underline underline-offset-4">
+												{link.label}
+											</a>
+										</li>
+									);
+								})}
+							</ul>
+						</nav>
+					)
+				}
+			</div>
+		</div>
+	</div>
+</footer>

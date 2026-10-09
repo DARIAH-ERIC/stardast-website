@@ -1,0 +1,141 @@
+---
+import { getEntryLabel, getLatestRevision, getSingleton, listEntrySummaries } from "#/src/cms/admin.ts";
+import { drafts } from "#/src/cms/api.ts";
+import { config, mediaCollectionName } from "#/src/cms/config.ts";
+import { storage } from "#/src/cms/server.ts";
+import { ChevronRight, Eye, FileText, Image, PanelsTopLeft } from "lucide-react";
+
+import PageHeader from "#/src/components/admin/page-header.astro";
+import { Badge } from "#/src/components/admin/ui/badge.tsx";
+import { buttonStyles } from "#/src/components/admin/ui/button.tsx";
+import { Card } from "#/src/components/admin/ui/card.tsx";
+import { Heading } from "#/src/components/admin/ui/heading.tsx";
+import AdminLayout from "#/src/layouts/admin-layout.astro";
+
+const revision = await getLatestRevision();
+const allDrafts = await drafts.list();
+
+const collections = await Promise.all(
+	Object.entries(config.collections).map(async ([name, collection]) => {
+		const entries = await listEntrySummaries(name, collection, revision, []);
+
+		return {
+			name,
+			href: name === mediaCollectionName ? "/admin/media" : `/admin/collections/${name}`,
+			label: collection.label,
+			count: entries.length,
+		};
+	}),
+);
+
+const singletons = Object.entries(config.singletons as Record<string, { label: string }>).map(([name, singleton]) => {
+	return { name, label: singleton.label };
+});
+
+const draftLinks = await Promise.all(
+	allDrafts.map(async (draft) => {
+		const data = await storage.read(draft.revision, draft.path);
+
+		if (draft.target.kind === "singleton") {
+			return {
+				href: `/admin/singletons/${draft.target.singleton}`,
+				label: getSingleton(draft.target.singleton)?.label ?? draft.target.singleton,
+				section: "Site",
+			};
+		}
+
+		const collection = config.collections[draft.target.collection as keyof typeof config.collections];
+		const base = draft.target.collection === mediaCollectionName ? "/admin/media" : `/admin/collections/${draft.target.collection}/entries`;
+
+		return {
+			href: `${base}/${draft.target.id}`,
+			label: getEntryLabel(collection, draft.target.id, data),
+			section: collection.label,
+		};
+	}),
+);
+---
+
+<AdminLayout title="Dashboard">
+	<PageHeader title="Dashboard" description="Edit the website's content, and manage its media." />
+	<ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" role="list">
+		{
+			[
+				...collections.map((collection) => {
+					return {
+						href: collection.href,
+						label: collection.label,
+						description: `${String(collection.count)} ${collection.count === 1 ? "entry" : "entries"}`,
+						icon: collection.name === mediaCollectionName ? Image : FileText,
+					};
+				}),
+				...singletons.map((singleton) => {
+					return {
+						href: `/admin/singletons/${singleton.name}`,
+						label: singleton.label,
+						description: "Page",
+						icon: PanelsTopLeft,
+					};
+				}),
+			].map((item) => {
+				const Icon = item.icon;
+
+				return (
+					<li>
+						<a
+							href={item.href}
+							class="flex items-center gap-4 rounded-lg border border-border bg-card p-4 shadow-xs transition hover:border-input hover:bg-muted"
+						>
+							<span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary-subtle text-primary-subtle-fg">
+								<Icon aria-hidden="true" className="size-5" />
+							</span>
+							<span class="flex min-w-0 flex-col">
+								<span class="truncate text-sm/6 font-medium text-fg">{item.label}</span>
+								<span class="text-sm/6 text-muted-fg">{item.description}</span>
+							</span>
+						</a>
+					</li>
+				);
+			})
+		}
+	</ul>
+
+	<section aria-labelledby="drafts-heading" class="mt-12">
+		<div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+			<Heading level={2} id="drafts-heading">Unpublished drafts</Heading>
+			{
+				draftLinks.length > 0 && (
+					<a href="/?preview" target="_blank" class={buttonStyles({ intent: "outline", size: "sm" })}>
+						<Eye aria-hidden="true" />
+						Preview site with drafts
+					</a>
+				)
+			}
+		</div>
+		{
+			draftLinks.length === 0 ? (
+				<div class="rounded-lg border border-dashed border-input p-8 text-center text-sm text-muted-fg">
+					There are no unpublished drafts.
+				</div>
+			) : (
+				<Card className="gap-0 overflow-hidden py-0">
+					<ul class="divide-y divide-border" role="list">
+						{draftLinks.map((link) => {
+							return (
+								<li>
+									<a href={link.href} class="flex items-center justify-between gap-4 px-4 py-3 -outline-offset-2 hover:bg-muted">
+										<span class="min-w-0 truncate text-sm/6 font-medium text-fg">{link.label}</span>
+										<span class="flex shrink-0 items-center gap-2">
+											<Badge intent="secondary">{link.section}</Badge>
+											<ChevronRight aria-hidden="true" className="size-4 text-muted-fg" />
+										</span>
+									</a>
+								</li>
+							);
+						})}
+					</ul>
+				</Card>
+			)
+		}
+	</section>
+</AdminLayout>

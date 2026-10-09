@@ -1,0 +1,53 @@
+{
+	"main": [
+		{
+			"type": "link",
+			"data": {
+				"label": "About",
+				"href": "/about"
+			}
+		},
+		{
+			"type": "link",
+			"data": {
+				"label": "Career resources",
+				"href": "/career-resources"
+			}
+		},
+		{
+			"type": "link",
+			"data": {
+				"label": "Cascading grants",
+				"href": "/cascading-grants"
+			}
+		},
+		{
+			"type": "link",
+			"data": {
+				"label": "News",
+				"href": "/news"
+			}
+		},
+		{
+			"type": "link",
+			"data": {
+				"label": "Events",
+				"href": "/events"
+			}
+		}
+	],
+	"legal": [
+		{
+			"label": "Imprint",
+			"href": "/imprint"
+		},
+		{
+			"label": "Privacy policy",
+			"href": "/privacy-policy"
+		},
+		{
+			"label": "Accessibility",
+			"href": "/accessibility"
+		}
+	]
+}

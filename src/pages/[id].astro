@@ -1,0 +1,41 @@
+---
+import PageHeader, { type Breadcrumb, type SectionLink } from "#/src/components/page-header.astro";
+import Sections from "#/src/components/sections/sections.astro";
+import PageLayout from "#/src/layouts/page-layout.astro";
+
+const { content } = Astro.locals;
+
+/** Static routes, e.g. `/news`, take precedence, so a page with the same id is unreachable. */
+const [entry, navigation] = await Promise.all([
+	content.entry("pages", Astro.params.id ?? ""),
+	content.singleton("navigation"),
+]);
+
+if (entry == null) {
+	return new Response(null, { status: 404 });
+}
+
+/** A page linked from a navigation menu is shown below the menu, e.g. Home › About › Objectives. */
+const href = `/${entry.id}`;
+const menu = navigation?.main.find((item) => item.type === "menu" && item.data.links.some((link) => link.href === href));
+const parents: Array<Breadcrumb> = menu?.type === "menu" ? [{ label: menu.data.label }] : [];
+
+/** Every section which can be linked to, named by its eyebrow - or its title, when it has none. */
+const sectionLinks: Array<SectionLink> = entry.data.sections.flatMap((section) => {
+	const { anchor, eyebrow, title } = section.data;
+	const label = eyebrow ?? title;
+
+	return anchor != null && label != null ? [{ label, href: `#${anchor}` }] : [];
+});
+---
+
+<PageLayout title={entry.data.title} description={entry.data.summary}>
+	<PageHeader
+		title={entry.data.title}
+		heading={entry.data.heading}
+		intro={entry.data.summary}
+		parents={parents}
+		sectionLinks={sectionLinks.length > 1 ? sectionLinks : []}
+	/>
+	<Sections value={entry.data.sections} />
+</PageLayout>

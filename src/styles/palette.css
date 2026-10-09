@@ -1,0 +1,49 @@
+/**
+ * Value tokens: the raw colour palette. Deliberately declared outside tailwind's `--color-*` theme namespace, so no
+ * utilities are generated for them. Only the semantic tokens in `index.css` should reference these - components use
+ * the semantic tokens.
+ */
+:root {
+	--palette-white: #fff;
+	--palette-black: #000;
+	--palette-blue: #2b6cb4;
+
+	/**
+	 * A deep tone of the brand blue - the primary colour, for buttons, links, and brand-coloured bands, see
+	 * `scheme-brand`. 10.8:1 contrast on white. The logo blue itself is used for hover and focus states.
+	 */
+	--palette-blue-deep: #163d74;
+
+	/** Text on `--palette-blue-deep`: 8.8:1 and 6:1 contrast. */
+	--palette-blue-50: #e2e9f3;
+	--palette-blue-200: #b3c3d8;
+
+	/** A light tint of the brand blue, e.g. for search highlights. */
+	--palette-blue-100: #dbe8f6;
+
+	/** For error messages on `--palette-blue-deep` - not a brand colour. 7.4:1 contrast. */
+	--palette-red-200: #fecaca;
+
+	/** For error messages - not a brand colour. 6.5:1 contrast on white. */
+	--palette-red: #b91c1c;
+
+	/** Status colours of the admin ui, e.g. "published" - not brand colours. 5:1 contrast on white. */
+	--palette-green: #15803d;
+	--palette-amber: #b45309;
+
+	/**
+	 * Neutral greys, slightly tinted towards the primary hue (~253.5 in oklch). Lightness steps follow tailwind's
+	 * default `neutral` scale; chroma is kept low (about half of tailwind's `slate`) so the tint stays subtle.
+	 */
+	--palette-neutral-50: oklch(98.5% 0.002 253.5deg);
+	--palette-neutral-100: oklch(97% 0.004 253.5deg);
+	--palette-neutral-200: oklch(92.2% 0.007 253.5deg);
+	--palette-neutral-300: oklch(87% 0.011 253.5deg);
+	--palette-neutral-400: oklch(70.8% 0.018 253.5deg);
+	--palette-neutral-500: oklch(55.6% 0.022 253.5deg);
+	--palette-neutral-600: oklch(43.9% 0.022 253.5deg);
+	--palette-neutral-700: oklch(37.1% 0.021 253.5deg);
+	--palette-neutral-800: oklch(26.9% 0.018 253.5deg);
+	--palette-neutral-900: oklch(20.5% 0.016 253.5deg);
+	--palette-neutral-950: oklch(14.5% 0.013 253.5deg);
+}

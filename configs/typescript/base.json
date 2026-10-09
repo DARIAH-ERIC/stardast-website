@@ -1,0 +1,35 @@
+{
+	"$schema": "https://www.schemastore.org/tsconfig",
+	"compilerOptions": {
+		"allowArbitraryExtensions": true,
+		"allowImportingTsExtensions": true,
+		"allowJs": false,
+		"erasableSyntaxOnly": true,
+		"incremental": true,
+		"isolatedModules": true,
+		/** `.astro` files are type-checked as jsx. */
+		"jsx": "preserve",
+		/**
+		 * Matches the `browserslist` floor in `package.json` (chrome 111, firefox 128, safari 16.4) - `es2023` is the
+		 * highest lib those targets fully support. The one exception is `es2023.collection` (symbols as `WeakMap` keys),
+		 * which needs safari 17.
+		 */
+		"lib": ["dom", "es2023"],
+		"module": "preserve",
+		"moduleDetection": "force",
+		"noEmit": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noPropertyAccessFromIndexSignature": false,
+		"noUncheckedIndexedAccess": true,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"target": "esnext",
+		"types": ["bun"],
+		"verbatimModuleSyntax": true
+	}
+}

@@ -1,0 +1,27 @@
+{
+	"title": "Privacy policy",
+	"heading": "How we handle your personal data",
+	"summary": "Placeholder content for the privacy policy.",
+	"sections": [
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "This is placeholder content for the privacy policy."
+								}
+							]
+						}
+					]
+				}
+			}
+		}
+	]
+}

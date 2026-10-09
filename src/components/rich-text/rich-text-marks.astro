@@ -1,0 +1,37 @@
+---
+import type { RichTextMark } from "#/src/lib/cms/schema/rich-text.ts";
+
+export interface Props {
+	text: string;
+	marks: ReadonlyArray<RichTextMark>;
+}
+
+const { text, marks } = Astro.props;
+
+/** Marks are applied outermost first, by rendering the remaining marks inside the element for the first one. */
+const [mark, ...rest] = marks;
+
+const elements: Record<string, string> = {
+	bold: "strong",
+	code: "code",
+	italic: "em",
+	link: "a",
+	strike: "s",
+	subscript: "sub",
+	superscript: "sup",
+	underline: "u",
+};
+
+const Element = mark != null ? elements[mark.type] : undefined;
+const attributes = mark?.type === "link" ? { href: mark.attrs?.href as string } : {};
+---
+
+{
+	mark == null ? (
+		text
+	) : Element == null ? (
+		<Astro.self text={text} marks={rest} />
+	) : (
+		<Element {...attributes}><Astro.self text={text} marks={rest} /></Element>
+	)
+}

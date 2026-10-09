@@ -1,0 +1,122 @@
+{
+	"title": "About",
+	"heading": "Making data stewardship a recognised profession",
+	"summary": "STARDAST builds the curriculum, training, community and institutional support that data stewards need, and puts FAIR and Open Science into practice across disciplines.",
+	"sections": [
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"eyebrow": "Overview",
+				"title": "The project",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "STARDAST is a Horizon Europe project that professionalises data stewardship across science, the humanities and industry. Data stewards turn FAIR and Open Science principles into daily practice, yet their role is still undervalued, with unclear career paths and uneven institutional support."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "The project develops a modular, cross-sectoral curriculum for data stewards, and builds peer learning, mentorship and Train-the-Trainer programmes around it. It helps institutions shape the roles, career pathways and competence centres that data stewardship needs, and its cascading grants fund secondments, job shadowing and exchanges between institutions."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "STARDAST builds on the work of Skills4EOSC and FAIR-IMPACT, and contributes to the European Open Science Cloud (EOSC)."
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "numberedList",
+			"data": {
+				"anchor": "objectives",
+				"eyebrow": "Objectives",
+				"title": "What STARDAST sets out to do",
+				"items": [
+					{
+						"title": "Defining a Cross-Sectoral Curriculum",
+						"text": "STARDAST will develop a modular, cross-sectoral curriculum for data stewards. It is grounded in real-world practice and community development, and reflects FAIR and Open Science principles. The curriculum builds on the work of Skills4EOSC and FAIR-IMPACT."
+					},
+					{
+						"title": "Upskilling Data Stewards",
+						"text": "Through peer learning, mentorship and Train-the-Trainer programmes, STARDAST will help data stewards build their skills, professional identity and mobility, and strengthen the community they belong to."
+					},
+					{
+						"title": "Bringing FAIR and Open Science Education to Researchers",
+						"text": "STARDAST will bring cross-domain and cross-sector perspectives into FAIR and Open Science education for researchers at all career stages, as well as broader audiences."
+					},
+					{
+						"title": "Strengthening Competence Centres and Institutional Readiness",
+						"text": "STARDAST will involve data experts in assessing, shaping and aligning the support structures and career pathways that institutions need. This will help expand and strengthen competence centres, improve institutional readiness, and connect their work to EOSC activities."
+					},
+					{
+						"title": "Putting FAIR and Open Science into Practice",
+						"text": "Through hands-on piloting and benchmarking, STARDAST will establish, validate and embed FAIR and Open Science practices that work across disciplines."
+					}
+				]
+			}
+		},
+		{
+			"type": "numberedList",
+			"data": {
+				"anchor": "work-packages",
+				"eyebrow": "Work packages",
+				"title": "How the work is organised",
+				"prefix": "WP",
+				"items": [
+					{
+						"title": "Data Stewardship Landscape, Competence Centres and Workforce Integration",
+						"text": "WP1 lays the institutional foundation for sustainable data stewardship. Partners map existing practices, job profiles and integration models across universities, research infrastructures and companies. The result is shared guidance on recruitment, onboarding, visibility and career progression. It also assesses the Open Science landscape and institutional readiness, and sets up a shared monitoring and recognition framework."
+					},
+					{
+						"title": "Open Science, FAIR Data Practices and Infrastructure",
+						"text": "WP2 embeds FAIR and Open Science tools in real workflows. Data stewards lead hands-on piloting of EOSC-aligned practices across diverse domains, turning standards into practical solutions suited to each field. What stewards learn here shapes the training and outreach work that follows."
+					},
+					{
+						"title": "Data Stewards Upskilling and Community Building",
+						"text": "WP3 builds a peer-learning and mentoring ecosystem for data stewards. Learning pathways, mentorship networks and community programmes strengthen both individual expertise and institutional capacity. Train-the-Trainer programmes and local training then carry this expertise across sectors."
+					},
+					{
+						"title": "Data Stewardship Knowledge Dissemination",
+						"text": "WP4 shares what the project learns beyond the consortium. Training content is adapted for broader audiences, and outreach campaigns engage researchers, sectoral communities and the public, including early-career researchers and less-structured communities."
+					},
+					{
+						"title": "Curriculum Consolidation, Impact and Sustainability",
+						"text": "WP5 brings the project’s training resources, infrastructure models and policy recommendations together into a modular, reusable curriculum and policy package. It also works on the long-term support needed to keep this work going, through sustainability planning and by building it into institutional policies."
+					},
+					{
+						"title": "Project Management and Cascading Grants",
+						"text": "WP6 coordinates the project and supports all other work packages throughout. It also runs the cascading grants, which fund secondments, job shadowing, exchanges and peer learning. These grants widen participation and mobility, including for institutions from underrepresented regions."
+					}
+				]
+			}
+		},
+		{
+			"type": "partners",
+			"data": {
+				"anchor": "partners",
+				"eyebrow": "Consortium",
+				"title": "Meet the STARDAST team",
+				"lead": "STARDAST brings together {partners} partners from 9 countries, representing science, the humanities and industry, to professionalise data stewardship across Europe.",
+				"links": []
+			}
+		}
+	]
+}

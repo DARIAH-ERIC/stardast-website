@@ -1,0 +1,71 @@
+name: Validate
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}-validate"
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+    # Content is read from github at runtime, not built into the image. The github webhook invalidates changed pages.
+    paths-ignore:
+      - "content/**"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    env:
+      PUBLIC_APP_BASE_URL: "http://localhost:3000"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Use bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.3"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Generate types
+        run: bun --bun astro sync
+
+      - parallel:
+          - name: Format
+            run: bun run format:check
+
+          - name: Lint
+            run: bun run lint:check
+
+          - name: Typecheck
+            run: bun run types:check
+
+          - name: Test
+            run: bun run test:unit
+
+      # Not part of the parallel group: `astro build` re-runs content sync, which rewrites `.astro/*.d.ts` read by lint and typecheck.
+      - name: Build app
+        run: bun run build
+        env:
+          ENV_VALIDATION: "build"
+
+  build-deploy:
+    name: Build and deploy
+    if: ${{ github.event_name == 'push' }}
+    needs: [validate]
+    uses: ./.github/workflows/build-deploy.yaml
+    secrets: inherit
+    # https://docs.github.com/en/actions/using-workflows/reusing-workflows#access-and-permissions
+    permissions:
+      contents: read
+      packages: write

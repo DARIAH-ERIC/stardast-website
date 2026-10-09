@@ -1,0 +1,65 @@
+---
+import LinkButton from "#/src/components/link-button.astro";
+import type { HomeData } from "#/src/cms/config.ts";
+import { funding } from "#/src/config/project.ts";
+
+export type Props = HomeData["hero"];
+
+const { eyebrow, title, lead, links } = Astro.props;
+
+/** Counted from the partners collection, so that the figures stay up to date. */
+const partners = await Astro.locals.content.list("partners");
+const countries = new Set(partners.flatMap((partner) => partner.data.country ?? []));
+
+const facts = [
+	{ label: "Programme", value: funding.programme },
+	{ label: "Grant agreement", value: `No ${funding.grantAgreementNumber}` },
+	partners.length > 0 && {
+		label: "Consortium",
+		value:
+			countries.size > 0
+				? `${String(partners.length)} partners, ${String(countries.size)} ${countries.size === 1 ? "country" : "countries"}`
+				: `${String(partners.length)} partners`,
+	},
+].filter((fact) => fact !== false);
+---
+
+<section class="scheme-brand">
+	<div class="content-container flex flex-col gap-[clamp(2.5rem,5vw,4.5rem)] pt-[clamp(3rem,3rem+3vw,6.5rem)]">
+		<div class="flex flex-col items-start gap-6">
+			<hgroup class="flex flex-col items-start gap-6">
+				{eyebrow != null && <p class="label-marker mono-label text-foreground-strong">{eyebrow}</p>}
+				<h1 class="max-w-[24ch] text-display text-balance text-foreground-strong">{title}</h1>
+			</hgroup>
+			<p class="max-w-[38rem] text-lead">{lead}</p>
+			{
+				links.length > 0 && (
+					<ul class="mt-2 flex flex-wrap gap-3 sm:gap-4" role="list">
+						{links.map((link, index) => {
+							return (
+								<li>
+									<LinkButton href={link.href} variant={index === 0 ? "primary" : "secondary"}>
+										{link.label}
+									</LinkButton>
+								</li>
+							);
+						})}
+					</ul>
+				)
+			}
+		</div>
+		{/* A strip of key figures along the bottom edge of the band, in cells divided by lines. */}
+		<dl class="grid border-t border-border-strong sm:grid-cols-3">
+			{
+				facts.map((fact) => {
+					return (
+						<div class="flex flex-col gap-0.5 border-b border-border py-4 last:border-b-0 sm:border-b-0 sm:border-l sm:px-5 sm:first:border-l-0 sm:first:ps-0">
+							<dt class="font-mono text-[0.6875rem]/4 font-medium tracking-[0.08em] text-foreground-muted uppercase">{fact.label}</dt>
+							<dd class="font-mono text-[0.9375rem] font-medium text-foreground-strong">{fact.value}</dd>
+						</div>
+					);
+				})
+			}
+		</dl>
+	</div>
+</section>

@@ -1,0 +1,28 @@
+---
+import Callout from "#/src/components/rich-text/callout.astro";
+import Figure from "#/src/components/rich-text/figure.astro";
+import RichText from "#/src/components/rich-text/rich-text.astro";
+import SectionHeader from "#/src/components/sections/section-header.astro";
+import type { SectionData } from "#/src/cms/config.ts";
+
+export type Props = SectionData<"text">;
+
+const { anchor, layout, eyebrow, title, lead, content } = Astro.props;
+---
+
+<section
+	id={anchor}
+	class:list={[
+		"content-container section-spacing",
+		/**
+		 * The title is a label for the text beside it: in a column just wide enough for a short title, and on the same
+		 * baseline as the text's first line.
+		 */
+		layout === "split" && "grid gap-x-16 lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:items-baseline",
+	]}
+>
+	<SectionHeader eyebrow={eyebrow} title={title} lead={lead} />
+	<div class="prose lead-in">
+		<RichText value={content} blocks={{ callout: Callout, figure: Figure }} />
+	</div>
+</section>

@@ -1,0 +1,73 @@
+{
+	"title": "Career resources",
+	"heading": "Resources for a career in data stewardship",
+	"summary": "Placeholder content for the career resources page.",
+	"sections": [
+		{
+			"type": "text",
+			"data": {
+				"anchor": "institutional-analysis",
+				"layout": "stacked",
+				"title": "Institutional analysis",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Placeholder for the institutional analysis - content still to come."
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"anchor": "cv-examples",
+				"layout": "stacked",
+				"title": "CV examples",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Placeholder for the cv examples - content still to come."
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"anchor": "competency-frameworks",
+				"layout": "stacked",
+				"title": "Competency frameworks",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Placeholder for the competency frameworks - content still to come."
+								}
+							]
+						}
+					]
+				}
+			}
+		}
+	]
+}

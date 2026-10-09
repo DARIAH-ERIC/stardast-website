@@ -1,0 +1,87 @@
+---
+import EventTeaser from "#/src/components/event-teaser.astro";
+import NewsTeaser from "#/src/components/news-teaser.astro";
+import SectionHeader from "#/src/components/sections/section-header.astro";
+import type { SectionData } from "#/src/cms/config.ts";
+import { limitMaxAge } from "#/src/lib/cms/astro.ts";
+import { getSecondsUntilTomorrow, getToday, isUpcoming } from "#/src/lib/events.ts";
+
+export type Props = SectionData<"newsAndEvents">;
+
+const { anchor, eyebrow, title, count } = Astro.props;
+
+const { content } = Astro.locals;
+
+/** News are sorted newest first, and events latest first - see the collections' `sort`. */
+const [news, events] = await Promise.all([content.list("news"), content.list("events")]);
+
+const today = getToday();
+
+const latestNews = news.slice(0, count);
+const upcomingEvents = events
+	.filter((entry) => isUpcoming(entry.data, today))
+	.toReversed()
+	.slice(0, count);
+
+/** Which events are upcoming changes with the date. */
+limitMaxAge(Astro, getSecondsUntilTomorrow());
+---
+
+<section id={anchor} class="content-container section-spacing">
+	<SectionHeader eyebrow={eyebrow} title={title} />
+	{
+		/* One placeholder for both, until there is anything to show. */
+		latestNews.length === 0 && upcomingEvents.length === 0 ? (
+			<p class="border border-dashed border-border-strong p-8 mono-label text-foreground-muted">Coming soon</p>
+		) : (
+			<div class="grid gap-x-12 gap-y-14 lg:grid-cols-2">
+				<div class="flex flex-col">
+					<div class="flex flex-wrap items-baseline justify-between gap-4 border-b border-border-strong pb-3">
+						<h3 class="label-marker mono-label text-foreground-strong">News</h3>
+						<a href="/news" class="mono-label text-primary hover:text-primary-hover hover:underline underline-offset-4">
+							All news <span aria-hidden="true">&rarr;</span>
+						</a>
+					</div>
+					{
+						latestNews.length > 0 ? (
+							<ul class="flex flex-col" role="list">
+								{latestNews.map((entry) => {
+									return (
+										<li class="border-b border-border">
+											<NewsTeaser id={entry.id} data={entry.data} headingLevel={4} />
+										</li>
+									);
+								})}
+							</ul>
+						) : (
+							<p class="mt-6 border border-dashed border-border-strong p-8 mono-label text-foreground-muted">Coming soon</p>
+						)
+					}
+				</div>
+				<div class="flex flex-col">
+					<div class="flex flex-wrap items-baseline justify-between gap-4 border-b border-border-strong pb-3">
+						<h3 class="label-marker mono-label text-foreground-strong">Upcoming events</h3>
+						<a href="/events" class="mono-label text-primary hover:text-primary-hover hover:underline underline-offset-4">
+							All events <span aria-hidden="true">&rarr;</span>
+						</a>
+					</div>
+					{
+						upcomingEvents.length > 0 ? (
+							<ul class="flex flex-col" role="list">
+								{upcomingEvents.map((entry) => {
+									return (
+										<li class="border-b border-border">
+											<EventTeaser id={entry.id} data={entry.data} headingLevel={4} />
+										</li>
+									);
+								})}
+							</ul>
+						) : (
+							<p class="mt-6 border border-dashed border-border-strong p-8 mono-label text-foreground-muted">Coming soon</p>
+						)
+					}
+				</div>
+			</div>
+		)
+	}
+</section>

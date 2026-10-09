@@ -1,0 +1,22 @@
+---
+import CmsImage from "#/src/components/cms-image.astro";
+
+export interface Props {
+	/** The id of a media entry - or none, for a plain hatched placeholder. */
+	id?: string;
+	sizes: string;
+}
+
+const { id, sizes } = Astro.props;
+
+const frameClass = "aspect-[16/10] w-full overflow-hidden border-b border-border-strong";
+---
+
+{
+	/* Decorative in cards, where the title already describes the content. */
+	id != null ? (
+		<CmsImage id={id} alt="" sizes={sizes} class={`${frameClass} object-cover`} />
+	) : (
+		<div class:list={[frameClass, "hatch"]} />
+	)
+}

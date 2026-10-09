@@ -1,0 +1,42 @@
+---
+import { EntryEditor } from "#/src/components/admin/entry-editor.tsx";
+import { getCollection, loadReferenceOptions } from "#/src/cms/admin.ts";
+import { drafts } from "#/src/cms/api.ts";
+import { mediaCollectionName } from "#/src/cms/config.ts";
+import AdminLayout from "#/src/layouts/admin-layout.astro";
+import { EntryIdSchema } from "#/src/lib/cms/schema/index.ts";
+import * as v from "valibot";
+
+const name = Astro.params.collection!;
+const id = Astro.params.id!;
+const collection = getCollection(name);
+
+if (collection == null || !v.is(EntryIdSchema, id)) {
+	return new Response(null, { status: 404 });
+}
+
+if (name === mediaCollectionName) {
+	return Astro.redirect(`/admin/media/${id}`);
+}
+
+const target = { kind: "collection", collection: name, id } as const;
+const { published, draft } = await drafts.load(target);
+
+if (published.data === undefined && draft?.data === undefined) {
+	return new Response(null, { status: 404 });
+}
+
+const referenceOptions = await loadReferenceOptions(collection.fields, published.revision);
+---
+
+<AdminLayout title={collection.label}>
+	<EntryEditor
+		client:only="react"
+		target={target}
+		revision={draft?.revision ?? published.revision}
+		initialData={draft?.data ?? published.data}
+		hasDraft={draft != null}
+		isPublished={published.data !== undefined}
+		referenceOptions={referenceOptions}
+	/>
+</AdminLayout>

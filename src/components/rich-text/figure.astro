@@ -1,0 +1,28 @@
+---
+import CmsImage from "#/src/components/cms-image.astro";
+
+export interface Props {
+	image: string;
+	caption?: string;
+}
+
+const { image, caption } = Astro.props;
+
+const media = await Astro.locals.content.entry("media", image);
+const text = caption ?? media?.data.caption;
+const credit = media?.data.credit;
+---
+
+{
+	media != null && (
+		<figure>
+			<CmsImage id={image} sizes="(min-width: 65ch) 65ch, 100vw" class="border border-border" />
+			{(text != null || credit != null) && (
+				<figcaption>
+					{text}
+					{credit != null && <span class="block text-xs">{credit}</span>}
+				</figcaption>
+			)}
+		</figure>
+	)
+}

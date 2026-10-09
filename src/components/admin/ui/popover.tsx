@@ -1,0 +1,84 @@
+import type { ReactNode } from "react";
+import { DialogTrigger as DialogTriggerPrimitive, type DialogTriggerProps } from "react-aria-components/Dialog";
+import { OverlayArrow, Popover as PopoverPrimitive, type PopoverProps } from "react-aria-components/Popover";
+
+import {
+	DialogBody,
+	DialogClose,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "#/src/components/admin/ui/dialog.tsx";
+import { cx } from "#/src/components/admin/ui/primitive.ts";
+
+const Popover = (props: DialogTriggerProps): ReactNode => <DialogTriggerPrimitive {...props} />;
+
+const PopoverTitle = DialogTitle;
+const PopoverHeader = DialogHeader;
+const PopoverBody = DialogBody;
+const PopoverFooter = DialogFooter;
+
+interface PopoverContentProps extends PopoverProps {
+	arrow?: boolean;
+	ref?: React.Ref<HTMLDivElement>;
+}
+
+const PopoverContent = ({ children, arrow = false, className, ref, ...props }: PopoverContentProps): ReactNode => {
+	const offset = props.offset ?? (arrow ? 12 : 8);
+	return (
+		<PopoverPrimitive
+			ref={ref}
+			offset={offset}
+			className={cx(
+				"[--visual-viewport-vertical-padding:16px] sm:[--visual-viewport-vertical-padding:32px]",
+				"max-block-[calc(var(--visual-viewport-height)-var(--visual-viewport-vertical-padding)*2)]",
+				"group/popover origin-(--trigger-anchor-point) rounded-(--popover-radius) bg-overlay text-overlay-fg shadow-xs ring ring-muted-fg/20 outline-hidden drop-shadow-xl transition-transform [--gutter:--spacing(6)] [--popover-radius:var(--radius-lg)] max-inline-xs min-inline-(--trigger-width) sm:text-sm dark:ring-border dark:backdrop-saturate-200 **:[[role=dialog]]:[--gutter:--spacing(6)]",
+				"entering:animate-in entering:fade-in exiting:animate-out exiting:fade-out",
+				"placement-left:entering:slide-in-from-right-1 placement-right:entering:slide-in-from-left-1 placement-top:entering:slide-in-from-bottom-1 placement-bottom:entering:slide-in-from-top-1",
+				"placement-left:exiting:slide-out-to-right-1 placement-right:exiting:slide-out-to-left-1 placement-top:exiting:slide-out-to-bottom-1 placement-bottom:exiting:slide-out-to-top-1",
+				"forced-colors:bg-[Canvas]",
+				className,
+			)}
+			{...props}
+		>
+			{(values) => (
+				<>
+					{arrow && (
+						<OverlayArrow className="group">
+							<svg
+								width={12}
+								height={12}
+								viewBox="0 0 12 12"
+								className="block fill-overlay stroke-border group-placement-left:-rotate-90 group-placement-right:rotate-90 group-placement-bottom:rotate-180 forced-colors:fill-[Canvas] forced-colors:stroke-[ButtonBorder]"
+							>
+								<path d="M0 0 L6 6 L12 0" />
+							</svg>
+						</OverlayArrow>
+					)}
+					<div data-slot="popover-inner" className="flex flex-col overflow-y-auto max-block-[inherit]">
+						{typeof children === "function" ? children(values) : children}
+					</div>
+				</>
+			)}
+		</PopoverPrimitive>
+	);
+};
+
+const PopoverTrigger = DialogTrigger;
+const PopoverClose = DialogClose;
+const PopoverDescription = DialogDescription;
+
+export type { PopoverContentProps, PopoverProps };
+export {
+	Popover,
+	PopoverBody,
+	PopoverClose,
+	PopoverContent,
+	PopoverDescription,
+	PopoverFooter,
+	PopoverHeader,
+	PopoverTitle,
+	PopoverTrigger,
+};

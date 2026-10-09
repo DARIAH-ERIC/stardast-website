@@ -1,0 +1,85 @@
+---
+import NewsCard from "#/src/components/news-card.astro";
+import PageHeader from "#/src/components/page-header.astro";
+import Pagination from "#/src/components/pagination.astro";
+import Sections from "#/src/components/sections/sections.astro";
+import { buttonStyles } from "#/src/components/button-styles.ts";
+import { inputStyles } from "#/src/components/input-styles.ts";
+import PageLayout from "#/src/layouts/page-layout.astro";
+import { paginate, parsePageParam } from "#/src/lib/pagination.ts";
+
+const pageSize = 9;
+
+/** Unknown pages are not found, rather than ignored, so that each page has exactly one url. */
+const pageParam = parsePageParam(Astro.url.searchParams.get("page"));
+
+if (pageParam == null) {
+	return new Response(null, { status: 404 });
+}
+
+const { content } = Astro.locals;
+
+const [page, entries] = await Promise.all([content.singleton("newsPage"), content.list("news")]);
+
+/** Created with the repository, like the home page - see `tests/cms/content.test.ts`. */
+if (page == null) {
+	throw new Error('The "newsPage" singleton has not been created.');
+}
+
+/** Sorted by publication date, newest first - see the collection's `sort`. */
+const news = paginate(entries, pageParam, pageSize);
+
+if (news == null) {
+	return new Response(null, { status: 404 });
+}
+
+function getHref(number: number): string {
+	return number > 1 ? `/news?page=${String(number)}` : "/news";
+}
+---
+
+<PageLayout
+	title={news.page > 1 ? `${page.title} - Page ${String(news.page)}` : page.title}
+	description={page.intro}
+	canonical={getHref(news.page)}
+>
+	<PageHeader title={page.title} heading={page.heading} intro={page.intro} />
+	<div class="content-container section-spacing">
+		{/* Like the form on the search page, which it leads to. */}
+		<form role="search" action="/search" method="get" class="flex max-w-2xl flex-wrap gap-3">
+			<input type="hidden" name="type" value="news" />
+			<label for="news-search-query" class="sr-only">Search news</label>
+			<input
+				id="news-search-query"
+				type="search"
+				name="q"
+				required
+				placeholder="Search news…"
+				autocomplete="off"
+				class={inputStyles({ class: "min-w-0 flex-1" })}
+			/>
+			<button type="submit" class={buttonStyles()}>Search</button>
+		</form>
+
+		{
+			news.items.length > 0 ? (
+				<ul class="mt-10 grid border-t border-l border-border-strong sm:grid-cols-2 lg:grid-cols-3" role="list">
+					{news.items.map((entry) => {
+						return (
+							<li class="border-r border-b border-border-strong">
+								<NewsCard id={entry.id} data={entry.data} headingLevel={2} />
+							</li>
+						);
+					})}
+				</ul>
+			) : (
+				<p class="mt-10 border border-dashed border-border-strong p-8 mono-label text-foreground-muted">
+					Coming soon
+				</p>
+			)
+		}
+
+		<Pagination page={news.page} pageCount={news.pageCount} getHref={getHref} />
+	</div>
+	<Sections value={page.sections} />
+</PageLayout>

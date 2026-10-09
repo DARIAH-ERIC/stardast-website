@@ -1,0 +1,105 @@
+---
+import { env } from "#/configs/env.config.ts";
+import PageHeader from "#/src/components/page-header.astro";
+import PageLayout from "#/src/layouts/page-layout.astro";
+import { type MonthlyVisits, createMatomoClient } from "#/src/lib/analytics/matomo.ts";
+
+const months = 12;
+
+if (env.PUBLIC_APP_MATOMO_ID == null) {
+	return new Response(null, { status: 404 });
+}
+
+let visits: Array<MonthlyVisits> | undefined;
+
+if (env.MATOMO_API_TOKEN == null) {
+	// oxlint-disable-next-line no-console
+	console.error("Visitor numbers are unavailable: MATOMO_API_TOKEN is not configured.");
+} else {
+	const result = await createMatomoClient({
+		baseUrl: env.PUBLIC_APP_MATOMO_BASE_URL,
+		siteId: env.PUBLIC_APP_MATOMO_ID,
+		token: env.MATOMO_API_TOKEN,
+	}).getMonthlyVisits({ months });
+
+	if (result.isOk()) {
+		visits = result.value;
+	} else {
+		// oxlint-disable-next-line no-console
+		console.error("Visitor numbers are unavailable:", result.error.message);
+	}
+}
+
+if (visits == null) {
+	Astro.response.status = 503;
+}
+
+/**
+ * Matomo is not asked on every request, but failures are retried soon. A cached response has no `swr`, since the cache
+ * would otherwise replace stale numbers with a failure in the background. Previews must never be cached, see
+ * `src/cms/middleware.ts`.
+ */
+if (Astro.locals.preview == null) {
+	Astro.cache.set({ maxAge: visits != null ? 60 * 60 : 60 });
+}
+
+const monthFormatter = new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric", timeZone: "UTC" });
+const numberFormatter = new Intl.NumberFormat("en-GB");
+
+const total = (visits ?? []).reduce(
+	(sum, month) => {
+		return { visits: sum.visits + month.visits, pageViews: sum.pageViews + month.pageViews };
+	},
+	{ visits: 0, pageViews: 0 },
+);
+
+const title = "Analytics";
+const intro = `Visits and page views of this website over the last ${String(months)} months, including the current month so far.`;
+---
+
+<PageLayout title={title} description={intro}>
+	<PageHeader title={title} heading="Visitor numbers" intro={intro} />
+	<section class="content-container section-spacing">
+		{
+			visits != null ? (
+				<div class="prose">
+					<table>
+						<thead>
+							<tr>
+								<th scope="col">Month</th>
+								<th scope="col" class="text-end">
+									Visits
+								</th>
+								<th scope="col" class="text-end">
+									Page views
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{visits.toReversed().map((month) => {
+								return (
+									<tr>
+										<th scope="row" class="font-normal">
+											{monthFormatter.format(new Date(`${month.month}-01`))}
+										</th>
+										<td class="text-end tabular-nums">{numberFormatter.format(month.visits)}</td>
+										<td class="text-end tabular-nums">{numberFormatter.format(month.pageViews)}</td>
+									</tr>
+								);
+							})}
+						</tbody>
+						<tfoot>
+							<tr>
+								<th scope="row">Total</th>
+								<td class="text-end font-semibold tabular-nums">{numberFormatter.format(total.visits)}</td>
+								<td class="text-end font-semibold tabular-nums">{numberFormatter.format(total.pageViews)}</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			) : (
+				<p role="status">Visitor numbers are currently unavailable. Please try again later.</p>
+			)
+		}
+	</section>
+</PageLayout>

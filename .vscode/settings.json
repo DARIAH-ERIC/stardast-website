@@ -1,0 +1,40 @@
+{
+	"css.validate": false,
+	"editor.codeActionsOnSave": {
+		"source.fixAll": "explicit"
+	},
+	"editor.defaultFormatter": "oxc.oxc-vscode",
+	"editor.formatOnSave": true,
+	"editor.inlayHints.enabled": "offUnlessPressed",
+	"editor.linkedEditing": true,
+	"editor.quickSuggestions": {
+		"strings": true
+	},
+	"editor.rulers": [120],
+	"editor.stickyScroll.enabled": true,
+	"emmet.showExpandedAbbreviation": "never",
+	"eslint.enable": false,
+	"files.associations": {
+		"*.css": "tailwindcss",
+		"**/configs/typescript/*.json": "jsonc"
+	},
+	"files.watcherExclude": {
+		"**/.astro/**": true,
+		"**/dist/**": true
+	},
+	"js/ts.experimental.useTsgo": true,
+	"js/ts.inlayHints.parameterNames.enabled": "all",
+	"js/ts.preferences.importModuleSpecifier": "non-relative",
+	"js/ts.preferences.preferTypeOnlyAutoImports": true,
+	"js/ts.tsdk.path": "node_modules/typescript/lib",
+	"js/ts.tsdk.promptToUseWorkspaceVersion": true,
+	"prettier.enable": false,
+	"stylelint.snippet": ["css", "tailwindcss"],
+	"stylelint.validate": ["css", "tailwindcss"],
+	"tailwindCSS.classFunctions": ["cn", "styles"],
+	"workbench.editor.labelFormat": "medium",
+	"workbench.tree.enableStickyScroll": true,
+	"[markdown]": {
+		"editor.wordWrap": "on"
+	}
+}

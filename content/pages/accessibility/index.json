@@ -1,0 +1,27 @@
+{
+	"title": "Accessibility",
+	"heading": "Accessibility statement",
+	"summary": "Placeholder content for the accessibility statement.",
+	"sections": [
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "This is placeholder content for the accessibility statement."
+								}
+							]
+						}
+					]
+				}
+			}
+		}
+	]
+}

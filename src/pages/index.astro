@@ -1,0 +1,17 @@
+---
+import HomeHero from "#/src/components/home-hero.astro";
+import Sections from "#/src/components/sections/sections.astro";
+import PageLayout from "#/src/layouts/page-layout.astro";
+
+const home = await Astro.locals.content.singleton("home");
+
+/** The home page is created with the repository, so a missing one is a deployment error, not a content error. */
+if (home == null) {
+	throw new Error('The "home" singleton has not been created.');
+}
+---
+
+<PageLayout description={home.hero.lead}>
+	<HomeHero {...home.hero} />
+	<Sections value={home.sections} />
+</PageLayout>

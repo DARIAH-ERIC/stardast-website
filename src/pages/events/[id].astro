@@ -1,0 +1,58 @@
+---
+import CmsImage from "#/src/components/cms-image.astro";
+import Callout from "#/src/components/rich-text/callout.astro";
+import Figure from "#/src/components/rich-text/figure.astro";
+import RichText from "#/src/components/rich-text/rich-text.astro";
+import ContentPageLayout from "#/src/layouts/content-page-layout.astro";
+import { formatDateRange } from "#/src/lib/format-date.ts";
+
+const { content } = Astro.locals;
+
+const [entry, eventsPage] = await Promise.all([
+	content.entry("events", Astro.params.id ?? ""),
+	content.singleton("eventsPage"),
+]);
+
+if (entry == null) {
+	return new Response(null, { status: 404 });
+}
+
+const { data } = entry;
+---
+
+<ContentPageLayout
+	title={data.title}
+	description={data.summary}
+	parent={{ label: eventsPage?.title ?? "Events", href: "/events" }}
+>
+	<dl class="not-prose grid grid-cols-[auto_1fr] border-t border-border-strong text-sm">
+		<dt class="border-b border-border py-3.5 pe-8 mono-label text-foreground-muted">Date</dt>
+		<dd class="border-b border-border py-3 text-foreground-strong"><time datetime={data.startDate}>{formatDateRange(data.startDate, data.endDate)}</time></dd>
+		{
+			data.location != null && (
+				<>
+					<dt class="border-b border-border py-3.5 pe-8 mono-label text-foreground-muted">Location</dt>
+					<dd class="border-b border-border py-3 text-foreground-strong">{data.location}</dd>
+				</>
+			)
+		}
+		{
+			data.website != null && (
+				<>
+					<dt class="border-b border-border py-3.5 pe-8 mono-label text-foreground-muted">Website</dt>
+					<dd class="border-b border-border py-3">
+						<a href={data.website} class="break-all text-primary underline hover:text-primary-hover">
+							{data.website}
+						</a>
+					</dd>
+				</>
+			)
+		}
+	</dl>
+	{
+		data.image != null && (
+			<CmsImage id={data.image} loading="eager" sizes="(min-width: 65ch) 65ch, 100vw" class="border border-border" />
+		)
+	}
+	<RichText value={data.content} blocks={{ callout: Callout, figure: Figure }} />
+</ContentPageLayout>

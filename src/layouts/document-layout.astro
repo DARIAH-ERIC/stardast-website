@@ -1,0 +1,68 @@
+---
+import { Font } from "astro:assets";
+
+import { env } from "#/configs/env.config.ts";
+import MatomoAnalytics from "#/src/components/matomo-analytics.astro";
+import { locale, siteName } from "#/src/config/project.ts";
+
+import "#/src/styles/index.css";
+
+export interface Props {
+	/** Page title, without the site name. Omit on the home page to use the site name alone. */
+	title?: string;
+	description?: string;
+	/**
+	 * Path and query of the canonical url, e.g. for filtered or paginated listings. Defaults to the current path without
+	 * query, which would otherwise include e.g. `?preview`.
+	 */
+	canonical?: string;
+}
+
+const { title, description, canonical } = Astro.props;
+
+const documentTitle = title != null ? `${title} | ${siteName}` : siteName;
+const url = new URL(canonical ?? Astro.url.pathname, Astro.site).href;
+const image = new URL("/opengraph-image.png", Astro.site).href;
+---
+
+<!doctype html>
+<html lang={locale}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/icon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/apple-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+		{/* `--palette-blue`: meta tags cannot read css variables. */}
+		<meta name="theme-color" content="#2b6cb4" />
+		<meta name="color-scheme" content="light" />
+		<title>{documentTitle}</title>
+		{description != null && <meta name="description" content={description} />}
+		<link rel="canonical" href={url} />
+		<link rel="alternate" type="application/rss+xml" title={`${siteName} news`} href="/news/rss.xml" />
+		<link rel="alternate" type="application/rss+xml" title={`${siteName} events`} href="/events/rss.xml" />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={siteName} />
+		<meta property="og:title" content={title ?? siteName} />
+		{description != null && <meta property="og:description" content={description} />}
+		<meta property="og:url" content={url} />
+		<meta property="og:image" content={image} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="STARDAST and EOSC logos" />
+		<meta name="twitter:card" content="summary_large_image" />
+		{
+			env.PUBLIC_APP_GOOGLE_SITE_VERIFICATION != null && (
+				<meta name="google-site-verification" content={env.PUBLIC_APP_GOOGLE_SITE_VERIFICATION} />
+			)
+		}
+		<Font cssVariable="--font-roboto" preload={[{ subset: "latin", style: "normal" }]} />
+		{/* Only for small labels, e.g. dates and navigation, so not preloaded. */}
+		<Font cssVariable="--font-roboto-mono" />
+		<MatomoAnalytics />
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>

@@ -1,0 +1,38 @@
+---
+import CmsImage from "#/src/components/cms-image.astro";
+import Callout from "#/src/components/rich-text/callout.astro";
+import Figure from "#/src/components/rich-text/figure.astro";
+import RichText from "#/src/components/rich-text/rich-text.astro";
+import ContentPageLayout from "#/src/layouts/content-page-layout.astro";
+import { formatDate } from "#/src/lib/format-date.ts";
+
+const { content } = Astro.locals;
+
+const [entry, newsPage] = await Promise.all([
+	content.entry("news", Astro.params.id ?? ""),
+	content.singleton("newsPage"),
+]);
+
+if (entry == null) {
+	return new Response(null, { status: 404 });
+}
+
+const authors = await content.entries("people", entry.data.authors);
+---
+
+<ContentPageLayout
+	title={entry.data.title}
+	description={entry.data.summary}
+	parent={{ label: newsPage?.title ?? "News", href: "/news" }}
+>
+	<p class="not-prose mono-label text-foreground-muted">
+		<time datetime={entry.data.publicationDate}>{formatDate(entry.data.publicationDate)}</time>
+		{authors.length > 0 && <span>{` · ${authors.map((author) => author.data.name).join(", ")}`}</span>}
+	</p>
+	{
+		entry.data.image != null && (
+			<CmsImage id={entry.data.image} loading="eager" sizes="(min-width: 65ch) 65ch, 100vw" class="border border-border" />
+		)
+	}
+	<RichText value={entry.data.content} blocks={{ callout: Callout, figure: Figure }} />
+</ContentPageLayout>

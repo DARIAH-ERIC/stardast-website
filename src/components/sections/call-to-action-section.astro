@@ -1,0 +1,35 @@
+---
+import LinkButton from "#/src/components/link-button.astro";
+import type { SectionData } from "#/src/cms/config.ts";
+
+export type Props = SectionData<"callToAction">;
+
+const { anchor, eyebrow, title, text, links } = Astro.props;
+---
+
+<section id={anchor} class="content-container py-10 sm:py-14">
+	<div class="flex scheme-brand flex-col items-start gap-8 p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between">
+		<div class="flex max-w-prose flex-col gap-3">
+			<hgroup class="flex flex-col items-start gap-4">
+				{eyebrow != null && <p class="label-marker mono-label text-foreground-strong">{eyebrow}</p>}
+				<h2 class="text-headline text-balance text-foreground-strong">{title}</h2>
+			</hgroup>
+			{text != null && <p class="text-pretty">{text}</p>}
+		</div>
+		{
+			links.length > 0 && (
+				<ul class="flex shrink-0 flex-wrap gap-4" role="list">
+					{links.map((link, index) => {
+						return (
+							<li>
+								<LinkButton href={link.href} variant={index === 0 ? "primary" : "secondary"}>
+									{link.label}
+								</LinkButton>
+							</li>
+						);
+					})}
+				</ul>
+			)
+		}
+	</div>
+</section>

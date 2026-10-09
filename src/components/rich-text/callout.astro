@@ -1,0 +1,19 @@
+---
+export interface Props {
+	tone: "info" | "warning";
+	text: string;
+}
+
+const { tone, text } = Astro.props;
+---
+
+{/* The tone is named in a label, and a warning has the heavier frame. */}
+<aside
+	class:list={[
+		"not-prose my-6 flex flex-col gap-2 bg-background-muted px-5 py-4",
+		tone === "warning" ? "border-2 border-foreground-strong" : "border border-border-strong",
+	]}
+>
+	<p class="label-marker mono-label text-foreground-strong">{tone === "warning" ? "Important" : "Note"}</p>
+	<p>{text}</p>
+</aside>

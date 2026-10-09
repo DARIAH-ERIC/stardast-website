@@ -1,0 +1,109 @@
+---
+import * as v from "valibot";
+
+import { EntryEditor } from "#/src/components/admin/entry-editor.tsx";
+import { getCollection, getEntryLabel } from "#/src/cms/admin.ts";
+import { drafts } from "#/src/cms/api.ts";
+import { type MediaEntryData, config, mediaCollectionName } from "#/src/cms/config.ts";
+import { getImageUrl, getMedia, getMediaUrl } from "#/src/cms/media.ts";
+import { storage } from "#/src/cms/server.ts";
+import { ExternalLink } from "lucide-react";
+
+import { Badge } from "#/src/components/admin/ui/badge.tsx";
+import { buttonStyles } from "#/src/components/admin/ui/button.tsx";
+import { Card } from "#/src/components/admin/ui/card.tsx";
+import { Heading } from "#/src/components/admin/ui/heading.tsx";
+import { Text, TextLink } from "#/src/components/admin/ui/text.tsx";
+import AdminLayout from "#/src/layouts/admin-layout.astro";
+import { EntryIdSchema } from "#/src/lib/cms/schema/index.ts";
+
+const id = Astro.params.id!;
+
+if (!v.is(EntryIdSchema, id)) {
+	return new Response(null, { status: 404 });
+}
+
+const target = { kind: "collection", collection: mediaCollectionName, id } as const;
+const { published, draft } = await drafts.load(target);
+const data = (draft?.data ?? published.data) as MediaEntryData | undefined;
+
+if (data == null) {
+	return new Response(null, { status: 404 });
+}
+
+const usages = await Promise.all(
+	(await getMedia().findUsages(id)).map(async (usage) => {
+		if (usage.target.kind === "singleton") {
+			return {
+				isDraft: usage.isDraft,
+				href: `/admin/singletons/${usage.target.singleton}`,
+				label: usage.target.singleton,
+			};
+		}
+
+		const collection = getCollection(usage.target.collection)!;
+		const entry = await storage.read(published.revision, `${collection.path}/${usage.target.id}`);
+
+		return {
+			isDraft: usage.isDraft,
+			href: `/admin/collections/${usage.target.collection}/entries/${usage.target.id}`,
+			label: `${collection.label}: ${getEntryLabel(collection, usage.target.id, entry)}`,
+		};
+	}),
+);
+
+const fileUrl = getMediaUrl(id, data);
+---
+
+<AdminLayout title={data.filename}>
+	<Card className="mb-8 flex-col gap-6 px-6 sm:flex-row">
+		{
+			data.contentType.startsWith("image/") ? (
+				<img
+					src={getImageUrl(id, data, { width: 640 })}
+					alt=""
+					class="max-h-80 w-full rounded-md bg-muted object-contain sm:w-80"
+				/>
+			) : (
+				<span class="flex h-40 w-full items-center justify-center rounded-md bg-muted text-muted-fg uppercase sm:w-80">
+					{data.contentType.split("/")[1]}
+				</span>
+			)
+		}
+		<div class="flex min-w-0 flex-col gap-4">
+			<a href={fileUrl} target="_blank" rel="noreferrer" class={buttonStyles({ intent: "outline", size: "sm", className: "w-fit" })}>
+				<ExternalLink aria-hidden="true" />
+				Open original file
+			</a>
+			<section aria-labelledby="usages-heading" class="flex flex-col gap-2">
+				<Heading level={3} id="usages-heading">Used in</Heading>
+				{
+					usages.length === 0 ? (
+						<Text>Not used anywhere yet - it can be deleted.</Text>
+					) : (
+						<ul class="flex flex-col gap-1 text-sm/6" role="list">
+							{usages.map((usage) => {
+								return (
+									<li class="flex flex-wrap items-center gap-2">
+										<TextLink href={usage.href}>{usage.label}</TextLink>
+										{usage.isDraft && <Badge intent="secondary">Draft</Badge>}
+									</li>
+								);
+							})}
+						</ul>
+					)
+				}
+			</section>
+		</div>
+	</Card>
+	<EntryEditor
+		client:only="react"
+		target={target}
+		revision={draft?.revision ?? published.revision}
+		initialData={data}
+		hasDraft={draft != null}
+		isPublished={published.data !== undefined}
+		referenceOptions={{}}
+		listUrl="/admin/media"
+	/>
+</AdminLayout>

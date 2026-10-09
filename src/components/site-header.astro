@@ -1,0 +1,427 @@
+---
+import Icon from "#/src/components/icon.astro";
+
+const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+
+/** Renders without links rather than failing every page - `tests/cms/content.test.ts` checks that it exists. */
+const mainNavigation = (await Astro.locals.content.singleton("navigation"))?.main ?? [];
+
+function toLink(link: { label: string; href: string }) {
+	return { label: link.label, href: link.href, isCurrent: link.href === pathname };
+}
+
+const entries = mainNavigation.map((entry, index) => {
+	switch (entry.type) {
+		case "link": {
+			const link = toLink(entry.data);
+
+			return { type: "link" as const, label: link.label, href: link.href, isCurrent: link.isCurrent };
+		}
+
+		case "menu": {
+			const links = entry.data.links.map(toLink);
+
+			return {
+				type: "menu" as const,
+				id: `navigation-menu-${String(index)}`,
+				label: entry.data.label,
+				links,
+				isCurrent: links.some((link) => link.isCurrent),
+			};
+		}
+	}
+});
+
+const menuId = "mobile-navigation";
+---
+
+<header class="relative z-10 border-b border-border-strong bg-background">
+	<div class="content-container flex h-18 items-center justify-between gap-8">
+		<a href="/" class="shrink-0">
+			<img
+				src="/assets/images/logo-stardast-horizontal-black.svg"
+				alt="STARDAST - Home"
+				width="584"
+				height="137"
+				class="h-8 w-auto"
+			/>
+		</a>
+
+		{/* One landmark for both the inline links and the mobile menu, so the menu button is found in it too. */}
+		<nav aria-label="Main" class="flex items-center gap-x-2 lg:gap-x-4">
+			{
+				/*
+				 * Menus follow the disclosure navigation pattern of the aria authoring practices guide - buttons which show and
+				 * hide a list of links - rather than the aria `menu` pattern, which is meant for application menus. See the
+				 * script below.
+				 *
+				 * Menus are positioned absolutely, and the script aligns them with the end of their button when they would
+				 * overflow the viewport. Css anchor positioning does the same with `position-try-fallbacks: flip-inline`, but
+				 * only natively from chrome 128, firefox 147, and safari / ios 26 - below that, the polyfill re-parses all
+				 * site css at runtime, and does not cover chrome 125 - 127. Once `browserslist` targets those versions, prefer
+				 * popover and anchor positioning, and drop the measuring from the script.
+				 */
+			}
+			<ul data-disclosure-navigation class="hidden items-center gap-x-1 lg:flex" role="list">
+				{
+					entries.map((entry) => {
+						if (entry.type === "link") {
+							return (
+								<li>
+									<a
+										href={entry.href}
+										aria-current={entry.isCurrent ? "page" : undefined}
+										class:list={[
+											"block px-2.5 py-2 mono-label transition-colors",
+											entry.isCurrent
+												? "bg-foreground-strong text-background"
+												: "text-foreground-strong hover:bg-background-hover",
+										]}
+									>
+										{entry.label}
+									</a>
+								</li>
+							);
+						}
+
+						return (
+							<li class="relative">
+								<button
+									type="button"
+									aria-expanded="false"
+									aria-controls={entry.id}
+									class:list={[
+										"group inline-flex items-center gap-1 px-2.5 py-2 mono-label transition-colors",
+										entry.isCurrent
+											? "bg-foreground-strong text-background"
+											: "text-foreground-strong hover:bg-background-hover aria-expanded:bg-background-hover",
+									]}
+								>
+									{entry.label}
+									<svg
+										aria-hidden="true"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										class="size-3.5 transition-transform group-aria-expanded:rotate-180"
+									>
+										<path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+									</svg>
+								</button>
+								<ul
+									id={entry.id}
+									hidden
+									class="absolute top-full left-0 mt-px flex min-w-64 flex-col border border-border-strong bg-background data-[align=end]:right-0 data-[align=end]:left-auto"
+									role="list"
+								>
+									{entry.links.map((link) => {
+										return (
+											<li>
+												<a
+													href={link.href}
+													aria-current={link.isCurrent ? "page" : undefined}
+													class:list={[
+														"block border-b border-border px-4 py-3 text-sm font-medium text-foreground-strong last:border-b-0 hover:bg-background-hover",
+														link.isCurrent && "bg-background-hover",
+													]}
+												>
+													{link.label}
+												</a>
+											</li>
+										);
+									})}
+								</ul>
+							</li>
+						);
+					})
+				}
+			</ul>
+
+			{/* Between the inline links and the menu button, so that it comes last on wide screens, and first on narrow ones. */}
+			<a
+				href="/search"
+				aria-current={pathname === "/search" ? "page" : undefined}
+				class="inline-flex size-11 items-center justify-center border border-foreground-strong text-foreground-strong transition-colors hover:bg-foreground-strong hover:text-background aria-[current=page]:bg-foreground-strong aria-[current=page]:text-background"
+			>
+				<Icon name="search" class="size-5" />
+				<span class="sr-only">Search</span>
+			</a>
+
+			<button
+				type="button"
+				commandfor={menuId}
+				command="show-modal"
+				class="-me-2 inline-flex size-11 items-center justify-center text-foreground-strong hover:bg-background-hover lg:hidden"
+			>
+				<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-6">
+					<path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"></path>
+				</svg>
+				<span class="sr-only">Open menu</span>
+			</button>
+
+			{
+				/*
+				 * Modal, so focus stays inside and the page behind is inert while it is open. No `display` utility on the
+				 * dialog itself - it would override the UA rule that hides it while closed. Not hidden at `lg` either: a
+				 * dialog left open while resizing would otherwise keep the page inert behind an invisible modal.
+				 */
+			}
+			<dialog
+				id={menuId}
+				aria-label="Main menu"
+				closedby="any"
+				class="inset-x-0 top-0 bottom-auto m-0 max-h-dvh w-full max-w-none overflow-y-auto border-0 border-b border-border-strong bg-background p-0 text-foreground-strong backdrop:bg-backdrop"
+			>
+				<div class="content-container flex h-18 items-center justify-between gap-8 border-b border-border-strong">
+					<a href="/" class="shrink-0">
+						<img
+							src="/assets/images/logo-stardast-horizontal-black.svg"
+							alt="STARDAST - Home"
+							width="584"
+							height="137"
+							class="h-8 w-auto"
+						/>
+					</a>
+					<button
+						type="button"
+						commandfor={menuId}
+						command="close"
+						autofocus
+						class="-me-2 inline-flex size-11 items-center justify-center text-foreground-strong hover:bg-background-hover"
+					>
+						<svg
+							aria-hidden="true"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							class="size-6"
+						>
+							<path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"></path>
+						</svg>
+						<span class="sr-only">Close menu</span>
+					</button>
+				</div>
+
+				{/* Menus are always expanded here, as labelled groups of links - the dialog has room for all of them. */}
+				<ul class="content-container flex flex-col pt-2 pb-6" role="list">
+					{
+						entries.map((entry) => {
+							if (entry.type === "link") {
+								return (
+									<li>
+										<a
+											href={entry.href}
+											aria-current={entry.isCurrent ? "page" : undefined}
+											class:list={[
+												"block border-b border-border py-3 text-base font-medium hover:text-primary-hover",
+												entry.isCurrent ? "text-primary" : "text-foreground-strong",
+											]}
+										>
+											{entry.label}
+										</a>
+									</li>
+								);
+							}
+
+							const labelId = `${entry.id}-mobile-label`;
+
+							return (
+								<li class="border-b border-border py-3">
+									<span id={labelId} class="mono-label text-foreground-muted">
+										{entry.label}
+									</span>
+									<ul aria-labelledby={labelId} class="mt-1 flex flex-col" role="list">
+										{entry.links.map((link) => {
+											return (
+												<li>
+													<a
+														href={link.href}
+														aria-current={link.isCurrent ? "page" : undefined}
+														class:list={[
+															"block py-2 ps-4 text-base font-medium hover:text-primary-hover",
+															link.isCurrent ? "text-primary" : "text-foreground-strong",
+														]}
+													>
+														{link.label}
+													</a>
+												</li>
+											);
+										})}
+									</ul>
+								</li>
+							);
+						})
+					}
+				</ul>
+			</dialog>
+		</nav>
+	</div>
+</header>
+
+<script>
+	/** Invoker commands are Baseline 2025, but `browserslist` still includes browsers without them. */
+	if (!("commandForElement" in HTMLButtonElement.prototype)) {
+		void import("invokers-polyfill");
+	}
+
+	/** `closedby="any"` closes a dialog on backdrop click, but is not supported in Safari. */
+	if (!("closedBy" in HTMLDialogElement.prototype)) {
+		for (const dialog of document.querySelectorAll<HTMLDialogElement>('dialog[closedby="any"]')) {
+			/** Clicks on `::backdrop` target the dialog itself; only close when the press also started there. */
+			let pressedOnBackdrop = false;
+
+			dialog.addEventListener("pointerdown", (event) => {
+				pressedOnBackdrop = event.target === dialog;
+			});
+
+			dialog.addEventListener("click", (event) => {
+				if (pressedOnBackdrop && event.target === dialog) {
+					dialog.close();
+				}
+			});
+		}
+	}
+
+	/**
+	 * Disclosure navigation, see https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/.
+	 * Links stay in the tab order. One menu is open at a time; escape closes it and returns focus to its button, and it
+	 * closes when focus or a click moves elsewhere. Arrow keys, home, and end additionally move between the links of an
+	 * open menu, and down arrow on a button opens its menu and moves to the first link.
+	 */
+	function getMenu(button: HTMLButtonElement): HTMLElement {
+		return document.querySelector<HTMLElement>(`#${CSS.escape(button.getAttribute("aria-controls")!)}`)!;
+	}
+
+	function getLinks(button: HTMLButtonElement): Array<HTMLAnchorElement> {
+		return [...getMenu(button).querySelectorAll("a")];
+	}
+
+	function isOpen(button: HTMLButtonElement): boolean {
+		return button.getAttribute("aria-expanded") === "true";
+	}
+
+	/** Kept free between a menu and the edge of the viewport, in pixels. */
+	const viewportMargin = 16;
+
+	/**
+	 * Menus open aligned with the start of their button - or with its end, when they would otherwise overflow the
+	 * viewport. Measured on every open, so that it adapts to resizing and zooming.
+	 */
+	function align(menu: HTMLElement): void {
+		delete menu.dataset.align;
+
+		if (menu.getBoundingClientRect().right > document.documentElement.clientWidth - viewportMargin) {
+			menu.dataset.align = "end";
+		}
+	}
+
+	function setOpen(button: HTMLButtonElement, open: boolean): void {
+		const menu = getMenu(button);
+
+		button.setAttribute("aria-expanded", String(open));
+		menu.hidden = !open;
+
+		if (open) {
+			align(menu);
+		}
+	}
+
+	for (const navigation of document.querySelectorAll<HTMLElement>("[data-disclosure-navigation]")) {
+		const buttons = [...navigation.querySelectorAll<HTMLButtonElement>("button[aria-controls]")];
+
+		function open(button: HTMLButtonElement): void {
+			for (const other of buttons) {
+				if (other !== button) {
+					setOpen(other, false);
+				}
+			}
+
+			setOpen(button, true);
+		}
+
+		function closeAll(): void {
+			for (const button of buttons) {
+				setOpen(button, false);
+			}
+		}
+
+		for (const button of buttons) {
+			const item = button.parentElement!;
+
+			button.addEventListener("click", () => {
+				if (isOpen(button)) {
+					setOpen(button, false);
+				} else {
+					open(button);
+				}
+			});
+
+			item.addEventListener("keydown", (event) => {
+				const links = getLinks(button);
+				const index = links.indexOf(document.activeElement as HTMLAnchorElement);
+
+				switch (event.key) {
+					case "Escape": {
+						if (isOpen(button)) {
+							setOpen(button, false);
+							button.focus();
+							event.preventDefault();
+						}
+						break;
+					}
+
+					case "ArrowDown": {
+						if (event.target === button) {
+							open(button);
+							links[0]?.focus();
+						} else if (index !== -1) {
+							links[(index + 1) % links.length]?.focus();
+						} else {
+							return;
+						}
+						event.preventDefault();
+						break;
+					}
+
+					case "ArrowUp": {
+						if (index === -1) {
+							return;
+						}
+						links[(index - 1 + links.length) % links.length]?.focus();
+						event.preventDefault();
+						break;
+					}
+
+					case "Home":
+					case "End": {
+						if (index === -1) {
+							return;
+						}
+						links.at(event.key === "Home" ? 0 : -1)?.focus();
+						event.preventDefault();
+						break;
+					}
+				}
+			});
+
+			/**
+			 * Only when focus moves to another element, e.g. with tab. Without one, focus left the document, or a click moved
+			 * it to a non-focusable element - or, in safari, which does not focus buttons on click, to the menu's own button.
+			 * Clicks elsewhere are handled below.
+			 */
+			item.addEventListener("focusout", (event) => {
+				if (event.relatedTarget instanceof Node && !item.contains(event.relatedTarget)) {
+					setOpen(button, false);
+				}
+			});
+		}
+
+		document.addEventListener("pointerdown", (event) => {
+			if (!navigation.contains(event.target as Node)) {
+				closeAll();
+			}
+		});
+	}
+</script>

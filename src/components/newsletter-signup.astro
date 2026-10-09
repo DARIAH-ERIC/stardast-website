@@ -1,0 +1,109 @@
+---
+import { buttonStyles } from "#/src/components/button-styles.ts";
+import { inputStyles } from "#/src/components/input-styles.ts";
+import { getNewsletterStatus, newsletterFormId } from "#/src/lib/newsletter/status.ts";
+
+/** Renders nothing rather than failing every page - `tests/cms/content.test.ts` checks that it exists. */
+const newsletter = await Astro.locals.content.singleton("newsletter");
+
+const status = getNewsletterStatus(Astro.url);
+
+const messages = {
+	subscribed: "Thank you for subscribing!",
+	invalid: "Please check your details - they could not be subscribed.",
+	error: "Sorry, something went wrong. Please try again later.",
+};
+
+const noticeId = "newsletter-notice";
+
+const hasNotice = newsletter?.notice != null || newsletter?.privacyPolicy != null;
+
+/** Shown on every page, so kept compact: small labels, shorter inputs than elsewhere, and names side by side. */
+const labelClass = "flex flex-col gap-1.5 text-sm font-medium text-foreground-strong";
+const inputClass = inputStyles({ class: "w-full font-normal" });
+---
+
+{
+	newsletter != null && (
+		<section id={newsletterFormId} aria-labelledby="newsletter-heading" class="scheme-brand">
+			<div class="content-container grid items-start gap-x-16 gap-y-8 py-[clamp(3rem,3rem+3vw,6rem)] lg:grid-cols-[2fr_3fr]">
+				<header class="flex flex-col items-start gap-4">
+					<hgroup class="flex flex-col items-start gap-4">
+						<p class="label-marker mono-label text-foreground-strong">Newsletter</p>
+						<h2 id="newsletter-heading" class="text-headline text-balance text-foreground-strong">
+							{newsletter.title}
+						</h2>
+					</hgroup>
+					{newsletter.text != null && <p class="text-pretty">{newsletter.text}</p>}
+				</header>
+
+				<form method="post" action="/api/newsletter" class="grid grid-cols-2 gap-3">
+					{status != null && (
+						<p
+							role={status === "subscribed" ? "status" : "alert"}
+							class:list={[
+								"col-span-2 border p-4",
+								status === "subscribed" ? "border-border-strong text-foreground-strong" : "border-danger text-danger",
+							]}
+						>
+							{messages[status]}
+						</p>
+					)}
+					<input type="hidden" name="returnTo" value={Astro.url.pathname} />
+					{/* A honeypot, see `/api/newsletter`. */}
+					<div aria-hidden="true" class="hidden">
+						<label>
+							Website
+							<input type="text" name="website" tabindex="-1" autocomplete="off" />
+						</label>
+					</div>
+					<label class={labelClass}>
+						First name
+						<input type="text" name="firstName" required maxlength="100" autocomplete="given-name" class={inputClass} />
+					</label>
+					<label class={labelClass}>
+						Last name
+						<input type="text" name="lastName" required maxlength="100" autocomplete="family-name" class={inputClass} />
+					</label>
+					<label class:list={[labelClass, "col-span-2 sm:col-span-1"]}>
+						Email
+						<input
+							type="email"
+							name="email"
+							required
+							maxlength="254"
+							autocomplete="email"
+							aria-describedby={hasNotice ? noticeId : undefined}
+							class={inputClass}
+						/>
+					</label>
+					<label class:list={[labelClass, "col-span-2 sm:col-span-1"]}>
+						<span>
+							Institution <span class="font-normal text-foreground-muted">(optional)</span>
+						</span>
+						<input type="text" name="institution" maxlength="200" autocomplete="organization" class={inputClass} />
+					</label>
+					<div class="col-span-2 mt-1 flex flex-wrap items-center gap-x-6 gap-y-3">
+						<button type="submit" class={buttonStyles()}>
+							Subscribe
+						</button>
+						{hasNotice && (
+							<p id={noticeId} class="flex-1 basis-64 text-sm text-pretty text-foreground-muted">
+								{newsletter.notice}
+								{newsletter.notice != null && newsletter.privacyPolicy != null && " "}
+								{newsletter.privacyPolicy != null && (
+									<a
+										href={newsletter.privacyPolicy}
+										class="font-medium text-foreground-strong underline hover:no-underline"
+									>
+										Privacy policy
+									</a>
+								)}
+							</p>
+						)}
+					</div>
+				</form>
+			</div>
+		</section>
+	)
+}

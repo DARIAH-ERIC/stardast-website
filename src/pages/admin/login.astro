@@ -1,0 +1,48 @@
+---
+import { getAuth, getSafeReturnTo } from "#/src/cms/auth.ts";
+import { LogIn } from "lucide-react";
+
+import { buttonStyles } from "#/src/components/admin/ui/button.tsx";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "#/src/components/admin/ui/card.tsx";
+import { Note } from "#/src/components/admin/ui/note.tsx";
+import AdminLayout from "#/src/layouts/admin-layout.astro";
+
+if (Astro.locals.session != null) {
+	return Astro.redirect(getSafeReturnTo(Astro.url.searchParams.get("returnTo")));
+}
+
+const { provider } = getAuth();
+
+const errors: Record<string, string> = {
+	denied: "Sign-in was cancelled.",
+	failed: "Sign-in failed. Please try again.",
+	forbidden: "Your account is not allowed to edit content. Ask a maintainer for write access to the content repository.",
+};
+
+const error = errors[Astro.url.searchParams.get("error") ?? ""];
+const returnTo = getSafeReturnTo(Astro.url.searchParams.get("returnTo"));
+const href = `/api/cms/auth/login?returnTo=${encodeURIComponent(returnTo)}`;
+---
+
+<AdminLayout title="Sign in">
+	<Card className="mx-auto mt-16 max-w-sm">
+		<img src="/assets/images/sparkle-stardast-blue.svg" alt="" class="mx-6 size-8" />
+		<CardHeader>
+			<CardTitle>Sign in to STARDAST CMS</CardTitle>
+			<CardDescription>Edit the website's content, and manage its media.</CardDescription>
+		</CardHeader>
+		<CardContent className="flex flex-col gap-4">
+			{
+				error != null && (
+					<Note intent="danger" role="alert">
+						{error}
+					</Note>
+				)
+			}
+			<a href={href} class={buttonStyles({ className: "w-full" })}>
+				<LogIn aria-hidden="true" />
+				Sign in with {provider.label}
+			</a>
+		</CardContent>
+	</Card>
+</AdminLayout>

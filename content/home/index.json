@@ -1,0 +1,95 @@
+{
+	"hero": {
+		"eyebrow": "STARDAST · Horizon Europe project",
+		"title": "Giving Europe’s data stewards the recognition, skills and careers they deserve",
+		"lead": "STARDAST professionalises data stewardship across science, the humanities and industry, and builds the training, networks and institutional support Open Science needs.",
+		"links": [
+			{
+				"label": "Explore the project",
+				"href": "/about"
+			},
+			{
+				"label": "Read the latest news",
+				"href": "/news"
+			}
+		]
+	},
+	"sections": [
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"eyebrow": "Vision",
+				"title": "Our vision",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Data stewards turn FAIR and Open Science principles into daily practice, yet their role is still undervalued, with unclear career paths and uneven institutional support. STARDAST will work to make data stewardship a recognised, skilled and connected profession across Europe."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "It will help institutions build the roles, skills, career pathways and support structures that enable data stewards to thrive, and help researchers put FAIR and Open Science into practice. STARDAST builds on Skills4EOSC and FAIR-IMPACT and contributes to the European Open Science Cloud (EOSC)."
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "cards",
+			"data": {
+				"eyebrow": "Impact",
+				"title": "The impact we want to create",
+				"cards": [
+					{
+						"eyebrow": "Networks",
+						"title": "Connected European networks",
+						"text": "Stronger, sustainable networks for FAIR and Open Science, connecting expertise across institutions, disciplines and countries."
+					},
+					{
+						"eyebrow": "Practice",
+						"title": "Better research through better data stewardship",
+						"text": "Better data practices, research quality and reproducibility, supported by skilled and consistent data stewardship."
+					},
+					{
+						"eyebrow": "Culture",
+						"title": "A culture that values data stewardship",
+						"text": "Recognition for data stewardship as a profession and for the people who make FAIR data and Open Science possible."
+					}
+				]
+			}
+		},
+		{
+			"type": "newsAndEvents",
+			"data": {
+				"eyebrow": "Updates",
+				"title": "Latest news and events",
+				"count": 3
+			}
+		},
+		{
+			"type": "partners",
+			"data": {
+				"eyebrow": "Consortium",
+				"title": "{partners} partners from science, the humanities and industry",
+				"links": [
+					{
+						"label": "Meet the team",
+						"href": "/about#partners"
+					}
+				]
+			}
+		}
+	]
+}

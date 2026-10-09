@@ -1,0 +1,233 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/** In the theme layer, next to tailwind's own theme variables. */
+@import "./palette.css" layer(theme);
+
+@plugin "@tailwindcss/typography";
+
+/** State variants for react aria components, e.g. `pressed:`, `selected:`, `placement-bottom:`. */
+@plugin "tailwindcss-react-aria-components";
+
+/**
+ * The admin ui has no dark mode. Intent ui components come with `dark:` styles, which would otherwise apply whenever
+ * the operating system prefers a dark colour scheme.
+ */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/**
+ * The stylesheet of the admin ui, separate from the site's `index.css`: the intent ui components in
+ * `src/components/admin/ui/` use intent ui's semantic token names, some of which clash with the site's - e.g. `accent`
+ * is a neutral highlight here, but the brand pink on the site.
+ *
+ * @see {@link https://intentui.com/docs/getting-started/theming}
+ */
+@theme {
+	/** Remove all of tailwind's default colours, so only the semantic tokens below are available as utilities. */
+	--color-*: initial;
+	--color-white: var(--palette-white);
+	--color-black: var(--palette-black);
+	--color-bg: var(--bg);
+	--color-fg: var(--fg);
+	--color-primary: var(--primary);
+	--color-primary-fg: var(--primary-fg);
+	--color-primary-subtle: var(--primary-subtle);
+	--color-primary-subtle-fg: var(--primary-subtle-fg);
+	--color-secondary: var(--secondary);
+	--color-secondary-fg: var(--secondary-fg);
+	--color-accent: var(--accent);
+	--color-accent-fg: var(--accent-fg);
+	--color-muted: var(--muted);
+	--color-muted-fg: var(--muted-fg);
+	--color-overlay: var(--overlay);
+	--color-overlay-fg: var(--overlay-fg);
+	--color-card: var(--card);
+	--color-card-fg: var(--card-fg);
+	--color-success: var(--success);
+	--color-success-fg: var(--success-fg);
+	--color-success-subtle: var(--success-subtle);
+	--color-success-subtle-fg: var(--success-subtle-fg);
+	--color-danger: var(--danger);
+	--color-danger-fg: var(--danger-fg);
+	--color-danger-subtle: var(--danger-subtle);
+	--color-danger-subtle-fg: var(--danger-subtle-fg);
+	--color-warning: var(--warning);
+	--color-warning-fg: var(--warning-fg);
+	--color-warning-subtle: var(--warning-subtle);
+	--color-warning-subtle-fg: var(--warning-subtle-fg);
+	--color-info: var(--info);
+	--color-info-fg: var(--info-fg);
+	--color-info-subtle: var(--info-subtle);
+	--color-info-subtle-fg: var(--info-subtle-fg);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--color-navbar: var(--navbar);
+	--color-navbar-fg: var(--navbar-fg);
+	--color-sidebar: var(--sidebar);
+	--color-sidebar-fg: var(--sidebar-fg);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-primary-fg: var(--sidebar-primary-fg);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-accent-fg: var(--sidebar-accent-fg);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-ring: var(--sidebar-ring);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+	--radius-2xl: calc(var(--radius) * 1.8);
+	--radius-3xl: calc(var(--radius) * 2.2);
+	--radius-4xl: calc(var(--radius) * 2.6);
+	--font-sans: var(--font-roboto);
+	--font-display: var(--font-roboto);
+}
+
+/**
+ * Animations of intent ui's `Sheet`, from its registry item: react aria's `Sheet` refers to them by name, in its
+ * `swipeAnimation` and `stackAnimation` props.
+ */
+@theme static {
+	--animate-sheet-backdrop: sheet-backdrop 300ms linear both;
+	--animate-sheet-scale-back: sheet-scale-back 300ms ease-out both;
+
+	@keyframes sheet-backdrop {
+		from {
+			opacity: 0;
+		}
+
+		to {
+			opacity: 1;
+		}
+	}
+
+	@keyframes sheet-scale-back {
+		to {
+			transform: translate(var(--sheet-stack-x, 0), var(--sheet-stack-y, 0)) scale(0.95);
+		}
+	}
+}
+
+/**
+ * Intent ui's tokens, mapped onto the value tokens in `palette.css`. Some components read these directly, rather than
+ * the `--color-*` theme variables above.
+ */
+@layer theme {
+	:root {
+		--bg: var(--palette-white);
+		--fg: var(--palette-neutral-900);
+		--primary: var(--palette-blue);
+		--primary-fg: var(--palette-white);
+		--primary-subtle: color-mix(in oklab, var(--palette-blue) 10%, transparent);
+		--primary-subtle-fg: var(--palette-blue);
+		--secondary: var(--palette-neutral-100);
+		--secondary-fg: var(--palette-neutral-900);
+		--accent: var(--palette-neutral-100);
+		--accent-fg: var(--palette-neutral-900);
+		--muted: var(--palette-neutral-50);
+		--muted-fg: var(--palette-neutral-600);
+		--overlay: var(--palette-white);
+		--overlay-fg: var(--palette-neutral-900);
+		--card: var(--palette-white);
+		--card-fg: var(--palette-neutral-900);
+		--success: var(--palette-green);
+		--success-fg: var(--palette-white);
+		--success-subtle: color-mix(in oklab, var(--palette-green) 10%, transparent);
+		--success-subtle-fg: var(--palette-green);
+		--danger: var(--palette-red);
+		--danger-fg: var(--palette-white);
+		--danger-subtle: color-mix(in oklab, var(--palette-red) 8%, transparent);
+		--danger-subtle-fg: var(--palette-red);
+		--warning: var(--palette-amber);
+		--warning-fg: var(--palette-white);
+		--warning-subtle: color-mix(in oklab, var(--palette-amber) 10%, transparent);
+		--warning-subtle-fg: var(--palette-amber);
+		--info: var(--palette-blue);
+		--info-fg: var(--palette-white);
+		--info-subtle: color-mix(in oklab, var(--palette-blue) 10%, transparent);
+		--info-subtle-fg: var(--palette-blue);
+		--border: var(--palette-neutral-200);
+		--input: var(--palette-neutral-300);
+		--ring: var(--palette-blue);
+		--navbar: var(--palette-white);
+		--navbar-fg: var(--palette-neutral-900);
+		--sidebar: var(--palette-neutral-50);
+		--sidebar-fg: var(--palette-neutral-900);
+		--sidebar-primary: color-mix(in oklab, var(--palette-blue) 10%, transparent);
+		--sidebar-primary-fg: var(--palette-blue);
+		--sidebar-accent: var(--palette-neutral-100);
+		--sidebar-accent-fg: var(--palette-neutral-900);
+		--sidebar-border: var(--palette-neutral-200);
+		--sidebar-ring: var(--palette-blue);
+		--radius: 0.5rem;
+	}
+}
+
+/** Layered, so that utilities, e.g. `outline-hidden`, can still override these. */
+@layer base {
+	html {
+		color-scheme: light;
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	body {
+		color: var(--fg);
+		background-color: var(--bg);
+	}
+
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--border, currentcolor);
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--ring);
+		outline-offset: 2px;
+	}
+}
+
+/** Extends the hit area of small controls, e.g. icon buttons, to at least 44 x 44px, without changing their size. */
+@utility touch-target {
+	position: relative;
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		display: block;
+		inline-size: 100%;
+		min-inline-size: 44px;
+		block-size: 100%;
+		min-block-size: 44px;
+		transform: translate(-50%, -50%);
+	}
+}
+
+/** Points the typography plugin's colours at the semantic tokens, for the rich text editor. */
+@utility prose {
+	--tw-prose-body: var(--fg);
+	--tw-prose-headings: var(--fg);
+	--tw-prose-lead: var(--muted-fg);
+	--tw-prose-links: var(--primary);
+	--tw-prose-bold: var(--fg);
+	--tw-prose-counters: var(--muted-fg);
+	--tw-prose-bullets: var(--input);
+	--tw-prose-hr: var(--border);
+	--tw-prose-quotes: var(--fg);
+	--tw-prose-quote-borders: var(--border);
+	--tw-prose-captions: var(--muted-fg);
+	--tw-prose-kbd: var(--fg);
+	--tw-prose-kbd-shadows: color-mix(in oklab, var(--fg) 10%, transparent);
+	--tw-prose-code: var(--fg);
+	--tw-prose-pre-code: var(--palette-neutral-200);
+	--tw-prose-pre-bg: var(--palette-neutral-800);
+	--tw-prose-th-borders: var(--input);
+	--tw-prose-td-borders: var(--border);
+}

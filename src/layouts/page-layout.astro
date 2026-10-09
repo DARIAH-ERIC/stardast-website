@@ -1,0 +1,52 @@
+---
+import NewsletterSignup from "#/src/components/newsletter-signup.astro";
+import SiteFooter from "#/src/components/site-footer.astro";
+import SiteHeader from "#/src/components/site-header.astro";
+import SkipLink from "#/src/components/skip-link.astro";
+import DocumentLayout, { type Props as DocumentLayoutProps } from "#/src/layouts/document-layout.astro";
+
+export interface Props extends DocumentLayoutProps {}
+
+const { title, description, canonical } = Astro.props;
+
+const mainContentId = "main-content";
+
+const { preview } = Astro.locals;
+---
+
+<DocumentLayout title={title} description={description} canonical={canonical}>
+	<div class="isolate flex min-h-full flex-col">
+		<SkipLink target={mainContentId} />
+		{
+			preview != null && (
+				<div role="status" class="bg-foreground-strong text-sm text-background">
+					<div class="content-container flex flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2">
+						<p>
+							<strong>Preview</strong> - showing {preview.drafts} unpublished {preview.drafts === 1 ? "draft" : "drafts"}.
+							Links leave the preview.
+						</p>
+						<p class="flex gap-4">
+							<a href="/admin" class="font-medium underline">
+								Back to the cms
+							</a>
+							<a href={preview.exitUrl} class="font-medium underline">
+								Exit preview
+							</a>
+						</p>
+					</div>
+				</div>
+			)
+		}
+		<SiteHeader />
+		{/* Sections are its direct children - a line between each two of them separates e.g. two white sections. */}
+		<main
+			id={mainContentId}
+			tabindex="-1"
+			class="flex-1 outline-none [&>*+*]:section-separator"
+		>
+			<slot />
+		</main>
+		<NewsletterSignup />
+		<SiteFooter />
+	</div>
+</DocumentLayout>

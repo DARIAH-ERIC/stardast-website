@@ -1,0 +1,36 @@
+{
+	"title": "Cascading grants",
+	"heading": "Grants for staff exchanges between institutions",
+	"summary": "Supporting staff exchanges that connect data stewards across organisations, sectors and countries, enabling hands-on learning, shared expertise and lasting professional networks.",
+	"sections": [
+		{
+			"type": "callToAction",
+			"data": {
+				"eyebrow": "Open call",
+				"title": "Call for submissions opening soon. Stay tuned!",
+				"links": []
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "split",
+				"title": "What the grants fund",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Secondments, job shadowing, exchanges and peer learning, widening participation and mobility, including for institutions from underrepresented regions."
+								}
+							]
+						}
+					]
+				}
+			}
+		}
+	]
+}

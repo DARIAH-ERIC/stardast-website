@@ -1,0 +1,15 @@
+---
+export interface Props {
+	/** Id of the element to skip to, without the leading `#`. */
+	target: string;
+}
+
+const { target } = Astro.props;
+---
+
+<a
+	href={`#${target}`}
+	class="fixed top-2 left-2 z-50 bg-primary px-4 py-3 mono-label text-primary-foreground not-focus:sr-only"
+>
+	Skip to main content
+</a>

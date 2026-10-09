@@ -1,0 +1,84 @@
+---
+import { Font } from "astro:assets";
+
+import { AdminNavigation, type NavigationSection } from "#/src/components/admin/admin-navigation.tsx";
+import { config, mediaCollectionName } from "#/src/cms/config.ts";
+
+import "#/src/styles/admin.css";
+
+export interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+
+const { session } = Astro.locals;
+const { pathname } = Astro.url;
+
+const singletons = Object.entries(config.singletons as Record<string, { label: string }>);
+
+const sections: Array<NavigationSection> = [
+	{ id: "home", items: [{ href: "/admin", label: "Dashboard", icon: "dashboard" }] },
+	{
+		id: "content",
+		title: "Content",
+		items: Object.entries(config.collections)
+			.filter(([name]) => name !== mediaCollectionName)
+			.map(([name, collection]) => {
+				return { href: `/admin/collections/${name}`, label: collection.label, icon: "collection" };
+			}),
+	},
+	{ id: "media", title: "Assets", items: [{ href: "/admin/media", label: "Media library", icon: "media" }] },
+	...(singletons.length > 0
+		? [
+				{
+					id: "site",
+					title: "Site",
+					items: singletons.map(([name, singleton]) => {
+						return { href: `/admin/singletons/${name}`, label: singleton.label, icon: "singleton" as const };
+					}),
+				},
+			]
+		: []),
+];
+
+/** The deepest navigation item containing the current page - e.g. the collection for one of its entries. */
+const currentRoute =
+	sections
+		.flatMap((section) => section.items.map((item) => item.href))
+		.filter((href) => pathname === href || pathname.startsWith(`${href}/`))
+		.toSorted((a, b) => b.length - a.length)[0] ?? null;
+
+const navigation = { sections, currentRoute, userName: session?.identity.name };
+---
+
+<!doctype html>
+<html lang="en-GB">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="robots" content="noindex, nofollow" />
+		<link rel="icon" type="image/svg+xml" href="/icon.svg" />
+		<meta name="color-scheme" content="light" />
+		<title>{title} | STARDAST CMS</title>
+		<Font cssVariable="--font-roboto" preload={[{ subset: "latin", style: "normal" }]} />
+	</head>
+	<body>
+		{
+			session == null ? (
+				<main class="min-h-dvh w-full bg-muted px-4 py-8 sm:px-6">
+					<slot />
+				</main>
+			) : (
+				<div class="flex min-h-dvh flex-col md:flex-row">
+					<AdminNavigation client:load {...navigation} />
+					<main class="w-full min-w-0 flex-1 px-4 py-8 sm:px-6 lg:px-10">
+						<div class="mx-auto max-w-5xl">
+							<slot />
+						</div>
+					</main>
+				</div>
+			)
+		}
+	</body>
+</html>

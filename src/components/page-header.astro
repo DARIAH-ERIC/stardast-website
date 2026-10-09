@@ -1,0 +1,91 @@
+---
+export interface Breadcrumb {
+	label: string;
+	/** Omitted for e.g. a navigation menu, which has no page of its own. */
+	href?: string;
+}
+
+export interface SectionLink {
+	label: string;
+	/** An in-page link, e.g. `#objectives`. */
+	href: string;
+}
+
+export interface Props {
+	/** The page's name - in the breadcrumbs, or above the heading. */
+	title: string;
+	/** The main heading, when it differs from the page's name. */
+	heading?: string;
+	intro?: string;
+	/** Between the home page, which always comes first, and this page, which always comes last. */
+	parents?: ReadonlyArray<Breadcrumb>;
+	/** Links to the sections of the page, below the intro. */
+	sectionLinks?: ReadonlyArray<SectionLink>;
+}
+
+const { title, heading, intro, parents = [], sectionLinks = [] } = Astro.props;
+
+const breadcrumbs: ReadonlyArray<Breadcrumb> = [{ label: "Home", href: "/" }, ...parents];
+
+/**
+ * Nested pages, e.g. news articles, show where they are in breadcrumbs. Top-level pages only show their name above a
+ * heading of its own - the breadcrumbs would only repeat it.
+ */
+const hasBreadcrumbs = parents.length > 0;
+---
+
+<header class="scheme-brand">
+	<div class="content-container flex flex-col items-start gap-6 pt-[clamp(3rem,3rem+3vw,6.5rem)] pb-[clamp(3rem,3rem+3vw,6rem)]">
+		{
+			/* Breadcrumbs: see https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/. */
+			hasBreadcrumbs ? (
+				<nav aria-label="Breadcrumb">
+					<ol class="flex flex-wrap items-center gap-x-2 gap-y-1 mono-label" role="list">
+						{
+							breadcrumbs.map((breadcrumb) => {
+								return (
+									<li class="flex items-center gap-x-2 text-foreground-muted">
+										{breadcrumb.href != null ? (
+											<a href={breadcrumb.href} class="hover:text-foreground-strong hover:underline underline-offset-4">
+												{breadcrumb.label}
+											</a>
+										) : (
+											breadcrumb.label
+										)}
+										<span aria-hidden="true">/</span>
+									</li>
+								);
+							})
+						}
+						<li>
+							<span aria-current="page" class="text-foreground-strong">
+								{title}
+							</span>
+						</li>
+					</ol>
+				</nav>
+			) : (
+				heading != null && <p class="label-marker mono-label text-foreground-strong">{title}</p>
+			)
+		}
+		<h1 class="max-w-[20ch] text-display text-foreground-strong">{heading ?? title}</h1>
+		{intro != null && <p class="max-w-[38rem] text-lead">{intro}</p>}
+		{
+			sectionLinks.length > 0 && (
+				<nav aria-label="On this page" class="mt-2">
+					<ul class="flex flex-wrap gap-x-6 gap-y-2" role="list">
+						{sectionLinks.map((link) => {
+							return (
+								<li>
+									<a href={link.href} class="mono-label text-foreground-strong hover:underline underline-offset-4">
+										{link.label} <span aria-hidden="true">&darr;</span>
+									</a>
+								</li>
+							);
+						})}
+					</ul>
+				</nav>
+			)
+		}
+	</div>
+</header>

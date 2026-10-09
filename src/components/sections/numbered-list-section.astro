@@ -1,0 +1,33 @@
+---
+import SectionHeader from "#/src/components/sections/section-header.astro";
+import type { SectionData } from "#/src/cms/config.ts";
+
+export type Props = SectionData<"numberedList">;
+
+const { anchor, eyebrow, title, lead, prefix = "", items } = Astro.props;
+
+/** Item titles are below the section title, if there is one. */
+const Heading = title != null ? "h3" : "h2";
+---
+
+<section id={anchor} class="content-container section-spacing">
+	<SectionHeader eyebrow={eyebrow} title={title} lead={lead} />
+	{/* The numbers are part of the text, rather than list markers, since they may be referenced elsewhere, e.g. WP1. */}
+	<ol class="flex flex-col border-t border-border-strong" role="list">
+		{
+			items.map((item, index) => {
+				return (
+					<li class="grid items-start gap-x-6 gap-y-2 border-b border-border py-6 sm:grid-cols-[6rem_1fr]">
+						<span class="justify-self-start border border-foreground-strong px-2 py-1 font-mono text-sm font-medium tracking-[0.04em] text-foreground-strong">
+							{`${prefix}${String(index + 1)}`}
+						</span>
+						<div class="flex max-w-[44rem] flex-col gap-2">
+							<Heading class="text-title text-balance text-foreground-strong">{item.title}</Heading>
+							<p class="text-pretty text-foreground-muted">{item.text}</p>
+						</div>
+					</li>
+				);
+			})
+		}
+	</ol>
+</section>

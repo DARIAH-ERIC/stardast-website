@@ -1,0 +1,57 @@
+---
+import CallToActionSection from "#/src/components/sections/call-to-action-section.astro";
+import CardsSection from "#/src/components/sections/cards-section.astro";
+import ImageTextSection from "#/src/components/sections/image-text-section.astro";
+import NewsAndEventsSection from "#/src/components/sections/news-and-events-section.astro";
+/** The mockup's version, with news and events in one list: to show it, comment out the import above, and uncomment this one. */
+// import NewsAndEventsSection from "#/src/components/sections/news-and-events-feed-section.astro";
+import NumberedListSection from "#/src/components/sections/numbered-list-section.astro";
+import PartnersSection from "#/src/components/sections/partners-section.astro";
+import SelectedNewsSection from "#/src/components/sections/selected-news-section.astro";
+import TextSection from "#/src/components/sections/text-section.astro";
+import type { SectionsData } from "#/src/cms/config.ts";
+
+export interface Props {
+	value: SectionsData;
+}
+
+const { value } = Astro.props;
+---
+
+{
+	value.map((section) => {
+		switch (section.type) {
+			case "text": {
+				return <TextSection {...section.data} />;
+			}
+
+			case "imageText": {
+				return <ImageTextSection {...section.data} />;
+			}
+
+			case "cards": {
+				return <CardsSection {...section.data} />;
+			}
+
+			case "callToAction": {
+				return <CallToActionSection {...section.data} />;
+			}
+
+			case "numberedList": {
+				return <NumberedListSection {...section.data} />;
+			}
+
+			case "newsAndEvents": {
+				return <NewsAndEventsSection {...section.data} />;
+			}
+
+			case "selectedNews": {
+				return <SelectedNewsSection {...section.data} />;
+			}
+
+			case "partners": {
+				return <PartnersSection {...section.data} />;
+			}
+		}
+	})
+}

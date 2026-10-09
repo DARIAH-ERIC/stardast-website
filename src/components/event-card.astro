@@ -1,0 +1,41 @@
+---
+import CoverImage from "#/src/components/cover-image.astro";
+import type { EventEntryData } from "#/src/cms/config.ts";
+import { formatDateRange } from "#/src/lib/format-date.ts";
+
+export interface Props {
+	id: string;
+	data: EventEntryData;
+	/** Below the heading of the list it is part of. */
+	headingLevel: 2 | 3;
+}
+
+const { id, data, headingLevel } = Astro.props;
+
+/** Literal tag names rather than a template string, so that the element's attributes can be type-checked. */
+const Heading = ({ 2: "h2", 3: "h3" } as const)[headingLevel];
+---
+
+<article class="relative flex h-full flex-col transition-colors has-[a:hover]:bg-background-hover">
+	<CoverImage id={data.image} sizes="(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw" />
+	<div class="flex flex-col gap-3 p-5 sm:p-6">
+		<Heading class="text-title text-balance text-foreground-strong">
+			{/* Stretched over the whole card, so that its text stays selectable rather than being a link label. */}
+			<a href={`/events/${id}`} class="after:absolute after:inset-0 hover:underline underline-offset-4">{data.title}</a>
+		</Heading>
+		<dl class="grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-1 text-sm">
+			<dt class="mono-label text-foreground-muted">Date</dt>
+			<dd class="text-foreground-strong">
+				<time datetime={data.startDate}>{formatDateRange(data.startDate, data.endDate)}</time>
+			</dd>
+			{
+				data.location != null && (
+					<>
+						<dt class="mono-label text-foreground-muted">Location</dt>
+						<dd class="text-foreground-strong">{data.location}</dd>
+					</>
+				)
+			}
+		</dl>
+	</div>
+</article>
