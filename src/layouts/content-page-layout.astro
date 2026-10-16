@@ -9,10 +9,10 @@ export interface Props extends PageLayoutProps {
 	parent: Breadcrumb;
 }
 
-const { title, description, image, parent } = Astro.props;
+const { title, description, image, parent, structuredData } = Astro.props;
 ---
 
-<PageLayout title={title} description={description} image={image} type="article">
+<PageLayout title={title} description={description} image={image} type="article" structuredData={structuredData}>
 	<article>
 		<PageHeader title={title} parents={[parent]} />
 		<div class="content-container section-spacing">

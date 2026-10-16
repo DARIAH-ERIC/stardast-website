@@ -1,6 +1,7 @@
 ---
 import CoverImage from "#/src/components/cover-image.astro";
 import type { EventEntryData } from "#/src/cms/config.ts";
+import { formatEventLocation } from "#/src/lib/events.ts";
 import { formatDateRange } from "#/src/lib/format-date.ts";
 
 export interface Props {
@@ -14,6 +15,8 @@ const { id, data, headingLevel } = Astro.props;
 
 /** Literal tag names rather than a template string, so that the element's attributes can be type-checked. */
 const Heading = ({ 2: "h2", 3: "h3" } as const)[headingLevel];
+
+const location = formatEventLocation(data);
 ---
 
 <article class="relative flex h-full flex-col transition-colors has-[a:hover]:bg-background-hover">
@@ -29,10 +32,10 @@ const Heading = ({ 2: "h2", 3: "h3" } as const)[headingLevel];
 				<time datetime={data.startDate}>{formatDateRange(data.startDate, data.endDate)}</time>
 			</dd>
 			{
-				data.location != null && (
+				location != null && (
 					<>
 						<dt class="mono-label text-foreground-muted">Location</dt>
-						<dd class="text-foreground-strong">{data.location}</dd>
+						<dd class="text-foreground-strong">{location}</dd>
 					</>
 				)
 			}

@@ -47,6 +47,13 @@ export const eventInvolvements = [
 	{ value: "supported", label: "Supported" },
 ] as const;
 
+/** How people take part in an event - also for search engines, see `src/lib/structured-data.ts`. */
+export const eventAttendanceModes = [
+	{ value: "inPerson", label: "In person" },
+	{ value: "online", label: "Online" },
+	{ value: "hybrid", label: "In person and online" },
+] as const;
+
 /** Events are a collection of their own, see `events`. */
 const newsTags = [
 	{ value: "release", label: "Release" },
@@ -484,7 +491,14 @@ export const events = collection({
 			options: eventInvolvements,
 			defaultValue: "organised",
 		}),
-		location: optional(fields.text({ label: "Location", description: "E.g. Vienna, Austria, or Online." })),
+		attendance: fields.select({
+			label: "Attendance",
+			options: eventAttendanceModes,
+			defaultValue: "inPerson",
+		}),
+		location: optional(
+			fields.text({ label: "Location", description: "Where the event takes place in person, e.g. Vienna, Austria." }),
+		),
 		website: optional(fields.url({ label: "Website", description: "E.g. the registration page." })),
 		image: optional(fields.image({ label: "Cover image" })),
 		content: fields.richText({

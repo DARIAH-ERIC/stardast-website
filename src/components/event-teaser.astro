@@ -1,5 +1,6 @@
 ---
 import type { EventEntryData } from "#/src/cms/config.ts";
+import { formatEventLocation } from "#/src/lib/events.ts";
 import { formatDateRange } from "#/src/lib/format-date.ts";
 
 export interface Props {
@@ -13,6 +14,8 @@ const { id, data, headingLevel } = Astro.props;
 
 /** Literal tag names rather than a template string, so that the element's attributes can be type-checked. */
 const Heading = ({ 2: "h2", 3: "h3", 4: "h4" } as const)[headingLevel];
+
+const location = formatEventLocation(data);
 ---
 
 <article class="relative flex flex-col gap-1.5 py-5">
@@ -23,7 +26,7 @@ const Heading = ({ 2: "h2", 3: "h3", 4: "h4" } as const)[headingLevel];
 	{/* Shown above the title, but read after it. */}
 	<p class="order-1 mono-label text-foreground-muted">
 		<time datetime={data.startDate}>{formatDateRange(data.startDate, data.endDate)}</time>
-		{data.location != null && <span>{` · ${data.location}`}</span>}
+		{location != null && <span>{` · ${location}`}</span>}
 	</p>
 	<p class="order-3 text-pretty text-foreground-muted">{data.summary}</p>
 </article>

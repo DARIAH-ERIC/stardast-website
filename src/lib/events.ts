@@ -3,6 +3,26 @@
  * from upcoming to past at midnight utc after its last day.
  */
 
+export interface EventLocation {
+	attendance: "hybrid" | "inPerson" | "online";
+	location?: string;
+}
+
+/** E.g. "Vienna, Austria", "Online", or "Vienna, Austria, and online" - `undefined` if not known. */
+export function formatEventLocation(event: EventLocation): string | undefined {
+	switch (event.attendance) {
+		case "inPerson": {
+			return event.location;
+		}
+		case "online": {
+			return "Online";
+		}
+		case "hybrid": {
+			return event.location != null ? `${event.location}, and online` : "In person and online";
+		}
+	}
+}
+
 export interface EventDates {
 	startDate: string;
 	endDate?: string;

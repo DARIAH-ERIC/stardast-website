@@ -3,27 +3,44 @@ import CmsImage from "#/src/components/cms-image.astro";
 import Callout from "#/src/components/rich-text/callout.astro";
 import Figure from "#/src/components/rich-text/figure.astro";
 import RichText from "#/src/components/rich-text/rich-text.astro";
+import { getSharingImage } from "#/src/cms/sharing-image.ts";
 import ContentPageLayout from "#/src/layouts/content-page-layout.astro";
 import { formatDate } from "#/src/lib/format-date.ts";
+import { createNewsArticleJsonLd, getProjectReference } from "#/src/lib/structured-data.ts";
 
 const { content } = Astro.locals;
 
-const [entry, newsPage] = await Promise.all([
+const [entry, newsPage, site] = await Promise.all([
 	content.entry("news", Astro.params.id ?? ""),
 	content.singleton("newsPage"),
+	content.singleton("site"),
 ]);
 
 if (entry == null) {
 	return new Response(null, { status: 404 });
 }
 
-const authors = await content.entries("people", entry.data.authors);
+const [authors, image] = await Promise.all([
+	content.entries("people", entry.data.authors),
+	getSharingImage(content, [entry.data.image, site?.image], Astro.site),
+]);
+
+const structuredData = createNewsArticleJsonLd({
+	url: new URL(`/news/${entry.id}`, Astro.site).href,
+	headline: entry.data.title,
+	description: entry.data.summary,
+	datePublished: entry.data.publicationDate,
+	authors: authors.map((author) => author.data.name),
+	image: image?.url,
+	publisher: getProjectReference(Astro.site),
+});
 ---
 
 <ContentPageLayout
 	title={entry.data.title}
 	description={entry.data.summary}
 	image={entry.data.image}
+	structuredData={structuredData}
 	parent={{ label: newsPage?.title ?? "News", href: "/news" }}
 >
 	<p class="not-prose mono-label text-foreground-muted">

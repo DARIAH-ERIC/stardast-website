@@ -1,0 +1,14 @@
+---
+import type { JsonLd as JsonLdValue } from "#/src/lib/structured-data.ts";
+
+export interface Props {
+	value: JsonLdValue | ReadonlyArray<JsonLdValue>;
+}
+
+const { value } = Astro.props;
+
+/** Escaped, so that content such as `</script>` in a title cannot end the script element. */
+const json = JSON.stringify(value).replaceAll("<", "\\u003c");
+---
+
+<script is:inline type="application/ld+json" set:html={json} />

@@ -3,6 +3,7 @@ import { rss } from "xast-util-feed";
 import { toXml } from "xast-util-to-xml";
 
 import { locale, siteName } from "#/src/config/project.ts";
+import { formatEventLocation } from "#/src/lib/events.ts";
 import { formatDateRange } from "#/src/lib/format-date.ts";
 
 const maxItems = 20;
@@ -25,12 +26,12 @@ export const GET: APIRoute = async (context) => {
 			lang: locale,
 		},
 		entries.slice(0, maxItems).map((entry) => {
-			const { title, summary, startDate, endDate, location } = entry.data;
+			const { title, summary, startDate, endDate } = entry.data;
 
 			return {
 				title,
 				url: new URL(`/events/${entry.id}`, context.site).href,
-				description: [formatDateRange(startDate, endDate), location, summary]
+				description: [formatDateRange(startDate, endDate), formatEventLocation(entry.data), summary]
 					.filter((value) => value != null)
 					.join(" · "),
 			};

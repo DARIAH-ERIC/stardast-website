@@ -1,17 +1,31 @@
 ---
 import HomeHero from "#/src/components/home-hero.astro";
 import Sections from "#/src/components/sections/sections.astro";
+import { funding } from "#/src/config/project.ts";
 import PageLayout from "#/src/layouts/page-layout.astro";
+import { createProjectJsonLd, getProjectReference } from "#/src/lib/structured-data.ts";
 
-const home = await Astro.locals.content.singleton("home");
+const [home, site] = await Promise.all([
+	Astro.locals.content.singleton("home"),
+	Astro.locals.content.singleton("site"),
+]);
 
 /** The home page is created with the repository, so a missing one is a deployment error, not a content error. */
 if (home == null) {
 	throw new Error('The "home" singleton has not been created.');
 }
+
+const structuredData = createProjectJsonLd({
+	...getProjectReference(Astro.site),
+	description: site?.description,
+	logo: new URL("/android-chrome-512x512.png", Astro.site).href,
+	email: site?.contactEmail,
+	sameAs: site?.socialLinks.map((link) => link.url) ?? [],
+	funding,
+});
 ---
 
-<PageLayout>
+<PageLayout structuredData={structuredData}>
 	<HomeHero {...home.hero} />
 	<Sections value={home.sections} />
 </PageLayout>

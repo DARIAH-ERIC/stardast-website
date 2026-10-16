@@ -3,14 +3,18 @@ import CmsImage from "#/src/components/cms-image.astro";
 import Callout from "#/src/components/rich-text/callout.astro";
 import Figure from "#/src/components/rich-text/figure.astro";
 import RichText from "#/src/components/rich-text/rich-text.astro";
+import { getSharingImage } from "#/src/cms/sharing-image.ts";
 import ContentPageLayout from "#/src/layouts/content-page-layout.astro";
+import { formatEventLocation } from "#/src/lib/events.ts";
 import { formatDateRange } from "#/src/lib/format-date.ts";
+import { createEventJsonLd, getProjectReference } from "#/src/lib/structured-data.ts";
 
 const { content } = Astro.locals;
 
-const [entry, eventsPage] = await Promise.all([
+const [entry, eventsPage, site] = await Promise.all([
 	content.entry("events", Astro.params.id ?? ""),
 	content.singleton("eventsPage"),
+	content.singleton("site"),
 ]);
 
 if (entry == null) {
@@ -18,22 +22,40 @@ if (entry == null) {
 }
 
 const { data } = entry;
+
+const location = formatEventLocation(data);
+
+const image = await getSharingImage(content, [data.image, site?.image], Astro.site);
+
+const structuredData = createEventJsonLd({
+	url: new URL(`/events/${entry.id}`, Astro.site).href,
+	name: data.title,
+	description: data.summary,
+	startDate: data.startDate,
+	endDate: data.endDate,
+	attendance: data.attendance,
+	location: data.location,
+	website: data.website,
+	image: image?.url,
+	organizer: data.involvement === "organised" ? getProjectReference(Astro.site) : undefined,
+});
 ---
 
 <ContentPageLayout
 	title={data.title}
 	description={data.summary}
 	image={data.image}
+	structuredData={structuredData}
 	parent={{ label: eventsPage?.title ?? "Events", href: "/events" }}
 >
 	<dl class="not-prose grid grid-cols-[auto_1fr] border-t border-border-strong text-sm">
 		<dt class="border-b border-border py-3.5 pe-8 mono-label text-foreground-muted">Date</dt>
 		<dd class="border-b border-border py-3 text-foreground-strong"><time datetime={data.startDate}>{formatDateRange(data.startDate, data.endDate)}</time></dd>
 		{
-			data.location != null && (
+			location != null && (
 				<>
 					<dt class="border-b border-border py-3.5 pe-8 mono-label text-foreground-muted">Location</dt>
-					<dd class="border-b border-border py-3 text-foreground-strong">{data.location}</dd>
+					<dd class="border-b border-border py-3 text-foreground-strong">{location}</dd>
 				</>
 			)
 		}

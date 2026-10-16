@@ -9,4 +9,6 @@ export const funding = {
 	grantAgreementNumber: "101268773",
 	/** Named in the eu disclaimer. */
 	grantingAuthority: "the European Commission",
+	/** For search engines, see `createProjectJsonLd()`. */
+	funder: { name: "European Commission", url: "https://commission.europa.eu" },
 };
