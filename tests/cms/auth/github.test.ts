@@ -22,35 +22,47 @@ test("builds the authorization url with state and a pkce challenge", async () =>
 	});
 });
 
-test("exchanges the code, and falls back to the noreply address for private emails", async () => {
+function createFakeGitHub(user: { email: string | null }, requests: Array<string>) {
+	return (url: URL, init?: RequestInit) => {
+		requests.push(`${init?.method ?? "GET"} ${url.href}`);
+
+		switch (url.pathname) {
+			case "/login/oauth/access_token": {
+				expect(JSON.parse(init!.body as string)).toMatchObject({ code: "code", code_verifier: "verifier" });
+				return Promise.resolve(Response.json({ access_token: "user-token" }));
+			}
+			case "/user": {
+				return Promise.resolve(
+					Response.json({ id: 42, login: "jane", name: null, email: user.email, avatar_url: "a" }),
+				);
+			}
+			default: {
+				return Promise.resolve(Response.json([{ email: "jane@example.org", primary: true, verified: false }]));
+			}
+		}
+	};
+}
+
+const callback = {
+	url: new URL("https://example.org/callback?code=code&state=state"),
+	codeVerifier: "verifier",
+	redirectUri: "https://example.org/callback",
+};
+
+test("exchanges the code, and attributes commits with the noreply address, even for public emails", async () => {
 	const requests: Array<string> = [];
 
 	const provider = createGitHubAuthProvider({
 		clientId: "client",
 		clientSecret: "secret",
-		fetch(url, init) {
-			requests.push(`${init?.method ?? "GET"} ${url.href}`);
-
-			switch (url.pathname) {
-				case "/login/oauth/access_token": {
-					expect(JSON.parse(init!.body as string)).toMatchObject({ code: "code", code_verifier: "verifier" });
-					return Promise.resolve(Response.json({ access_token: "user-token" }));
-				}
-				case "/user": {
-					return Promise.resolve(Response.json({ id: 42, login: "jane", name: null, email: null, avatar_url: "a" }));
-				}
-				default: {
-					return Promise.resolve(Response.json([{ email: "jane@example.org", primary: true, verified: false }]));
-				}
-			}
-		},
+		fetch: createFakeGitHub({ email: "jane@example.org" }, requests),
 	});
 
-	const identity = await provider.handleCallback({
-		url: new URL("https://example.org/callback?code=code&state=state"),
-		codeVerifier: "verifier",
-		redirectUri: "https://example.org/callback",
-	});
+	const authorizationUrl = await provider.createAuthorizationUrl({ state: "s", codeVerifier: "v", redirectUri: "r" });
+
+	expect(authorizationUrl.searchParams.has("scope")).toBe(false);
+
+	const identity = await provider.handleCallback(callback);
 
 	expect(identity).toEqual({
 		provider: "github",
@@ -60,11 +72,39 @@ test("exchanges the code, and falls back to the noreply address for private emai
 		email: "42+jane@users.noreply.github.com",
 		avatarUrl: "a",
 	});
+	expect(requests).toEqual(["POST https://github.com/login/oauth/access_token", "GET https://api.github.com/user"]);
+});
+
+test("attributes commits with the primary email if asked to, falling back to the noreply address", async () => {
+	const requests: Array<string> = [];
+
+	const provider = createGitHubAuthProvider({
+		clientId: "client",
+		clientSecret: "secret",
+		commitEmail: "primary",
+		fetch: createFakeGitHub({ email: null }, requests),
+	});
+
+	const authorizationUrl = await provider.createAuthorizationUrl({ state: "s", codeVerifier: "v", redirectUri: "r" });
+
+	expect(authorizationUrl.searchParams.get("scope")).toBe("user:email");
+
+	/** The primary email is not verified. */
+	expect((await provider.handleCallback(callback)).email).toBe("42+jane@users.noreply.github.com");
 	expect(requests).toEqual([
 		"POST https://github.com/login/oauth/access_token",
 		"GET https://api.github.com/user",
 		"GET https://api.github.com/user/emails",
 	]);
+
+	const publicProvider = createGitHubAuthProvider({
+		clientId: "client",
+		clientSecret: "secret",
+		commitEmail: "primary",
+		fetch: createFakeGitHub({ email: "jane@example.org" }, []),
+	});
+
+	expect((await publicProvider.handleCallback(callback)).email).toBe("jane@example.org");
 });
 
 test("reports failed exchanges, which github sends with status 200", async () => {

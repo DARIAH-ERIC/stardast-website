@@ -22,9 +22,8 @@ async function createCodeChallenge(codeVerifier: string): Promise<string> {
 }
 
 /**
- * Signs in with a github oauth app, or with the user authorization of a github app. Only reads the user's profile, and
- * their primary email for commit attribution - the user's token is not kept. Users with a private email are attributed
- * with their github noreply address.
+ * Signs in with a github oauth app, or with the user authorization of a github app. Only reads the user's profile -
+ * and, with `commitEmail: "primary"`, their primary email - for commit attribution. The user's token is not kept.
  *
  * @see {@link https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps}
  */
@@ -34,6 +33,12 @@ export function createGitHubAuthProvider(params: {
 	/** Github enterprise server, e.g. `https://github.example.org`. */
 	baseUrl?: string;
 	apiUrl?: string;
+	/**
+	 * The email address commits are attributed with. Commits are public in a public repository, so by default with the
+	 * user's github noreply address. `primary` uses their primary email address instead - unless it is private, or not
+	 * verified - and needs the `user:email` scope, or a github app's "email addresses" account permission.
+	 */
+	commitEmail?: "noreply" | "primary";
 	fetch?: Fetch;
 }): AuthProvider {
 	const {
@@ -41,6 +46,7 @@ export function createGitHubAuthProvider(params: {
 		clientSecret,
 		baseUrl = "https://github.com",
 		apiUrl = "https://api.github.com",
+		commitEmail = "noreply",
 		fetch = globalThis.fetch,
 	} = params;
 
@@ -69,8 +75,10 @@ export function createGitHubAuthProvider(params: {
 			url.searchParams.set("client_id", clientId);
 			url.searchParams.set("redirect_uri", redirectUri);
 			url.searchParams.set("state", state);
-			/** Ignored for github apps, which ask for the "email addresses" account permission instead. */
-			url.searchParams.set("scope", "user:email");
+			if (commitEmail === "primary") {
+				/** Ignored for github apps, which ask for the "email addresses" account permission instead. */
+				url.searchParams.set("scope", "user:email");
+			}
 			url.searchParams.set("code_challenge", await createCodeChallenge(codeVerifier));
 			url.searchParams.set("code_challenge_method", "S256");
 			url.searchParams.set("allow_signup", "false");
@@ -107,11 +115,15 @@ export function createGitHubAuthProvider(params: {
 			const token = body.access_token;
 			const user = await api<GitHubUser>("/user", token);
 
-			let email = user.email;
+			let email: string | null = null;
 
-			if (email == null) {
-				const emails = await api<Array<GitHubEmail>>("/user/emails", token).catch(() => []);
-				email = emails.find((item) => item.primary && item.verified)?.email ?? null;
+			if (commitEmail === "primary") {
+				email = user.email;
+
+				if (email == null) {
+					const emails = await api<Array<GitHubEmail>>("/user/emails", token).catch(() => []);
+					email = emails.find((item) => item.primary && item.verified)?.email ?? null;
+				}
 			}
 
 			return {
