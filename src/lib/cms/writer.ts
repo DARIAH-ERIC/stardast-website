@@ -1,7 +1,7 @@
 import { Result, TaggedError } from "better-result";
 import * as v from "valibot";
 
-import type { AnyCollection, AnySingleton, Config } from "#/src/lib/cms/schema/config.ts";
+import type { AnyCollection, AnySingleton, CommitAction, Config } from "#/src/lib/cms/schema/config.ts";
 import { EntryIdSchema } from "#/src/lib/cms/schema/fields.ts";
 import { editorMessagesLang } from "#/src/lib/cms/schema/messages.ts";
 import {
@@ -114,14 +114,14 @@ export function validate(schema: v.GenericSchema, data: unknown): Result<unknown
 }
 
 export interface Writer {
-	/** Validates and writes an entry. `verb` starts the commit message, e.g. "Update", or "Publish". */
+	/** Validates and writes an entry. `action` is passed to the config's `commitMessage`. */
 	save: (params: {
 		ref?: Ref;
 		target: EntryTarget;
 		data: unknown;
 		expect: Expectation;
 		author: Author;
-		verb: string;
+		action: Exclude<CommitAction, "delete">;
 	}) => Promise<Result<WriteResult, WriteError>>;
 	remove: (params: {
 		ref?: Ref;
@@ -201,7 +201,7 @@ export function createWriter(params: { config: Config; storage: ContentStorage; 
 	}
 
 	return {
-		async save({ ref = publishedRef, target, data, expect, author, verb }) {
+		async save({ ref = publishedRef, target, data, expect, author, action }) {
 			const resolved = resolveTarget(config, target);
 
 			if (resolved.isErr()) {
@@ -230,7 +230,7 @@ export function createWriter(params: { config: Config; storage: ContentStorage; 
 				path,
 				expect,
 				changes: [{ type: "put", path, data: validated.value }],
-				message: `${verb} ${getLabel(validated.value)}`,
+				message: config.commitMessage({ action, label: getLabel(validated.value) }),
 				author,
 			});
 		},
@@ -249,7 +249,7 @@ export function createWriter(params: { config: Config; storage: ContentStorage; 
 				path,
 				expect: { type: "unchanged", since },
 				changes: [{ type: "delete", path }],
-				message: `Delete ${getLabel(await storage.read(since, path))}`,
+				message: config.commitMessage({ action: "delete", label: getLabel(await storage.read(since, path)) }),
 				author,
 			});
 		},

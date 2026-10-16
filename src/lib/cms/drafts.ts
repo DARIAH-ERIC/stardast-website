@@ -190,7 +190,7 @@ export function createDrafts(params: { config: Config; storage: ContentStorage }
 				expect = current === undefined ? { type: "absent" } : { type: "unchanged", since: head };
 			}
 
-			return writer.save({ ref, target, data, expect, author, verb: "Draft" });
+			return writer.save({ ref, target, data, expect, author, action: "draft" });
 		},
 
 		async publish({ target, data, revision, author }) {
@@ -216,7 +216,7 @@ export function createDrafts(params: { config: Config; storage: ContentStorage }
 				data,
 				expect: isPublished ? { type: "unchanged", since: base } : { type: "absent" },
 				author,
-				verb: isPublished ? "Publish" : "Create",
+				action: isPublished ? "publish" : "create",
 			});
 
 			if (result.isOk() && draftHead != null) {

@@ -51,7 +51,9 @@ function setup() {
 		storage,
 		drafts,
 		collection: "media",
-		assets: { repo: createRepositoryAssetStorage({ storage, path: "content/media" }) },
+		assets: {
+			repo: createRepositoryAssetStorage({ storage, path: "content/media", commitMessage: config.commitMessage }),
+		},
 		uploadTo: "repo",
 		uploadTokens: createSealedCodec({ secret: "s".repeat(32), purpose: "upload", schema: UploadTokenSchema }),
 		maxSize: 1024,

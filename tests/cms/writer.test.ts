@@ -71,11 +71,11 @@ describe("writer", () => {
 			data: { title: " B ", tags: [] },
 			expect: { type: "absent" },
 			author,
-			verb: "Create",
+			action: "create",
 		});
 
 		expect(result.unwrap().paths).toEqual(["content/news/b/index.json"]);
-		expect(github.commit(github.ref("main")!)).toMatchObject({ message: 'Create news "B"', author });
+		expect(github.commit(github.ref("main")!)).toMatchObject({ message: 'content: create news "B"', author });
 		/** Stores the validated output, e.g. with trimmed text. */
 		expect(JSON.parse(github.file("main", "content/news/b/index.json")!)).toEqual({ title: "B", tags: [] });
 	});
@@ -88,7 +88,7 @@ describe("writer", () => {
 			data: { title: "A2", tags: [] },
 			expect: { type: "absent" },
 			author,
-			verb: "Create",
+			action: "create",
 		});
 
 		expect(result.isErr() && EntryExistsError.is(result.error)).toBe(true);
@@ -102,7 +102,7 @@ describe("writer", () => {
 			data: { tags: ["x", ""] },
 			expect: { type: "absent" },
 			author,
-			verb: "Create",
+			action: "create",
 		});
 
 		expect(result.isErr() && EntryValidationError.is(result.error) && result.error.issues).toEqual([
@@ -119,14 +119,14 @@ describe("writer", () => {
 			data: { title: "X", tags: [] },
 			expect: { type: "absent" },
 			author,
-			verb: "Create",
+			action: "create",
 		});
 		const unknown = await writer.save({
 			target: { kind: "collection", collection: "events", id: "x" },
 			data: {},
 			expect: { type: "absent" },
 			author,
-			verb: "Create",
+			action: "create",
 		});
 
 		expect(invalid.isErr() && EntryNotFoundError.is(invalid.error)).toBe(true);
@@ -143,7 +143,7 @@ describe("writer", () => {
 			data: { title: "A2", tags: [] },
 			expect: { type: "unchanged", since: base },
 			author,
-			verb: "Update",
+			action: "publish",
 		});
 
 		expect(result.isOk()).toBe(true);
@@ -161,7 +161,7 @@ describe("writer", () => {
 			data: { title: "A2", tags: [] },
 			expect: { type: "unchanged", since: base },
 			author,
-			verb: "Update",
+			action: "publish",
 		});
 
 		expect(result.isErr() && EntryConflictError.is(result.error)).toBe(true);
@@ -178,7 +178,7 @@ describe("writer", () => {
 		const result = await writer.remove({ target: news("a"), since: base, author });
 
 		expect(result.isOk()).toBe(true);
-		expect(github.commit(github.ref("main")!)).toMatchObject({ message: 'Delete news "A"' });
+		expect(github.commit(github.ref("main")!)).toMatchObject({ message: 'content: delete news "A"' });
 		expect(github.file("main", "content/news/a/index.json")).toBeUndefined();
 
 		const again = await writer.remove({ target: news("a"), since: base, author });
@@ -195,14 +195,14 @@ describe("writer", () => {
 			data: { title: "X", tags: [] },
 			expect: { type: "absent" },
 			author,
-			verb: "Create",
+			action: "create",
 		});
 		const updated = await writer.save({
 			target: news("reserved"),
 			data: { title: "Updated", tags: [] },
 			expect: { type: "unchanged", since: head! },
 			author,
-			verb: "Update",
+			action: "publish",
 		});
 
 		expect(created.isErr() && EntryValidationError.is(created.error) && created.error.issues).toEqual([
@@ -219,11 +219,11 @@ describe("writer", () => {
 			data: { title: "Site" },
 			expect: { type: "absent" },
 			author,
-			verb: "Update",
+			action: "publish",
 		});
 
 		expect(result.isOk()).toBe(true);
-		expect(github.commit(github.ref("main")!)).toMatchObject({ message: "Update Site settings" });
+		expect(github.commit(github.ref("main")!)).toMatchObject({ message: "content: publish Site settings" });
 		expect(JSON.parse(github.file("main", "content/settings/index.json")!)).toEqual({ title: "Site" });
 	});
 });

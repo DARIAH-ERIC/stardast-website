@@ -51,7 +51,11 @@ function createS3AssetStorageFromEnv(): AssetStorage | undefined {
 
 /** Files uploaded to the repository stay readable after switching to s3, and vice versa when configured. */
 export const assets: Partial<Record<AssetStorageName, AssetStorage>> = {
-	repo: createRepositoryAssetStorage({ storage, path: config.collections.media.path }),
+	repo: createRepositoryAssetStorage({
+		storage,
+		path: config.collections.media.path,
+		commitMessage: config.commitMessage,
+	}),
 	s3: createS3AssetStorageFromEnv(),
 };
 

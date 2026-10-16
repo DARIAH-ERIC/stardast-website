@@ -1,3 +1,4 @@
+import type { CommitMessage } from "#/src/lib/cms/schema/config.ts";
 import { type Author, type ContentStorage, publishedRef } from "#/src/lib/cms/storage/types.ts";
 
 export type AssetStorageName = "repo" | "s3";
@@ -28,8 +29,12 @@ export interface AssetStorage {
  * Commits files to the content repository, next to their media entry's `index.json` - so they are versioned, and
  * deleted, together with the entry. Fine for a moderate number of images, but every file is part of every clone.
  */
-export function createRepositoryAssetStorage(params: { storage: ContentStorage; path: string }): AssetStorage {
-	const { storage, path } = params;
+export function createRepositoryAssetStorage(params: {
+	storage: ContentStorage;
+	path: string;
+	commitMessage: CommitMessage;
+}): AssetStorage {
+	const { storage, path, commitMessage } = params;
 
 	async function resolvePublished(): Promise<string> {
 		const revision = await storage.resolve(publishedRef);
@@ -53,12 +58,13 @@ export function createRepositoryAssetStorage(params: { storage: ContentStorage; 
 		},
 
 		async put({ key, content, author }) {
+			const message = commitMessage({ action: "upload", label: key.slice(key.lastIndexOf("/") + 1) });
 			const revision = await resolvePublished();
 			const result = await storage.commit({
 				ref: publishedRef,
 				expectedRevision: revision,
 				changes: [{ type: "put-file", path: key, content }],
-				message: `Upload ${key.slice(key.lastIndexOf("/") + 1)}`,
+				message,
 				author,
 			});
 
@@ -68,7 +74,7 @@ export function createRepositoryAssetStorage(params: { storage: ContentStorage; 
 					ref: publishedRef,
 					expectedRevision: await resolvePublished(),
 					changes: [{ type: "put-file", path: key, content }],
-					message: `Upload ${key.slice(key.lastIndexOf("/") + 1)}`,
+					message,
 					author,
 				});
 

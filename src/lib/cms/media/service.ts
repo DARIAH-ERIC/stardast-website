@@ -257,7 +257,7 @@ export function createMediaService(params: {
 				},
 				expect: { type: "absent" },
 				author,
-				verb: "Upload",
+				action: "upload",
 			});
 		},
 

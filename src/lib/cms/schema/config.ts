@@ -106,12 +106,23 @@ export interface AnySingleton {
 	readonly preview?: (entry: { data: never }) => string;
 }
 
+export type CommitAction = "create" | "delete" | "draft" | "publish" | "upload";
+
+export type CommitMessage = (params: {
+	action: CommitAction;
+	/** A short, human-readable name of what changed, e.g. `news "My post"`, or a filename. */
+	label: string;
+}) => string;
+
+export const defaultCommitMessage: CommitMessage = ({ action, label }) => `content: ${action} ${label}`;
+
 export interface Config<
 	TCollections extends Readonly<Record<string, AnyCollection>> = Readonly<Record<string, AnyCollection>>,
 	TSingletons extends Readonly<Record<string, AnySingleton>> = Readonly<Record<string, AnySingleton>>,
 > {
 	readonly collections: TCollections;
 	readonly singletons: TSingletons;
+	readonly commitMessage: CommitMessage;
 }
 
 export type CollectionName<TConfig extends Config> = keyof TConfig["collections"] & string;
@@ -131,8 +142,12 @@ export function defineConfig<
 	/** No singletons, rather than any singleton - so that `reader.singleton()` only accepts configured names. */
 	// oxlint-disable-next-line typescript/no-generated-empty-object-type
 	const TSingletons extends Readonly<Record<string, AnySingleton>> = Record<never, AnySingleton>,
->(config: { collections: TCollections; singletons?: TSingletons }): Config<TCollections, TSingletons> {
-	const { collections, singletons = {} as TSingletons } = config;
+>(config: {
+	collections: TCollections;
+	singletons?: TSingletons;
+	commitMessage?: CommitMessage;
+}): Config<TCollections, TSingletons> {
+	const { collections, singletons = {} as TSingletons, commitMessage = defaultCommitMessage } = config;
 
 	const paths: Array<[name: string, path: string]> = [];
 
@@ -160,7 +175,7 @@ export function defineConfig<
 		});
 	}
 
-	return { collections, singletons };
+	return { collections, singletons, commitMessage };
 }
 
 /**

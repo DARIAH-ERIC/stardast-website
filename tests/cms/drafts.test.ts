@@ -65,7 +65,7 @@ describe("drafts", () => {
 		const saved = (await drafts.save({ target: a, data: { title: "A2" }, revision: published, author })).unwrap();
 
 		expect(github.ref(draftOfA)).toBe(saved.revision);
-		expect(github.commit(saved.revision)).toMatchObject({ message: 'Draft news "A2"', author });
+		expect(github.commit(saved.revision)).toMatchObject({ message: 'content: draft news "A2"', author });
 		expect(file("main", "a")).toEqual({ title: "A" });
 		expect(file(draftOfA, "a")).toEqual({ title: "A2" });
 		expect(await drafts.load(a)).toEqual({
@@ -112,7 +112,7 @@ describe("drafts", () => {
 		expect(result.isOk()).toBe(true);
 		expect(file("main", "a")).toEqual({ title: "A3" });
 		expect(file("main", "other")).toEqual({ title: "Other" });
-		expect(github.commit(github.ref("main")!)).toMatchObject({ message: 'Publish news "A3"' });
+		expect(github.commit(github.ref("main")!)).toMatchObject({ message: 'content: publish news "A3"' });
 		expect(github.ref(draftOfA)).toBeUndefined();
 	});
 
