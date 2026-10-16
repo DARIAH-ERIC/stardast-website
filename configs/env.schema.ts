@@ -111,8 +111,8 @@ export const serverRuntime = v.object({
 	/** Shared with the github webhook, which announces pushes so that changed pages can be invalidated. */
 	REVALIDATION_WEBHOOK_SECRET: v.optional(v.pipe(v.string(), v.minLength(32))),
 	/**
-	 * Reads the visitor numbers shown at `/analytics`, for `PUBLIC_APP_MATOMO_ID`. Should belong to a matomo user with
-	 * view access only, since a token grants everything its user may do.
+	 * Reads the visitor numbers and search terms shown in the cms, at `/admin/analytics`, for `PUBLIC_APP_MATOMO_ID`.
+	 * Should belong to a matomo user with view access only, since a token grants everything its user may do.
 	 */
 	MATOMO_API_TOKEN: v.optional(v.string()),
 });

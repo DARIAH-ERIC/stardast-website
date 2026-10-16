@@ -1,6 +1,7 @@
 ---
 import { Font } from "astro:assets";
 
+import { env } from "#/configs/env.config.ts";
 import { AdminNavigation, type NavigationSection } from "#/src/components/admin/admin-navigation.tsx";
 import { config, mediaCollectionName } from "#/src/cms/config.ts";
 
@@ -18,7 +19,15 @@ const { pathname } = Astro.url;
 const singletons = Object.entries(config.singletons as Record<string, { label: string }>);
 
 const sections: Array<NavigationSection> = [
-	{ id: "home", items: [{ href: "/admin", label: "Dashboard", icon: "dashboard" }] },
+	{
+		id: "home",
+		items: [
+			{ href: "/admin", label: "Dashboard", icon: "dashboard" },
+			...(env.PUBLIC_APP_MATOMO_ID != null
+				? [{ href: "/admin/analytics", label: "Analytics", icon: "analytics" as const }]
+				: []),
+		],
+	},
 	{
 		id: "content",
 		title: "Content",

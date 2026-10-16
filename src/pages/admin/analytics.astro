@@ -1,0 +1,148 @@
+---
+import type { Result } from "better-result";
+
+import { env } from "#/configs/env.config.ts";
+import PageHeader from "#/src/components/admin/page-header.astro";
+import StatsTable from "#/src/components/admin/stats-table.astro";
+import { Heading } from "#/src/components/admin/ui/heading.tsx";
+import { Note } from "#/src/components/admin/ui/note.tsx";
+import AdminLayout from "#/src/layouts/admin-layout.astro";
+import { type MatomoError, createMatomoClient } from "#/src/lib/analytics/matomo.ts";
+
+const months = 12;
+
+/**
+ * Search terms are only shown when they were searched for in at least this many visits, so that e.g. a name which
+ * someone searched for once is left out.
+ */
+const minVisits = 3;
+const limit = 20;
+
+if (env.PUBLIC_APP_MATOMO_ID == null) {
+	return new Response(null, { status: 404 });
+}
+
+const client =
+	env.MATOMO_API_TOKEN != null
+		? createMatomoClient({
+				baseUrl: env.PUBLIC_APP_MATOMO_BASE_URL,
+				siteId: env.PUBLIC_APP_MATOMO_ID,
+				token: env.MATOMO_API_TOKEN,
+			})
+		: undefined;
+
+if (client == null) {
+	// oxlint-disable-next-line no-console
+	console.error("Analytics are unavailable: MATOMO_API_TOKEN is not configured.");
+}
+
+const [visitsResult, keywordsResult, withoutResultsResult] =
+	client != null
+		? await Promise.all([
+				client.getMonthlyVisits({ months }),
+				client.getSearchKeywords({ months, minVisits, limit }),
+				client.getSearchKeywords({ months, minVisits, limit, withoutResults: true }),
+			])
+		: [];
+
+function unwrap<T>(result: Result<T, MatomoError> | undefined, report: string): T | undefined {
+	if (result?.isErr() === true) {
+		// oxlint-disable-next-line no-console
+		console.error(`${report} are unavailable:`, result.error.message);
+	}
+
+	return result?.isOk() === true ? result.value : undefined;
+}
+
+const visits = unwrap(visitsResult, "Visitor numbers");
+const keywords = unwrap(keywordsResult, "Search keywords");
+const keywordsWithoutResults = unwrap(withoutResultsResult, "Search keywords without results");
+
+const monthFormatter = new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric", timeZone: "UTC" });
+const numberFormatter = new Intl.NumberFormat("en-GB");
+
+const total = (visits ?? []).reduce(
+	(sum, month) => {
+		return { visits: sum.visits + month.visits, pageViews: sum.pageViews + month.pageViews };
+	},
+	{ visits: 0, pageViews: 0 },
+);
+
+const searchReports = [
+	{
+		id: "search-keywords",
+		title: "Search terms",
+		description: `The most searched terms, by the number of visits which searched for them - only terms of at least ${String(minVisits)} visits.`,
+		empty: "No term has been searched for often enough yet.",
+		keywords,
+	},
+	{
+		id: "search-keywords-without-results",
+		title: "Searches without results",
+		description: "Terms which visitors searched for, but did not find anything - e.g. content which is missing.",
+		empty: "No term without results has been searched for often enough yet.",
+		keywords: keywordsWithoutResults,
+	},
+];
+
+const unavailable = "Currently unavailable. Please try again later.";
+---
+
+<AdminLayout title="Analytics">
+	<PageHeader
+		title="Analytics"
+		description={`Visits to the website, and its site search, over the last ${String(months)} months - including the current month so far.`}
+	/>
+
+	<section aria-labelledby="visits-heading">
+		<Heading level={2} id="visits-heading" className="mb-4">Visitor numbers</Heading>
+		{
+			visits != null ? (
+				<StatsTable
+					labelledBy="visits-heading"
+					columns={["Month", "Visits", "Page views"]}
+					rows={visits.toReversed().map((month) => {
+						return [
+							monthFormatter.format(new Date(`${month.month}-01`)),
+							numberFormatter.format(month.visits),
+							numberFormatter.format(month.pageViews),
+						];
+					})}
+					footer={["Total", numberFormatter.format(total.visits), numberFormatter.format(total.pageViews)]}
+				/>
+			) : (
+				<Note intent="warning">{unavailable}</Note>
+			)
+		}
+	</section>
+
+	{
+		searchReports.map((report) => {
+			const headingId = `${report.id}-heading`;
+
+			return (
+				<section aria-labelledby={headingId} class="mt-12">
+					<div class="mb-4 flex flex-col gap-1">
+						<Heading level={2} id={headingId}>
+							{report.title}
+						</Heading>
+						<p class="text-sm/6 text-muted-fg">{report.description}</p>
+					</div>
+					{report.keywords == null ? (
+						<Note intent="warning">{unavailable}</Note>
+					) : report.keywords.length === 0 ? (
+						<div class="rounded-lg border border-dashed border-input p-8 text-center text-sm text-muted-fg">
+							{report.empty}
+						</div>
+					) : (
+						<StatsTable
+							labelledBy={headingId}
+							columns={["Search term", "Visits"]}
+							rows={report.keywords.map((keyword) => [keyword.keyword, numberFormatter.format(keyword.visits)])}
+						/>
+					)}
+				</section>
+			);
+		})
+	}
+</AdminLayout>

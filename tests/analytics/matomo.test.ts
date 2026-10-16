@@ -11,7 +11,13 @@ function createClient(respond: (url: URL, init?: RequestInit) => Response) {
 		return Promise.resolve(respond(url, init));
 	};
 
-	const client = createMatomoClient({ baseUrl: "https://matomo.example.org/", siteId: "42", token: "secret", fetch });
+	const client = createMatomoClient({
+		baseUrl: "https://matomo.example.org/",
+		siteId: "42",
+		token: "secret",
+		fetch,
+		now: () => new Date("2026-10-16T12:00:00Z"),
+	});
 
 	return { client, requests };
 }
@@ -77,4 +83,41 @@ test("reports failed requests", async () => {
 	const result = await client.getMonthlyVisits({ months: 12 });
 
 	expect(result.isErr() && result.error.message).toBe("Matomo responded with 502.");
+});
+
+test("returns search keywords of at least the minimum number of visits, over whole months", async () => {
+	const { client, requests } = createClient(() =>
+		Response.json([
+			{ label: "data stewardship", nb_visits: 7, nb_hits: 9 },
+			{ label: 2027, nb_visits: "3" },
+			{ label: "jane doe", nb_visits: 2, nb_hits: 5 },
+		]),
+	);
+
+	const result = await client.getSearchKeywords({ months: 12, minVisits: 3, limit: 20 });
+
+	expect(result.isOk() && result.value).toEqual([
+		{ keyword: "data stewardship", visits: 7 },
+		{ keyword: "2027", visits: 3 },
+	]);
+	expect(Object.fromEntries(requests[0]!.init?.body as URLSearchParams)).toMatchObject({
+		method: "Actions.getSiteSearchKeywords",
+		period: "range",
+		date: "2025-11-01,2026-10-16",
+		filter_sort_column: "nb_visits",
+		filter_sort_order: "desc",
+		filter_limit: "20",
+	});
+});
+
+test("returns searches without results from their own report", async () => {
+	const { client, requests } = createClient(() => Response.json([]));
+
+	const result = await client.getSearchKeywords({ months: 1, minVisits: 3, limit: 20, withoutResults: true });
+
+	expect(result.isOk() && result.value).toEqual([]);
+	expect(Object.fromEntries(requests[0]!.init?.body as URLSearchParams)).toMatchObject({
+		method: "Actions.getSiteSearchNoResultKeywords",
+		date: "2026-10-01,2026-10-16",
+	});
 });

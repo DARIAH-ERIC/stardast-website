@@ -5,8 +5,8 @@ import { config } from "#/src/cms/config.ts";
 import { getContentPaths } from "#/src/lib/cms/paths.ts";
 
 /**
- * All pages with content, i.e. not e.g. `/search` or `/analytics`. Without `lastmod`: entries have no modification
- * date, and search engines ignore dates which are not accurate.
+ * All pages with content, i.e. not e.g. `/search`. Without `lastmod`: entries have no modification date, and search
+ * engines ignore dates which are not accurate.
  */
 export const GET: APIRoute = async (context) => {
 	const paths = await getContentPaths(config, context.locals.content);

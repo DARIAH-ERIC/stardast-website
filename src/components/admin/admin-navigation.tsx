@@ -1,4 +1,4 @@
-import { FileText, Image, LayoutDashboard, LogOut, type LucideIcon, PanelsTopLeft } from "lucide-react";
+import { ChartColumn, FileText, Image, LayoutDashboard, LogOut, type LucideIcon, PanelsTopLeft } from "lucide-react";
 import type { ReactNode } from "react";
 import { I18nProvider } from "react-aria-components/I18nProvider";
 
@@ -21,6 +21,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "#/src/components/admin/
 /** Icon names, since props passed from astro to an island must be serialisable. */
 const icons = {
 	dashboard: LayoutDashboard,
+	analytics: ChartColumn,
 	collection: FileText,
 	media: Image,
 	singleton: PanelsTopLeft,

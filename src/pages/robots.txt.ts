@@ -3,9 +3,9 @@ import type { APIRoute } from "astro";
 import { env } from "#/configs/env.config.ts";
 
 /**
- * Pages which must never be indexed, e.g. `/search`, `/analytics`, and `/admin`, are marked `noindex` instead of being
- * disallowed here: a disallowed page is never fetched, so its `noindex` is never seen - and a linked url could still be
- * indexed, without its content.
+ * Pages which must never be indexed, e.g. `/search` and `/admin`, are marked `noindex` instead of being disallowed
+ * here: a disallowed page is never fetched, so its `noindex` is never seen - and a linked url could still be indexed,
+ * without its content.
  */
 export const GET: APIRoute = (context) => {
 	const rules =
