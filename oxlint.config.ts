@@ -28,8 +28,12 @@ const config = defineConfig({
 		builtin: true,
 		browser: true,
 	},
-	/** @see {@link https://github.com/ota-meshi/eslint-plugin-regexp/issues/1033} */
-	ignorePatterns: ["**/*.d.ts"],
+	ignorePatterns: [
+		/** @see {@link https://github.com/ota-meshi/eslint-plugin-regexp/issues/1033} */
+		"**/*.d.ts",
+		/** Written by the cms. */
+		"content/**",
+	],
 	options: {
 		reportUnusedDisableDirectives: "error",
 		typeAware: true,
