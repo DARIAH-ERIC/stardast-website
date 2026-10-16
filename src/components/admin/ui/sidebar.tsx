@@ -1,5 +1,5 @@
 import { ChevronDownIcon } from "lucide-react";
-import { type ReactNode, createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type ReactNode, createContext, use, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { Button as ButtonPrimitive, type ButtonProps } from "react-aria-components/Button";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import {
@@ -9,7 +9,6 @@ import {
 	type DisclosureProps,
 } from "react-aria-components/Disclosure";
 import { DisclosureGroup, type DisclosureGroupProps } from "react-aria-components/DisclosureGroup";
-import { Header } from "react-aria-components/Header";
 import { Heading } from "react-aria-components/Heading";
 import type { LinkProps, LinkRenderProps } from "react-aria-components/Link";
 import {
@@ -257,7 +256,6 @@ const Sidebar = ({
 					],
 					className,
 				)}
-				{...props}
 			>
 				<div
 					data-sidebar="default"
@@ -367,11 +365,18 @@ interface SidebarSectionProps extends React.ComponentProps<"div"> {
 	label?: string;
 }
 
+/**
+ * A labelled section is a group named by its label - not a `<header>`, which outside of e.g. an article is the page's
+ * banner landmark.
+ */
 const SidebarSection = ({ className, ...props }: SidebarSectionProps): ReactNode => {
 	const { state } = useSidebar();
+	const labelId = useId();
+	const hasLabel = state !== "collapsed" && "label" in props;
 	return (
 		<div
 			data-slot="sidebar-section"
+			{...(hasLabel ? { role: "group", "aria-labelledby": labelId } : {})}
 			className={twMerge(
 				"col-span-full flex flex-col gap-y-0.5 min-inline-0 **:data-[slot=sidebar-section]:**:gap-y-0",
 				"p-4 in-data-[state=collapsed]:p-2",
@@ -379,10 +384,13 @@ const SidebarSection = ({ className, ...props }: SidebarSectionProps): ReactNode
 			)}
 			{...props}
 		>
-			{state !== "collapsed" && "label" in props && (
-				<Header className="mbe-1 flex shrink-0 items-center rounded-md px-2 text-xs/6 text-sidebar-fg/70 ring-sidebar-ring transition-[margin,opa] duration-200 ease-linear outline-none *:[svg]:shrink-0 *:[svg]:block-4 *:[svg]:inline-4 group-data-[collapsible=dock]:-mbs-8 group-data-[collapsible=dock]:opacity-0">
+			{hasLabel && (
+				<div
+					id={labelId}
+					className="mbe-1 flex shrink-0 items-center rounded-md px-2 text-xs/6 text-sidebar-fg/70 ring-sidebar-ring transition-[margin,opa] duration-200 ease-linear outline-none *:[svg]:shrink-0 *:[svg]:block-4 *:[svg]:inline-4 group-data-[collapsible=dock]:-mbs-8 group-data-[collapsible=dock]:opacity-0"
+				>
 					{props.label}
-				</Header>
+				</div>
 			)}
 			<div
 				data-slot="sidebar-section-inner"

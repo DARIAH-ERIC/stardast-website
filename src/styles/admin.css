@@ -133,7 +133,9 @@
 		--success: var(--palette-green);
 		--success-fg: var(--palette-white);
 		--success-subtle: color-mix(in oklab, var(--palette-green) 10%, transparent);
-		--success-subtle-fg: var(--palette-green);
+
+		/** Darkened, since the palette colour has a contrast of only 4.4:1 on its subtle background - 6.2:1 like this. */
+		--success-subtle-fg: color-mix(in oklab, var(--palette-green) 85%, black);
 		--danger: var(--palette-red);
 		--danger-fg: var(--palette-white);
 		--danger-subtle: color-mix(in oklab, var(--palette-red) 8%, transparent);
@@ -141,7 +143,9 @@
 		--warning: var(--palette-amber);
 		--warning-fg: var(--palette-white);
 		--warning-subtle: color-mix(in oklab, var(--palette-amber) 10%, transparent);
-		--warning-subtle-fg: var(--palette-amber);
+
+		/** Darkened, since the palette colour has a contrast of only 4.4:1 on its subtle background - 6.2:1 like this. */
+		--warning-subtle-fg: color-mix(in oklab, var(--palette-amber) 85%, black);
 		--info: var(--palette-blue);
 		--info-fg: var(--palette-white);
 		--info-subtle: color-mix(in oklab, var(--palette-blue) 10%, transparent);

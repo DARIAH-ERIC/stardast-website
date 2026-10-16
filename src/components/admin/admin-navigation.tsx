@@ -81,7 +81,7 @@ export function AdminNavigation(props: AdminNavigationProps): ReactNode {
 					<SidebarTrigger aria-label="Open navigation" />
 					<Brand />
 				</header>
-				<Sidebar>
+				<Sidebar role="navigation" aria-label="CMS">
 					<SidebarHeader>
 						<Brand />
 					</SidebarHeader>

@@ -12,6 +12,9 @@ Changes made when copying them:
 - formatted with oxfmt, and linted with oxlint like the rest of the project - e.g. explicit return types, explicit
   conditionals, and logical instead of physical tailwind classes
 - broken class names in upstream fixed, e.g. truncated arbitrary values in `tree.tsx` and `keyboard.tsx`
+- `Sidebar` passes its props to its outer element only, rather than to its inner container too, which duplicated
+  e.g. landmark roles and ids; labelled `SidebarSection`s are groups named by their label, rather than having a
+  `<header>`, which is a banner landmark outside of e.g. an article
 - css that registry items ship besides their components - only `sheet` has any - is in `src/styles/admin.css`
 
 To use an improvement from upstream, port it by hand rather than copying the upstream file over ours. A component that
