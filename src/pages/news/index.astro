@@ -17,6 +17,11 @@ if (pageParam == null) {
 	return new Response(null, { status: 404 });
 }
 
+/** The first page's url has no page number. */
+if (Astro.url.searchParams.get("page") === "1") {
+	return Astro.redirect(getHref(1), 301);
+}
+
 const { content } = Astro.locals;
 
 const [page, entries] = await Promise.all([content.singleton("newsPage"), content.list("news")]);
