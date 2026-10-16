@@ -8,20 +8,20 @@
 		"#/*": "./*"
 	},
 	"scripts": {
-		"build": "bun --bun astro build",
-		"dev": "bun --bun astro dev",
-		"format:check": "oxfmt --check",
-		"format:fix": "oxfmt --write",
+		"build": "bun run --bun astro build",
+		"dev": "bun run --bun astro dev",
+		"format:check": "bun run --bun oxfmt --check",
+		"format:fix": "bun run --bun oxfmt --write",
 		"lint:check": "FORCE_COLOR=1 bun run --parallel lint:code:check lint:styles:check",
-		"lint:code:check": "oxlint --report-unused-disable-directives --type-aware --type-check",
-		"lint:code:fix": "oxlint --fix --report-unused-disable-directives --type-aware --type-check",
+		"lint:code:check": "bun run --bun oxlint --report-unused-disable-directives --type-aware --type-check",
+		"lint:code:fix": "bun run --bun oxlint --fix --report-unused-disable-directives --type-aware --type-check",
 		"lint:fix": "FORCE_COLOR=1 bun run --parallel lint:code:fix lint:styles:fix",
-		"lint:styles:check": "stylelint \"./**/*.css\" --cache --ignore-path ./.gitignore",
-		"lint:styles:fix": "stylelint \"./**/*.css\" --cache --fix --ignore-path ./.gitignore",
-		"start": "bun --bun astro preview",
+		"lint:styles:check": "bun run --bun stylelint \"./**/*.css\" --cache --ignore-path ./.gitignore",
+		"lint:styles:fix": "bun run --bun stylelint \"./**/*.css\" --cache --fix --ignore-path ./.gitignore",
+		"start": "bun run --bun astro preview",
 		"test:e2e": "playwright test --config ./e2e/playwright.config.ts --update-snapshots=missing",
 		"test:unit": "bun test ./tests/",
-		"types:check": "tsc --noEmit --runExternalCode"
+		"types:check": "bun run --bun tsc --noEmit --runExternalCode"
 	},
 	"dependencies": {
 		"@acdh-oeaw/lib": "^1.0.7",
@@ -92,11 +92,18 @@
 			"version": "^1.4.3",
 			"onFail": "download"
 		},
-		"runtime": {
-			"name": "bun",
-			"version": "^1.4.3",
-			"onFail": "download"
-		}
+		"runtime": [
+			{
+				"name": "bun",
+				"version": "^1.4.3",
+				"onFail": "download"
+			},
+			{
+				"name": "node",
+				"version": "^24.21.0",
+				"onFail": "warn"
+			}
+		]
 	},
 	"engines": {
 		"runtime": {
