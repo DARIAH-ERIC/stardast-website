@@ -7,9 +7,11 @@ import { env } from "#/configs/env.config.ts";
  * disallowed here: a disallowed page is never fetched, so its `noindex` is never seen - and a linked url could still be
  * indexed, without its content.
  */
-export const GET: APIRoute = () => {
+export const GET: APIRoute = (context) => {
 	const rules =
-		env.PUBLIC_APP_BOTS === "enabled" ? ["User-agent: *", "Disallow: /api/"] : ["User-agent: *", "Disallow: /"];
+		env.PUBLIC_APP_BOTS === "enabled"
+			? ["User-agent: *", "Disallow: /api/", "", `Sitemap: ${new URL("/sitemap.xml", context.site).href}`]
+			: ["User-agent: *", "Disallow: /"];
 
 	return new Response(`${rules.join("\n")}\n`, { headers: { "content-type": "text/plain; charset=utf-8" } });
 };

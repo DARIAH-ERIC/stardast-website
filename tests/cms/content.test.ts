@@ -5,8 +5,8 @@ import * as path from "node:path";
 import * as v from "valibot";
 
 import { config } from "#/src/cms/config.ts";
-import { createReader } from "#/src/lib/cms/reader.ts";
-import type { AnyCollection, AnySingleton } from "#/src/lib/cms/schema/config.ts";
+import { getContentPaths } from "#/src/lib/cms/paths.ts";
+import { type Reader, createReader } from "#/src/lib/cms/reader.ts";
 import { collectReferences } from "#/src/lib/cms/schema/references.ts";
 import { createFilesystemStorage } from "#/src/lib/cms/storage/filesystem.ts";
 
@@ -90,7 +90,7 @@ test("pages cannot have the id of a top-level route or public directory, which w
  * The paths of all pages on this site: the urls of entries and singletons, see their `preview`, and static routes in
  * `src/pages/`, e.g. `/search`. Endpoints are left out, since they are not linked to.
  */
-async function getSitePaths(reader: ReturnType<typeof createReader>): Promise<Set<string>> {
+async function getSitePaths(reader: Reader<typeof config>): Promise<Set<string>> {
 	const root = path.join(import.meta.dirname, "../../src/pages");
 	const files = await fs.readdir(root, { recursive: true });
 
@@ -98,30 +98,9 @@ async function getSitePaths(reader: ReturnType<typeof createReader>): Promise<Se
 		.filter((file) => file.endsWith(".astro") && !file.includes("["))
 		.map((file) => `/${file.replace(/\.astro$/, "").replace(/(?:^|\/)index$/, "")}`);
 
-	const collectionPaths = await Promise.all(
-		(Object.keys(config.collections) as Array<CollectionName>).map(async (name) => {
-			const { preview } = config.collections[name] as AnyCollection;
+	const contentPaths = await getContentPaths(config, reader);
 
-			if (preview == null) {
-				return [];
-			}
-
-			const entries = await reader.list(name);
-
-			return entries.map((entry) => preview({ id: entry.id, data: entry.data as never }));
-		}),
-	);
-
-	const singletonPaths = await Promise.all(
-		(Object.keys(config.singletons) as Array<SingletonName>).map(async (name) => {
-			const { preview } = config.singletons[name] as AnySingleton;
-			const data = await reader.singleton(name);
-
-			return preview != null && data != null ? [preview({ data: data as never })] : [];
-		}),
-	);
-
-	return new Set([...staticPaths, ...collectionPaths.flat(), ...singletonPaths.flat()]);
+	return new Set([...staticPaths, ...contentPaths]);
 }
 
 test("internal links in the navigation and the mailing list signup resolve", async () => {
