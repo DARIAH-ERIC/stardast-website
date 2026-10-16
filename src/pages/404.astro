@@ -1,0 +1,20 @@
+---
+import { buttonStyles } from "#/src/components/button-styles.ts";
+import PageHeader from "#/src/components/page-header.astro";
+import PageLayout from "#/src/layouts/page-layout.astro";
+
+/** Rendered for unknown urls, and for routes which return an empty 404 response, e.g. an unknown news id. */
+Astro.response.status = 404;
+---
+
+<PageLayout title="Page not found">
+	<PageHeader
+		title="Page not found"
+		heading="This page does not exist"
+		intro="It may have been moved or removed, or the address may be mistyped."
+	/>
+	<div class="content-container section-spacing flex flex-wrap gap-4">
+		<a href="/" class={buttonStyles()}>Go to the home page</a>
+		<a href="/search" class={buttonStyles({ variant: "secondary" })}>Search the site</a>
+	</div>
+</PageLayout>

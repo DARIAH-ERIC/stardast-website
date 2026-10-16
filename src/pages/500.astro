@@ -1,0 +1,46 @@
+---
+import { Font } from "astro:assets";
+
+import { buttonStyles } from "#/src/components/button-styles.ts";
+import { locale, siteName } from "#/src/config/project.ts";
+
+import "#/src/styles/index.css";
+
+/**
+ * Rendered for unhandled errors. Deliberately without the site layout, which reads the cms - whose failure may be the
+ * cause of the error.
+ */
+---
+
+<!doctype html>
+<html lang={locale}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="robots" content="noindex" />
+		<link rel="icon" type="image/svg+xml" href="/icon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="color-scheme" content="light" />
+		<title>{`Something went wrong | ${siteName}`}</title>
+		<Font cssVariable="--font-roboto" preload={[{ subset: "latin", style: "normal" }]} />
+		<Font cssVariable="--font-roboto-mono" />
+	</head>
+	<body>
+		<main class="content-container flex min-h-full flex-col items-start justify-center gap-8 py-16">
+			<a href="/">
+				<img
+					src="/assets/images/logo-stardast-horizontal-black.svg"
+					alt={`${siteName} - Home`}
+					width="584"
+					height="137"
+					class="h-9 w-auto"
+				/>
+			</a>
+			<h1 class="text-headline text-balance text-foreground-strong">Something went wrong</h1>
+			<p class="max-w-[60ch] text-pretty">
+				Sorry, this page could not be loaded. Please try again in a moment.
+			</p>
+			<a href="/" class={buttonStyles()}>Go to the home page</a>
+		</main>
+	</body>
+</html>

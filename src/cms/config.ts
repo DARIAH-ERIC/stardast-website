@@ -370,7 +370,18 @@ export const home = singleton({
 });
 
 /** Top-level routes and public directories, which take precedence over pages with the same id. */
-const reservedPageIds = new Set(["admin", "analytics", "api", "assets", "events", "media", "news", "search"]);
+const reservedPageIds = new Set([
+	"404",
+	"500",
+	"admin",
+	"analytics",
+	"api",
+	"assets",
+	"events",
+	"media",
+	"news",
+	"search",
+]);
 
 export const pages = collection({
 	label: "Pages",
