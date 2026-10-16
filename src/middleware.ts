@@ -5,6 +5,19 @@ function isPathWithin(pathname: string, prefix: string): boolean {
 }
 
 /**
+ * Baseline headers, which restrict nothing the site does. The content security policy only covers framing and similar,
+ * not scripts - which would need hashes of astro's inline scripts, see the `security.csp` option, and allowances for
+ * e.g. matomo and uploads to s3. Strict transport security is ignored by browsers over plain http, e.g. in
+ * development.
+ */
+const securityHeaders = {
+	"content-security-policy": "base-uri 'self'; frame-ancestors 'self'; object-src 'none'",
+	"referrer-policy": "strict-origin-when-cross-origin",
+	"strict-transport-security": "max-age=31536000",
+	"x-content-type-options": "nosniff",
+};
+
+/**
  * The cms is loaded on demand, rather than imported: importing it validates its configuration, which would make every
  * route fail when the configuration is broken - including the liveness check, which must only reflect whether the
  * process can respond. Health checks therefore skip the cms entirely, see `/api/health/`.
@@ -32,6 +45,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
 	 */
 	if (import.meta.env.PUBLIC_APP_BOTS !== "enabled") {
 		response.headers.set("x-robots-tag", "noindex");
+	}
+
+	for (const [name, value] of Object.entries(securityHeaders)) {
+		response.headers.set(name, value);
 	}
 
 	return response;
