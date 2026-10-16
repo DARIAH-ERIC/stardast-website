@@ -7,6 +7,7 @@ import * as v from "valibot";
 
 import { loadEnvFiles } from "#/configs/env.files.ts";
 import { client } from "#/configs/env.schema.ts";
+import { cacheKeyQueryParams } from "#/src/config/cache.ts";
 
 /**
  * The config file is evaluated before vite loads `.env` files into `import.meta.env`. Loading them into `process.env`
@@ -21,7 +22,7 @@ const env = v.parse(client, Object.fromEntries(Object.entries(process.env).filte
 export default defineConfig({
 	adapter: node({ mode: "standalone" }),
 	cache: {
-		provider: memoryCache(),
+		provider: memoryCache({ query: { include: [...cacheKeyQueryParams] } }),
 	},
 	integrations: [react()],
 	image: {

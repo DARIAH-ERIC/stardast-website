@@ -106,7 +106,8 @@ export function createTransformLoader(config: ImageTransformConfig): ImageLoader
 	};
 }
 
-const variantParams = ["w", "h", "fit", "f", "q"];
+/** The query parameters of variants, e.g. for cache keys. */
+export const variantParams = ["w", "h", "fit", "f", "q"] as const;
 
 function parseInteger(value: string | null): number | undefined {
 	return value != null && /^\d{1,5}$/.test(value) ? Number(value) : undefined;
