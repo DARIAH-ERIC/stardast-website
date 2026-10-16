@@ -6,8 +6,11 @@ export interface Props {
 	id: string;
 	/** Overrides the media entry's alternative text. */
 	alt?: string;
-	/** Matches the image's rendered width at different viewport sizes, e.g. `(min-width: 48rem) 48rem, 100vw`. */
-	sizes?: string;
+	/**
+	 * Matches the image's rendered width at different viewport sizes, e.g. `(min-width: 48rem) 48rem, 100vw` - or a
+	 * function of the image's size, e.g. for images whose width follows from their height.
+	 */
+	sizes?: string | ((image: { width?: number; height?: number }) => string);
 	widths?: ReadonlyArray<number>;
 	loading?: "eager" | "lazy";
 	class?: string;
@@ -32,7 +35,7 @@ const data = entry?.data;
 		<img
 			src={getImageUrl(id, data, { width: 960 })}
 			srcset={getImageSrcSet(id, data, widths)}
-			sizes={sizes}
+			sizes={typeof sizes === "function" ? sizes(data) : sizes}
 			alt={alt ?? data.alt}
 			width={data.width}
 			height={data.height}

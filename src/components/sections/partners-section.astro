@@ -11,6 +11,18 @@ const { anchor, eyebrow, title, lead, links } = Astro.props;
 /** Sorted by name - see the collection's `sort`. */
 const partners = await Astro.locals.content.list("partners");
 
+/**
+ * Logos are contained in a box which is at most 3.5rem high, see `h-14` - so their width follows from their aspect ratio,
+ * and e.g. a square logo is far narrower than its cell.
+ */
+const logoHeight = 56;
+
+function getLogoSizes(image: { width?: number; height?: number }): string {
+	return image.width != null && image.height != null
+		? `${String(Math.ceil((logoHeight * image.width) / image.height))}px`
+		: "12rem";
+}
+
 /** Cells of a grid which share their dividing lines: each draws its own right and bottom edge. */
 const cellClass = "flex h-32 w-full items-center justify-center p-6";
 ---
@@ -29,7 +41,13 @@ const cellClass = "flex h-32 w-full items-center justify-center p-6";
 
 				/** The logo identifies the partner - its alternative text is the full name, and so the link's name. */
 				const image = (
-					<CmsImage id={logo} alt={label} sizes="12rem" widths={[192, 384]} class="h-14 w-full object-contain" />
+					<CmsImage
+						id={logo}
+						alt={label}
+						sizes={getLogoSizes}
+						widths={[160, 320, 384]}
+						class="h-14 w-full object-contain"
+					/>
 				);
 
 				return (
