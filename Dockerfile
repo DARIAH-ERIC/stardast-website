@@ -28,6 +28,7 @@ RUN bun add "sharp@$(bun --print 'require("/app/node_modules/sharp/package.json"
 FROM install AS build
 # Inlined into the client and server bundles, see `configs/env.schema.ts`.
 ARG PUBLIC_APP_BASE_URL
+ARG PUBLIC_APP_BOTS
 ARG PUBLIC_APP_GOOGLE_SITE_VERIFICATION
 ARG PUBLIC_APP_MATOMO_BASE_URL
 ARG PUBLIC_APP_MATOMO_ID

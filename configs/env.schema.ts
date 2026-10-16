@@ -6,6 +6,11 @@ import * as v from "valibot";
  */
 export const client = v.object({
 	PUBLIC_APP_BASE_URL: v.pipe(v.string(), v.url()),
+	/**
+	 * Whether search engines may index the site. Until then, `robots.txt` disallows everything, and every response is
+	 * marked `noindex` - since `robots.txt` alone does not remove pages which are already indexed.
+	 */
+	PUBLIC_APP_BOTS: v.optional(v.picklist(["disabled", "enabled"]), "disabled"),
 	/** The google search console's html tag verification - its `content`, not the whole tag. */
 	PUBLIC_APP_GOOGLE_SITE_VERIFICATION: v.optional(v.string()),
 	/** Defaults to the acdh instance. */

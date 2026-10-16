@@ -6,6 +6,9 @@ import { type MonthlyVisits, createMatomoClient } from "#/src/lib/analytics/mato
 
 const months = 12;
 
+/** Visitor numbers are public, but not meant to be found via search engines. */
+Astro.response.headers.set("x-robots-tag", "noindex");
+
 if (env.PUBLIC_APP_MATOMO_ID == null) {
 	return new Response(null, { status: 404 });
 }

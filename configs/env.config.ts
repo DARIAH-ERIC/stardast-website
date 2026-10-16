@@ -9,6 +9,7 @@ const serverEnvironment: Record<string, string | undefined> = import.meta.env.SS
 export const env = validate({
 	environment: {
 		PUBLIC_APP_BASE_URL: import.meta.env.PUBLIC_APP_BASE_URL,
+		PUBLIC_APP_BOTS: import.meta.env.PUBLIC_APP_BOTS,
 		PUBLIC_APP_GOOGLE_SITE_VERIFICATION: import.meta.env.PUBLIC_APP_GOOGLE_SITE_VERIFICATION,
 		PUBLIC_APP_MATOMO_BASE_URL: import.meta.env.PUBLIC_APP_MATOMO_BASE_URL,
 		PUBLIC_APP_MATOMO_ID: import.meta.env.PUBLIC_APP_MATOMO_ID,

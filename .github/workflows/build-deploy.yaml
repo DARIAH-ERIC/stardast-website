@@ -55,6 +55,7 @@ jobs:
           # Inlined at build time, see `configs/env.schema.ts`.
           build-args: |
             "PUBLIC_APP_BASE_URL=${{ vars.PUBLIC_APP_BASE_URL }}"
+            "PUBLIC_APP_BOTS=${{ vars.PUBLIC_APP_BOTS }}"
             "PUBLIC_APP_GOOGLE_SITE_VERIFICATION=${{ vars.PUBLIC_APP_GOOGLE_SITE_VERIFICATION }}"
             "PUBLIC_APP_MATOMO_BASE_URL=${{ vars.PUBLIC_APP_MATOMO_BASE_URL }}"
             "PUBLIC_APP_MATOMO_ID=${{ vars.PUBLIC_APP_MATOMO_ID }}"
