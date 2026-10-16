@@ -1,12 +1,13 @@
 {
 	"title": "Accessibility",
 	"heading": "Accessibility statement",
-	"summary": "Placeholder content for the accessibility statement.",
+	"summary": "How accessible this website is, and how to report problems.",
 	"sections": [
 		{
 			"type": "text",
 			"data": {
 				"layout": "stacked",
+				"title": "Our commitment",
 				"content": {
 					"type": "doc",
 					"content": [
@@ -15,7 +16,323 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "This is placeholder content for the accessibility statement."
+									"text": "[To be completed: name of the responsible organisation]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": " is committed to making this website accessible to everyone, including people with disabilities. "
+								},
+								{
+									"type": "text",
+									"text": "[To be completed: the applicable law, if any - e.g. the national transposition of Directive (EU) 2016/2102]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "This statement applies to the public website at "
+								},
+								{
+									"type": "text",
+									"text": "[To be completed: production address]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": ". It does not cover the editing interface used by the project team."
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Compliance status",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "We aim to meet the Web Content Accessibility Guidelines (WCAG) 2.2 at level AA. "
+								},
+								{
+									"type": "text",
+									"text": "[To be completed: compliance status - fully or partially compliant - once the manual review has been carried out]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "What we do",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "bulletList",
+							"content": [
+								{
+									"type": "listItem",
+									"content": [
+										{
+											"type": "paragraph",
+											"content": [
+												{
+													"type": "text",
+													"text": "Pages use semantic HTML, with landmarks and a meaningful heading structure, so that they can be navigated with a screen reader."
+												}
+											]
+										}
+									]
+								},
+								{
+									"type": "listItem",
+									"content": [
+										{
+											"type": "paragraph",
+											"content": [
+												{
+													"type": "text",
+													"text": "All content and menus can be reached and used with a keyboard, and a skip link leads directly to the main content."
+												}
+											]
+										}
+									]
+								},
+								{
+									"type": "listItem",
+									"content": [
+										{
+											"type": "paragraph",
+											"content": [
+												{
+													"type": "text",
+													"text": "Images have alternative text, unless they are purely decorative. Partner logos are described by the partner's name."
+												}
+											]
+										}
+									]
+								},
+								{
+									"type": "listItem",
+									"content": [
+										{
+											"type": "paragraph",
+											"content": [
+												{
+													"type": "text",
+													"text": "Text can be enlarged, and the layout adapts to small screens and high zoom levels."
+												}
+											]
+										}
+									]
+								},
+								{
+									"type": "listItem",
+									"content": [
+										{
+											"type": "paragraph",
+											"content": [
+												{
+													"type": "text",
+													"text": "Every page has a title and declares its language."
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Known limitations",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "[To be completed: content which is not yet accessible, if any, as found in the manual review]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Documents and images published by the project team may not always meet these requirements. If you find content you cannot access, please let us know, and we will provide it in an accessible format."
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "How this statement was prepared",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "This statement was prepared on "
+								},
+								{
+									"type": "text",
+									"text": "[To be completed: date]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": ", based on a self-assessment. On 16 October 2026, a sample of pages was tested automatically with axe-core against WCAG 2.2 level AA, without finding any issues. "
+								},
+								{
+									"type": "text",
+									"text": "[To be completed: the manual review, e.g. with a keyboard and a screen reader]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Feedback and contact",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "If you encounter any accessibility barriers on this website, please contact us at "
+								},
+								{
+									"type": "text",
+									"text": "[To be completed: contact email address]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": ". We aim to respond within "
+								},
+								{
+									"type": "text",
+									"text": "[To be completed: response time, e.g. two weeks]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": "."
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Enforcement procedure",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "If you are not satisfied with our response, you can contact "
+								},
+								{
+									"type": "text",
+									"text": "[To be completed: the competent enforcement body, if any]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": "."
 								}
 							]
 						}

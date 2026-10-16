@@ -1,12 +1,13 @@
 {
 	"title": "Privacy policy",
 	"heading": "How we handle your personal data",
-	"summary": "Placeholder content for the privacy policy.",
+	"summary": "Which personal data this website processes, why, and what your rights are.",
 	"sections": [
 		{
 			"type": "text",
 			"data": {
 				"layout": "stacked",
+				"title": "Who is responsible",
 				"content": {
 					"type": "doc",
 					"content": [
@@ -15,7 +16,419 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "This is placeholder content for the privacy policy."
+									"text": "The controller responsible for processing personal data on this website is:"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "[To be completed: name and address of the controller, and a contact email address]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "[To be completed: contact details of the data protection officer, if there is one]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Hosting",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "This website is hosted by the Austrian Centre for Digital Humanities and Cultural Heritage (ACDH-CH) of the Austrian Academy of Sciences, in Vienna, Austria. "
+								},
+								{
+									"type": "text",
+									"text": "[To be completed: confirm the hosting arrangement, e.g. a data processing agreement with the Austrian Academy of Sciences]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "When you visit the website, your browser sends technical information which is needed to deliver the pages to you: your IP address, the date and time of the request, the address of the requested page, the address of the page you came from, and your browser and operating system. We process this information to provide the website and to keep it secure, which is our legitimate interest (Art. 6(1)(f) GDPR)."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "[To be completed: whether server logs are kept, and for how long - to be confirmed with ACDH-CH]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Cookies",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "The public website does not set cookies, and does not store any other information in your browser. Fonts and images are served from our own server. Apart from the analytics service described below, no content is loaded from other websites."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Links to the websites of our partners and to LinkedIn are ordinary links: those websites only receive information about you if you follow a link."
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Analytics",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "To understand how the website is used, we use Matomo, an open-source analytics service, run by ACDH-CH on its own servers at matomo.acdh.oeaw.ac.at. Your data is not shared with third parties."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Matomo records:"
+								}
+							]
+						},
+						{
+							"type": "bulletList",
+							"content": [
+								{
+									"type": "listItem",
+									"content": [
+										{
+											"type": "paragraph",
+											"content": [
+												{
+													"type": "text",
+													"text": "the pages you visit, and when"
+												}
+											]
+										}
+									]
+								},
+								{
+									"type": "listItem",
+									"content": [
+										{
+											"type": "paragraph",
+											"content": [
+												{
+													"type": "text",
+													"text": "the page you came from"
+												}
+											]
+										}
+									]
+								},
+								{
+									"type": "listItem",
+									"content": [
+										{
+											"type": "paragraph",
+											"content": [
+												{
+													"type": "text",
+													"text": "links to other websites and downloads you click"
+												}
+											]
+										}
+									]
+								},
+								{
+									"type": "listItem",
+									"content": [
+										{
+											"type": "paragraph",
+											"content": [
+												{
+													"type": "text",
+													"text": "your browser, operating system, device type, and screen resolution"
+												}
+											]
+										}
+									]
+								},
+								{
+									"type": "listItem",
+									"content": [
+										{
+											"type": "paragraph",
+											"content": [
+												{
+													"type": "text",
+													"text": "your approximate location, derived from your IP address"
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Matomo runs without cookies. Returning visitors are only recognised within the same day, by a hash of e.g. their IP address and browser. Search terms you enter in the site search are part of the page address, and are therefore recorded like any other page address."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "[To be completed: whether ACDH-CH's Matomo anonymises IP addresses, and how long data is kept - to be confirmed with ACDH-CH]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "The legal basis is our legitimate interest in improving the website and reporting on its use (Art. 6(1)(f) GDPR)."
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Mailing list",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "If you subscribe to our mailing list, we store your first name, last name, email address, and - if you provide it - your institution. We use this information only to send you the STARDAST mailing list. It is stored in a database run by ACDH-CH."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "The legal basis is your consent (Art. 6(1)(a) GDPR). You can withdraw your consent and unsubscribe at any time "
+								},
+								{
+									"type": "text",
+									"text": "[To be completed: how - e.g. with the link in every email, or by writing to the contact address above]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": ". We keep your data until you unsubscribe."
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Editors",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "This section only concerns members of the project team who edit the website's content. Editors sign in with their GitHub account, which is processed by GitHub, Inc. in the United States. "
+								},
+								{
+									"type": "text",
+									"text": "[To be completed: legal basis for the transfer to the United States, e.g. the EU-U.S. Data Privacy Framework]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "When an editor signs in, we read their GitHub username, name, and email address. The sign-in is kept in a cookie for 12 hours, and a second cookie is used for up to 10 minutes during sign-in. Both are strictly necessary to provide the editing interface."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Changes are saved in a public GitHub repository, DARIAH-ERIC/stardast-website, with the editor's name and email address as the author. Editors who keep their email address private on GitHub are recorded with their GitHub no-reply address instead."
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Your rights",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "You have the right to access, correct, and delete your personal data, to restrict or object to its processing, and to data portability. Where processing is based on your consent, you can withdraw it at any time, without affecting the processing before. To exercise these rights, please contact us at the address above."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "You also have the right to lodge a complaint with a data protection supervisory authority. "
+								},
+								{
+									"type": "text",
+									"text": "[To be completed: name and contact details of the competent supervisory authority]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Changes to this policy",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Last updated: "
+								},
+								{
+									"type": "text",
+									"text": "[To be completed: date of publication]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": "."
 								}
 							]
 						}
