@@ -1,6 +1,7 @@
 ---
+import { socialPlatforms } from "#/src/cms/config.ts";
 import Icon from "#/src/components/icon.astro";
-import { contactEmail, funding, socialLinks } from "#/src/config/project.ts";
+import { funding, siteName } from "#/src/config/project.ts";
 
 const year = new Date().getFullYear();
 
@@ -18,6 +19,15 @@ const mainNavigation = (navigation?.main ?? []).flatMap((entry) =>
 	entry.type === "menu" ? entry.data.links : [entry.data],
 );
 const legalNavigation = navigation?.legal ?? [];
+
+/** Renders without contact details rather than failing every page - `tests/cms/content.test.ts` checks that it exists. */
+const site = await Astro.locals.content.singleton("site");
+const contactEmail = site?.contactEmail;
+const socialLinks = (site?.socialLinks ?? []).map((link) => {
+	const platform = socialPlatforms.find((item) => item.value === link.platform);
+
+	return { href: link.url, icon: link.platform, label: `${siteName} on ${platform?.label ?? link.platform}` };
+});
 
 ---
 

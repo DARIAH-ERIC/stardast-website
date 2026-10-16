@@ -23,6 +23,7 @@ const authors = await content.entries("people", entry.data.authors);
 <ContentPageLayout
 	title={entry.data.title}
 	description={entry.data.summary}
+	image={entry.data.image}
 	parent={{ label: newsPage?.title ?? "News", href: "/news" }}
 >
 	<p class="not-prose mono-label text-foreground-muted">

@@ -1,5 +1,6 @@
 import * as v from "valibot";
 
+import { siteName } from "#/src/config/project.ts";
 import { createMediaCollection } from "#/src/lib/cms/media/collection.ts";
 import {
 	type InferEntry,
@@ -590,9 +591,60 @@ export const navigation = singleton({
 	},
 });
 
+/** The platforms which can be linked from the site footer - each needs an icon, see `icon.astro`. */
+export const socialPlatforms = [
+	{ value: "bluesky", label: "Bluesky" },
+	{ value: "linkedin", label: "LinkedIn" },
+	{ value: "mastodon", label: "Mastodon" },
+	{ value: "youtube", label: "YouTube" },
+] as const;
+
+export type SocialPlatform = (typeof socialPlatforms)[number]["value"];
+
+/** Site-wide metadata - defaults for pages which do not have their own, and the contact details in the site footer. */
+export const site = singleton({
+	label: "Site metadata",
+	path: "content/site",
+	fields: {
+		title: optional(
+			fields.text({
+				label: "Title",
+				description: `The home page's title, e.g. in search results and when shared. Defaults to ${siteName}. Other pages are titled e.g. "About | ${siteName}".`,
+				validation: [v.maxLength(70)],
+			}),
+		),
+		description: optional(
+			fields.textarea({
+				label: "Description",
+				description:
+					"Describes the site in search results and when shared - for the home page, and pages without a summary.",
+				validation: [v.maxLength(300)],
+			}),
+		),
+		image: optional(
+			fields.image({
+				label: "Sharing image",
+				description:
+					"Shown when a page is shared, e.g. on LinkedIn, unless it has a cover image of its own. Cropped to 1200 × 630 pixels, so it should be at least that large. Must be a jpg, png, or webp image - platforms do not show svg images.",
+			}),
+		),
+		contactEmail: optional(fields.email({ label: "Contact email", description: "Shown in the site footer." })),
+		socialLinks: fields.array(
+			fields.object({
+				label: "Social link",
+				fields: {
+					platform: fields.select({ label: "Platform", options: socialPlatforms, defaultValue: "linkedin" }),
+					url: fields.url({ label: "Url", description: "The profile's full url." }),
+				},
+			}),
+			{ label: "Social links", description: "Shown as icons in the site footer." },
+		),
+	},
+});
+
 export const config = defineConfig({
 	collections: { events, media, news, pages, partners, people },
-	singletons: { eventsPage, home, navigation, newsPage, newsletter },
+	singletons: { eventsPage, home, navigation, newsPage, newsletter, site },
 });
 
 /** The collection name of the media library, see `createMediaCollection()`. */

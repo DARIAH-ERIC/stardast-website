@@ -7,14 +7,20 @@ import DocumentLayout, { type Props as DocumentLayoutProps } from "#/src/layouts
 
 export interface Props extends DocumentLayoutProps {}
 
-const { title, description, canonical } = Astro.props;
+const { title, description, image, type, canonical } = Astro.props;
 
 const mainContentId = "main-content";
 
 const { preview } = Astro.locals;
 ---
 
-<DocumentLayout title={title} description={description} canonical={canonical}>
+<DocumentLayout
+	title={title}
+	description={description}
+	image={image}
+	type={type}
+	canonical={canonical}
+>
 	<div class="isolate flex min-h-full flex-col">
 		<SkipLink target={mainContentId} />
 		{

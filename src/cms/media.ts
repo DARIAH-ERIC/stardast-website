@@ -82,10 +82,11 @@ const imgproxy = createImgproxyFromEnv();
 
 /**
  * The widths, and heights, of image variants which the site computes itself, see `createTransformLoader()` - which
- * throws for others. Includes the `widths` of every `CmsImage`, e.g. 192 and 384 for a 12rem logo at 1x and 2x.
+ * throws for others. Includes the `widths` of every `CmsImage`, e.g. 192 and 384 for a 12rem logo at 1x and 2x - and
+ * 1200 × 630 for sharing images, see `document-layout.astro`.
  */
 export const imageTransformConfig: ImageTransformConfig = {
-	sizes: [160, 192, 320, 384, 640, 960, 1280, 1920, 2560],
+	sizes: [160, 192, 320, 384, 630, 640, 960, 1200, 1280, 1920, 2560],
 };
 
 /** Imgproxy when configured, and otherwise the site itself, with sharp - so images are always resized and converted. */
