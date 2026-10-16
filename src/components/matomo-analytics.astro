@@ -1,27 +1,38 @@
 ---
 import { env } from "#/configs/env.config.ts";
+import { type PageTracking, getTrackerCommands } from "#/src/lib/analytics/matomo-tracking.ts";
+
+export interface Props {
+	tracking?: PageTracking;
+}
+
+const { tracking = { kind: "pageView" } } = Astro.props;
 
 const siteId = env.PUBLIC_APP_MATOMO_ID;
 const baseUrl = `${env.PUBLIC_APP_MATOMO_BASE_URL.replace(/\/$/, "")}/`;
 
 /** Editors previewing drafts are not visitors. */
 const isEnabled = siteId != null && Astro.locals.preview == null;
+
+const commands =
+	siteId != null
+		? getTrackerCommands({
+				trackerUrl: `${baseUrl}matomo.php`,
+				siteId,
+				url: tracking.url != null ? new URL(tracking.url, Astro.site).href : undefined,
+				tracking,
+			})
+		: [];
 ---
 
 {
 	isEnabled && (
 		<>
-			{/*
-			 * Without cookies, so that no consent is needed - returning visitors are only recognised within a day, by a
-			 * hash of e.g. their ip address and user agent.
-			 */}
-			<script is:inline define:vars={{ trackerUrl: `${baseUrl}matomo.php`, siteId }}>
+			<script is:inline define:vars={{ commands }}>
 				const queue = (window._paq = window._paq || []);
-				queue.push(["disableCookies"]);
-				queue.push(["setTrackerUrl", trackerUrl]);
-				queue.push(["setSiteId", siteId]);
-				queue.push(["trackPageView"]);
-				queue.push(["enableLinkTracking"]);
+				for (const command of commands) {
+					queue.push(command);
+				}
 			</script>
 			<script is:inline async src={`${baseUrl}matomo.js`} />
 		</>

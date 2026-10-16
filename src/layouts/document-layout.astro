@@ -6,6 +6,7 @@ import { getSharingImage, sharingImageSize } from "#/src/cms/sharing-image.ts";
 import JsonLd from "#/src/components/json-ld.astro";
 import MatomoAnalytics from "#/src/components/matomo-analytics.astro";
 import { locale, siteName } from "#/src/config/project.ts";
+import type { PageTracking } from "#/src/lib/analytics/matomo-tracking.ts";
 import type { JsonLd as JsonLdValue } from "#/src/lib/structured-data.ts";
 
 import "#/src/styles/index.css";
@@ -26,9 +27,11 @@ export interface Props {
 	canonical?: string;
 	/** Schema.org metadata for search engines, see `src/lib/structured-data.ts`. */
 	structuredData?: JsonLdValue | ReadonlyArray<JsonLdValue>;
+	/** What the page reports to analytics - a page view by default. */
+	tracking?: PageTracking;
 }
 
-const { title, description, image, type = "website", canonical, structuredData } = Astro.props;
+const { title, description, image, type = "website", canonical, structuredData, tracking } = Astro.props;
 
 const { content } = Astro.locals;
 
@@ -89,7 +92,7 @@ const sharingImage = await getSharingImage(content, [image, site?.image], Astro.
 		{/* Only for small labels, e.g. dates and navigation, so not preloaded. */}
 		<Font cssVariable="--font-roboto-mono" />
 		{structuredData != null && <JsonLd value={structuredData} />}
-		<MatomoAnalytics />
+		<MatomoAnalytics tracking={tracking} />
 	</head>
 	<body>
 		<slot />

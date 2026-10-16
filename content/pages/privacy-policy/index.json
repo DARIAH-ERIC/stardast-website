@@ -241,7 +241,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "Matomo runs without cookies. Returning visitors are only recognised within the same day, by a hash of e.g. their IP address and browser. Search terms you enter in the site search are part of the page address, and are therefore recorded like any other page address."
+									"text": "Matomo runs without cookies. Returning visitors are only recognised within the same day, by a hash of e.g. their IP address and browser. Search terms you enter in the site search are recorded, together with the number of results, so that we can see what visitors are looking for."
 								}
 							]
 						},

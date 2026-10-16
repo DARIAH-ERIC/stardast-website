@@ -5,6 +5,7 @@ import PageHeader from "#/src/components/page-header.astro";
 import Pagination from "#/src/components/pagination.astro";
 import { type SearchType, searchIndex, searchTypes } from "#/src/cms/search.ts";
 import PageLayout from "#/src/layouts/page-layout.astro";
+import type { PageTracking } from "#/src/lib/analytics/matomo-tracking.ts";
 import { parsePageParam } from "#/src/lib/pagination.ts";
 import type { SearchResults } from "#/src/lib/cms/search/types.ts";
 
@@ -77,9 +78,20 @@ const typeLabels: Record<string, string> = Object.fromEntries(
 );
 
 const pluralize = (count: number) => (count === 1 ? "result" : "results");
+
+/**
+ * Reported to analytics as a site search, rather than a page view - once per search, i.e. not again for further pages
+ * of its results, and with the search terms in matomo's site search report, rather than in page urls.
+ */
+const tracking: PageTracking =
+	query === ""
+		? { kind: "pageView", url: "/search" }
+		: page > 1
+			? { kind: "none" }
+			: { kind: "siteSearch", url: "/search", keyword: query, category: type?.label, resultsCount: results?.total };
 ---
 
-<PageLayout title={query !== "" ? `Search results for "${query}"` : "Search"}>
+<PageLayout title={query !== "" ? `Search results for "${query}"` : "Search"} tracking={tracking}>
 	<PageHeader title="Search" heading="Search our website" />
 	<div class="content-container section-spacing">
 		<form role="search" action="/search" method="get" class="flex max-w-2xl flex-wrap gap-3">
