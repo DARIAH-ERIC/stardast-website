@@ -25,7 +25,7 @@ export const GET: APIRoute = async (context) => {
 		const identity = await provider.handleCallback({
 			url: context.url,
 			codeVerifier: saved.codeVerifier,
-			redirectUri: new URL(callbackPath, context.url).href,
+			redirectUri: new URL(callbackPath, context.site ?? context.url).href,
 		});
 
 		const role = await authorizer.authorize(identity);

@@ -16,7 +16,7 @@ export const GET: APIRoute = async (context) => {
 	const url = await provider.createAuthorizationUrl({
 		state,
 		codeVerifier,
-		redirectUri: new URL(callbackPath, context.url).href,
+		redirectUri: new URL(callbackPath, context.site ?? context.url).href,
 	});
 
 	return context.redirect(url.href);
