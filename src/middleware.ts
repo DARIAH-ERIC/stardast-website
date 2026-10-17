@@ -5,13 +5,14 @@ function isPathWithin(pathname: string, prefix: string): boolean {
 }
 
 /**
- * Baseline headers, which restrict nothing the site does. The content security policy only covers framing and similar,
- * not scripts - which would need hashes of astro's inline scripts, see the `security.csp` option, and allowances for
- * e.g. matomo and uploads to s3. Strict transport security is ignored by browsers over plain http, e.g. in
- * development.
+ * Baseline headers, which restrict nothing the site does. The content security policy only covers framing, form targets
+ * and similar, not scripts - which would need hashes of astro's inline scripts, see the `security.csp` option, and
+ * allowances for e.g. matomo and uploads to s3. Not worth maintaining while only trusted editors write content, and
+ * rendering escapes it - reconsider when the site renders content from visitors, or embeds third-party scripts. Strict
+ * transport security is ignored by browsers over plain http, e.g. in development.
  */
 const securityHeaders = {
-	"content-security-policy": "base-uri 'self'; frame-ancestors 'self'; object-src 'none'",
+	"content-security-policy": "base-uri 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'",
 	"referrer-policy": "strict-origin-when-cross-origin",
 	"strict-transport-security": "max-age=31536000",
 	"x-content-type-options": "nosniff",
