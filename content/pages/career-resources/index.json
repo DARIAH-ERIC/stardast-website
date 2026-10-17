@@ -4,69 +4,30 @@
 	"summary": "Placeholder content for the career resources page.",
 	"sections": [
 		{
-			"type": "text",
+			"type": "resources",
 			"data": {
 				"anchor": "institutional-analysis",
-				"layout": "stacked",
 				"title": "Institutional analysis",
-				"content": {
-					"type": "doc",
-					"content": [
-						{
-							"type": "paragraph",
-							"content": [
-								{
-									"type": "text",
-									"text": "Placeholder for the institutional analysis - content still to come."
-								}
-							]
-						}
-					]
-				}
+				"lead": "Placeholder for the institutional analysis - content still to come.",
+				"category": "institutionalAnalysis"
 			}
 		},
 		{
-			"type": "text",
+			"type": "resources",
 			"data": {
 				"anchor": "cv-examples",
-				"layout": "stacked",
 				"title": "CV examples",
-				"content": {
-					"type": "doc",
-					"content": [
-						{
-							"type": "paragraph",
-							"content": [
-								{
-									"type": "text",
-									"text": "Placeholder for the cv examples - content still to come."
-								}
-							]
-						}
-					]
-				}
+				"lead": "Placeholder for the cv examples - content still to come.",
+				"category": "cvExamples"
 			}
 		},
 		{
-			"type": "text",
+			"type": "resources",
 			"data": {
 				"anchor": "competency-frameworks",
-				"layout": "stacked",
 				"title": "Competency frameworks",
-				"content": {
-					"type": "doc",
-					"content": [
-						{
-							"type": "paragraph",
-							"content": [
-								{
-									"type": "text",
-									"text": "Placeholder for the competency frameworks - content still to come."
-								}
-							]
-						}
-					]
-				}
+				"lead": "Placeholder for the competency frameworks - content still to come.",
+				"category": "competencyFrameworks"
 			}
 		}
 	]

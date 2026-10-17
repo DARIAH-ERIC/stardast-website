@@ -16,6 +16,7 @@ export const searchTypes = [
 	{ value: "pages", label: "Pages" },
 	{ value: "news", label: "News" },
 	{ value: "events", label: "Events" },
+	{ value: "resources", label: "Resources" },
 	{ value: "partners", label: "Partners" },
 ] as const;
 
@@ -98,11 +99,12 @@ function getPageDocuments(params: {
 async function loadDocuments(): Promise<Array<SearchDocument>> {
 	const reader = createReader({ config, storage });
 
-	const [home, pages, news, events, partners] = await Promise.all([
+	const [home, pages, news, events, resources, partners] = await Promise.all([
 		reader.singleton("home"),
 		reader.list("pages"),
 		reader.list("news"),
 		reader.list("events"),
+		reader.list("resources"),
 		reader.list("partners"),
 	]);
 
@@ -153,6 +155,17 @@ async function loadDocuments(): Promise<Array<SearchDocument>> {
 			title: entry.data.title,
 			text: extractText(config.collections.events.fields, { ...entry.data, title: undefined }, { skip }),
 			url: `/events/${entry.id}`,
+		});
+	}
+
+	for (const entry of resources) {
+		documents.push({
+			id: `resources:${entry.id}`,
+			type: "resources",
+			title: entry.data.title,
+			text: entry.data.summary ?? "",
+			/** Resources have no pages of their own - their cards link to where they are published. */
+			url: entry.data.href,
 		});
 	}
 

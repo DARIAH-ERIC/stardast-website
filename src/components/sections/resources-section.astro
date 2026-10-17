@@ -1,0 +1,30 @@
+---
+import ResourceCard from "#/src/components/resource-card.astro";
+import SectionHeader from "#/src/components/sections/section-header.astro";
+import type { SectionData } from "#/src/cms/config.ts";
+
+export type Props = SectionData<"resources">;
+
+const { anchor, eyebrow, title, lead, category } = Astro.props;
+
+/** Sorted newest first - see the collection's `sort`. */
+const resources = (await Astro.locals.content.list("resources")).filter((entry) => entry.data.category === category);
+---
+
+{/* Just the title and lead while there are no resources yet, rather than a placeholder. */}
+<section id={anchor} class="content-container section-spacing">
+	<SectionHeader eyebrow={eyebrow} title={title} lead={lead} />
+	{
+		resources.length > 0 && (
+			<ul class="grid border-t border-l border-border-strong sm:grid-cols-2 lg:grid-cols-3" role="list">
+				{resources.map((entry) => {
+					return (
+						<li class="border-r border-b border-border-strong">
+							<ResourceCard data={entry.data} headingLevel={title != null ? 3 : 2} />
+						</li>
+					);
+				})}
+			</ul>
+		)
+	}
+</section>

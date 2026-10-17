@@ -7,6 +7,7 @@ import NewsAndEventsSection from "#/src/components/sections/news-and-events-sect
 // import NewsAndEventsSection from "#/src/components/sections/news-and-events-feed-section.astro";
 import NumberedListSection from "#/src/components/sections/numbered-list-section.astro";
 import PartnersSection from "#/src/components/sections/partners-section.astro";
+import ResourcesSection from "#/src/components/sections/resources-section.astro";
 import SelectedNewsSection from "#/src/components/sections/selected-news-section.astro";
 import TextSection from "#/src/components/sections/text-section.astro";
 import type { SectionsData } from "#/src/cms/config.ts";
@@ -51,6 +52,10 @@ const { value } = Astro.props;
 
 			case "partners": {
 				return <PartnersSection {...section.data} />;
+			}
+
+			case "resources": {
+				return <ResourcesSection {...section.data} />;
 			}
 		}
 	})
