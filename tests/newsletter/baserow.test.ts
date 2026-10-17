@@ -129,3 +129,41 @@ test("fails when baserow cannot be reached", async () => {
 
 	expect(result.isErr() && result.error._tag).toBe("BaserowError");
 });
+
+test("finds subscribed addresses, ignoring case", async () => {
+	const { client, requests } = createClient(() =>
+		Response.json({
+			count: 2,
+			results: [{ [subscriberFieldIds.email]: "lada@example.org" }, { [subscriberFieldIds.email]: "Ada@Example.org" }],
+		}),
+	);
+
+	const result = await client.isSubscribed("ada@example.org");
+
+	expect(result.isOk() && result.value).toBe(true);
+	expect(requests[0]!.url.searchParams.get(`filter__${subscriberFieldIds.email}__contains`)).toBe("ada@example.org");
+	expect(new Headers(requests[0]!.init?.headers).get("authorization")).toBe("Token secret");
+});
+
+test("does not count addresses which only contain the address as subscribed", async () => {
+	const { client } = createClient(() =>
+		Response.json({ count: 1, results: [{ [subscriberFieldIds.email]: "lada@example.org" }] }),
+	);
+
+	const result = await client.isSubscribed("ada@example.org");
+
+	expect(result.isOk() && result.value).toBe(false);
+});
+
+test("fails to check for subscribed addresses without permission to read rows", async () => {
+	const { client } = createClient(() =>
+		Response.json(
+			{ error: "ERROR_NO_PERMISSION_TO_TABLE", detail: "The token does not have permissions to the table." },
+			{ status: 401 },
+		),
+	);
+
+	const result = await client.isSubscribed("ada@example.org");
+
+	expect(result.isErr() && result.error.message).toContain("ERROR_NO_PERMISSION_TO_TABLE");
+});

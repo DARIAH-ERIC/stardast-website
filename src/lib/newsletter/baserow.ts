@@ -42,7 +42,9 @@ export interface Subscription {
 }
 
 export interface BaserowClient {
-	/** Adds a row to the subscribers table. Addresses already in the table are added again - duplicates are not checked. */
+	/** Whether the address is in the subscribers table already, ignoring case. */
+	isSubscribed: (email: string) => Promise<Result<boolean, BaserowError>>;
+	/** Adds a row to the subscribers table. Addresses already in the table are added again - see `isSubscribed`. */
 	subscribe: (subscriber: Subscriber) => Promise<Result<Subscription, InvalidSubscriberError | BaserowError>>;
 }
 
@@ -55,18 +57,70 @@ const ErrorResponseSchema = v.object({
 /** The created row, keyed by field id. */
 const RowSchema = v.record(v.string(), v.unknown());
 
+const RowsSchema = v.object({ results: v.array(RowSchema) });
+
 export function createBaserowClient(params: {
 	/** E.g. `https://baserow.acdh-dev.oeaw.ac.at`, or `https://api.baserow.io` for baserow's hosted service. */
 	baseUrl: string;
-	/** A database token, with permission to create rows in the table. */
+	/** A database token, with permission to read and create rows in the table. */
 	token: string;
 	fetch?: Fetch;
 }): BaserowClient {
 	const { baseUrl, token, fetch = globalThis.fetch } = params;
 
+	const url = new URL(`api/database/rows/table/${subscribersTableId}/`, `${baseUrl.replace(/\/$/, "")}/`);
+
 	return {
+		async isSubscribed(email) {
+			/**
+			 * Baserow's `contains` filter ignores case, which its `equal` filter does not - matches are then compared in
+			 * full, since e.g. `ada@example.org` also contains `a@example.org`.
+			 */
+			const query = new URL(url);
+			query.searchParams.set(`filter__${subscriberFieldIds.email}__contains`, email);
+			query.searchParams.set("size", "200");
+
+			const response = await Result.tryPromise({
+				try: () =>
+					fetch(query, {
+						headers: { authorization: `Token ${token}` },
+						signal: AbortSignal.timeout(10_000),
+					}),
+				catch: (error) => new BaserowError({ message: `Request to baserow failed: ${String(error)}` }),
+			});
+
+			if (response.isErr()) {
+				return Result.err(response.error);
+			}
+
+			const body: unknown = await response.value.json().catch(() => undefined);
+
+			if (!response.value.ok) {
+				const error = v.safeParse(ErrorResponseSchema, body);
+
+				return Result.err(
+					new BaserowError({
+						message: `Baserow responded with ${String(response.value.status)}: ${(error.success ? error.output.error : undefined) ?? "unknown error"}.`,
+					}),
+				);
+			}
+
+			const rows = v.safeParse(RowsSchema, body);
+
+			if (!rows.success) {
+				return Result.err(new BaserowError({ message: "Baserow responded with an unexpected list of rows." }));
+			}
+
+			return Result.ok(
+				rows.output.results.some((row) => {
+					const value = row[subscriberFieldIds.email];
+
+					return typeof value === "string" && value.toLowerCase() === email.toLowerCase();
+				}),
+			);
+		},
+
 		async subscribe(subscriber) {
-			const url = new URL(`api/database/rows/table/${subscribersTableId}/`, `${baseUrl.replace(/\/$/, "")}/`);
 			const values: Record<keyof Subscriber, string> = {
 				email: subscriber.email,
 				firstName: subscriber.firstName,
