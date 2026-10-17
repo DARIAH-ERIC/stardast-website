@@ -1,6 +1,13 @@
 import * as v from "valibot";
 
 /**
+ * The largest upload size `CMS_MAX_UPLOAD_SIZE` may be set to, in megabytes - also the server's limit for request
+ * bodies, see `astro.config.ts`. Uploaded files are committed to the content repository, unless they go to s3, where
+ * browsers upload directly.
+ */
+export const maxUploadSizeLimit = 20;
+
+/**
  * Inlined into the client and server bundles at build time, so these must be correct when `astro build` runs. Read via
  * `import.meta.env`, so that client and server always see the same value.
  */
@@ -78,10 +85,10 @@ export const serverRuntime = v.object({
 	),
 	/** Where uploads go: `repo` commits them to the content repository, `s3` stores them in an object storage. */
 	CMS_ASSETS: v.optional(v.picklist(["repo", "s3"]), "repo"),
-	/** Maximum upload size, in megabytes. */
+	/** Maximum upload size, in megabytes, at most `maxUploadSizeLimit`. */
 	CMS_MAX_UPLOAD_SIZE: v.optional(
-		v.pipe(v.string(), v.transform(Number), v.number(), v.integer(), v.minValue(1)),
-		"20",
+		v.pipe(v.string(), v.transform(Number), v.number(), v.integer(), v.minValue(1), v.maxValue(maxUploadSizeLimit)),
+		String(maxUploadSizeLimit),
 	),
 	/** An s3-compatible object storage, e.g. ceph's rados gateway, addressed path-style. */
 	CMS_S3_ENDPOINT: v.optional(v.pipe(v.string(), v.url())),
@@ -98,7 +105,10 @@ export const serverRuntime = v.object({
 	IMGPROXY_SALT: v.optional(v.pipe(v.string(), v.hexadecimal())),
 	/** Baserow, which stores mailing list signups. Defaults to the acdh instance. */
 	BASEROW_API_BASE_URL: v.optional(v.pipe(v.string(), v.url()), "https://baserow.acdh-dev.oeaw.ac.at"),
-	/** A database token, which can create rows in the subscribers table. Without it, the signup form shows an error. */
+	/**
+	 * A database token, which can read and create rows in the subscribers table - reading to skip addresses which are
+	 * subscribed already. Without it, the signup form shows an error.
+	 */
 	BASEROW_TOKEN: v.optional(v.string()),
 	/**
 	 * Site search uses typesense when this is set - all three are required then - and an in-memory index otherwise. The

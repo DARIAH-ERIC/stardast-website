@@ -6,7 +6,7 @@ import { defineConfig, fontProviders, memoryCache, passthroughImageService } fro
 import * as v from "valibot";
 
 import { loadEnvFiles } from "#/configs/env.files.ts";
-import { client } from "#/configs/env.schema.ts";
+import { client, maxUploadSizeLimit } from "#/configs/env.schema.ts";
 import { cacheKeyQueryParams } from "#/src/config/cache.ts";
 
 /**
@@ -20,7 +20,8 @@ loadEnvFiles();
 const env = v.parse(client, Object.fromEntries(Object.entries(process.env).filter(([, value]) => value !== "")));
 
 export default defineConfig({
-	adapter: node({ mode: "standalone" }),
+	/** Request bodies are at most an upload, see `/api/cms/media/uploads/` - the adapter's default would be 1gb. */
+	adapter: node({ mode: "standalone", bodySizeLimit: maxUploadSizeLimit * 1024 * 1024 }),
 	cache: {
 		provider: memoryCache({ query: { include: [...cacheKeyQueryParams] } }),
 	},
