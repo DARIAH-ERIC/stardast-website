@@ -1,0 +1,19 @@
+{
+	"title": "First project workshop",
+	"summary": "Project partners and invited guests meet to discuss early results and plan the next steps.",
+	"startDate": "2026-11-18",
+	"endDate": "2026-11-19",
+	"involvement": "organised",
+	"attendance": "hybrid",
+	"location": "Vienna, Austria",
+	"website": "https://example.org/workshop",
+	"content": {
+		"type": "doc",
+		"content": [
+			{
+				"type": "paragraph",
+				"content": [{ "type": "text", "text": "This is placeholder content." }]
+			}
+		]
+	}
+}
