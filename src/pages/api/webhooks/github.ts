@@ -7,6 +7,12 @@ import { githubStorage } from "#/src/cms/server.ts";
 import { handlePushEvent, parsePushEvent, verifySignature } from "#/src/lib/cms/webhooks/github.ts";
 
 /**
+ * Only `ref`, `before` and `after` are read, but the cap must admit github's push payloads, whose `commits` list the
+ * changed files of each commit - a rejected push leaves pages stale until their `maxAge`.
+ */
+const maxBodySize = 5 * 1024 * 1024;
+
+/**
  * Receives github push events - configure the repository webhook with content type `application/json`, and the
  * `REVALIDATION_WEBHOOK_SECRET` as secret - and invalidates the cached pages which read changed content.
  */
@@ -15,6 +21,13 @@ export const POST: APIRoute = async (context) => {
 
 	if (secret == null || githubStorage == null) {
 		return new Response("Webhook is not configured.", { status: 404 });
+	}
+
+	const length = Number(context.request.headers.get("content-length") ?? Number.NaN);
+
+	/** Checked before reading the body, which would otherwise be buffered in full before its signature is verified. */
+	if (!Number.isInteger(length) || length > maxBodySize) {
+		return new Response(null, { status: 413 });
 	}
 
 	const body = await context.request.text();
