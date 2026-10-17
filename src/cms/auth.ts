@@ -114,8 +114,9 @@ export function getAuth(): Auth {
 	return auth;
 }
 
-function getCookieOptions(context: Pick<APIContext, "url">, maxAge: number, path = "/"): AstroCookieSetOptions {
-	return { httpOnly: true, maxAge, path, sameSite: "lax", secure: context.url.protocol === "https:" };
+/** Secure if the site is served over https - not the request url, which depends on the proxy's forwarded headers. */
+function getCookieOptions(context: Pick<APIContext, "site">, maxAge: number, path = "/"): AstroCookieSetOptions {
+	return { httpOnly: true, maxAge, path, sameSite: "lax", secure: context.site?.protocol === "https:" };
 }
 
 export async function getSession(context: Pick<APIContext, "cookies">): Promise<Session | undefined> {
@@ -124,27 +125,27 @@ export async function getSession(context: Pick<APIContext, "cookies">): Promise<
 	return value != null ? getAuth().sessions.unseal(value) : undefined;
 }
 
-export async function setSession(context: Pick<APIContext, "cookies" | "url">, session: Session): Promise<void> {
+export async function setSession(context: Pick<APIContext, "cookies" | "site">, session: Session): Promise<void> {
 	const value = await getAuth().sessions.seal(session, { maxAge: sessionMaxAge });
 
 	context.cookies.set(sessionCookie, value, getCookieOptions(context, sessionMaxAge));
 }
 
-export function clearSession(context: Pick<APIContext, "cookies" | "url">): void {
+export function clearSession(context: Pick<APIContext, "cookies" | "site">): void {
 	context.cookies.delete(sessionCookie, getCookieOptions(context, 0));
 }
 
 /** Scoped to the auth routes, which are the only ones that need it. */
 const oauthStatePath = "/api/cms/auth";
 
-export async function setOAuthState(context: Pick<APIContext, "cookies" | "url">, state: OAuthState): Promise<void> {
+export async function setOAuthState(context: Pick<APIContext, "cookies" | "site">, state: OAuthState): Promise<void> {
 	const value = await getAuth().oauthStates.seal(state, { maxAge: oauthStateMaxAge });
 
 	context.cookies.set(oauthStateCookie, value, getCookieOptions(context, oauthStateMaxAge, oauthStatePath));
 }
 
 /** Reads and removes the state, which is only valid for one callback. */
-export async function takeOAuthState(context: Pick<APIContext, "cookies" | "url">): Promise<OAuthState | undefined> {
+export async function takeOAuthState(context: Pick<APIContext, "cookies" | "site">): Promise<OAuthState | undefined> {
 	const value = context.cookies.get(oauthStateCookie)?.value;
 
 	context.cookies.delete(oauthStateCookie, getCookieOptions(context, 0, oauthStatePath));
