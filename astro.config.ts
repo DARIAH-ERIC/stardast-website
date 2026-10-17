@@ -19,6 +19,8 @@ loadEnvFiles();
 
 const env = v.parse(client, Object.fromEntries(Object.entries(process.env).filter(([, value]) => value !== "")));
 
+const site = new URL(env.PUBLIC_APP_BASE_URL);
+
 export default defineConfig({
 	/** Request bodies are at most an upload, see `/api/cms/media/uploads/` - the adapter's default would be 1gb. */
 	adapter: node({ mode: "standalone", bodySizeLimit: maxUploadSizeLimit * 1024 * 1024 }),
@@ -56,6 +58,14 @@ export default defineConfig({
 	output: "server",
 	server: {
 		port: 3000,
+	},
+	/**
+	 * Behind a proxy which terminates tls, requests arrive over http, and astro trusts `x-forwarded-*` and `host` headers
+	 * only for allowed domains - otherwise request urls are `http://localhost`, which e.g. fails astro's origin check for
+	 * form posts.
+	 */
+	security: {
+		allowedDomains: [{ protocol: site.protocol.slice(0, -1), hostname: site.hostname, port: site.port || undefined }],
 	},
 	site: env.PUBLIC_APP_BASE_URL,
 	vite: {
