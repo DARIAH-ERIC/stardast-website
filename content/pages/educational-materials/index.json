@@ -1,0 +1,45 @@
+{
+	"title": "Educational materials",
+	"summary": "Placeholder content for the educational materials page.",
+	"sections": [
+		{
+			"type": "cards",
+			"data": {
+				"anchor": "courses",
+				"title": "Courses",
+				"cards": [
+					{
+						"title": "Placeholder course",
+						"text": "Placeholder for a course - content still to come."
+					}
+				]
+			}
+		},
+		{
+			"type": "cards",
+			"data": {
+				"anchor": "tutorials",
+				"title": "Tutorials",
+				"cards": [
+					{
+						"title": "Placeholder tutorial",
+						"text": "Placeholder for a tutorial - content still to come."
+					}
+				]
+			}
+		},
+		{
+			"type": "cards",
+			"data": {
+				"anchor": "documentation",
+				"title": "Documentation",
+				"cards": [
+					{
+						"title": "Placeholder document",
+						"text": "Placeholder for a document - content still to come."
+					}
+				]
+			}
+		}
+	]
+}

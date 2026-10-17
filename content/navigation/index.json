@@ -24,6 +24,13 @@
 		{
 			"type": "link",
 			"data": {
+				"label": "Educational materials",
+				"href": "/educational-materials"
+			}
+		},
+		{
+			"type": "link",
+			"data": {
 				"label": "News",
 				"href": "/news"
 			}
