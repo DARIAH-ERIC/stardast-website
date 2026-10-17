@@ -227,6 +227,13 @@ const cardsSection = block({
 		eyebrow,
 		title: optional(fields.text({ label: "Title" })),
 		lead: optional(fields.textarea({ label: "Lead", validation: [v.maxLength(500)] })),
+		covers: optional(
+			fields.boolean({
+				label: "Cover on every card",
+				description:
+					"Cards without an image show a placeholder, as news do - e.g. for a list of materials. Otherwise only cards with an image show it.",
+			}),
+		),
 		cards: fields.array(
 			fields.object({
 				label: "Card",

@@ -1,11 +1,14 @@
 ---
 import CmsImage from "#/src/components/cms-image.astro";
+import CoverImage from "#/src/components/cover-image.astro";
 import SectionHeader from "#/src/components/sections/section-header.astro";
 import type { SectionData } from "#/src/cms/config.ts";
 
 export type Props = SectionData<"cards">;
 
-const { anchor, eyebrow, title, lead, cards } = Astro.props;
+const { anchor, eyebrow, title, lead, covers = false, cards } = Astro.props;
+
+const sizes = "(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw";
 
 /** Card titles are below the section title, if there is one. */
 const Heading = title != null ? "h3" : "h2";
@@ -20,8 +23,13 @@ const Heading = title != null ? "h3" : "h2";
 				cards.map((card) => {
 					return (
 						<li class="relative flex flex-col border-r border-b border-border-strong transition-colors has-[a:hover]:bg-background-hover">
-							{card.image != null && (
-								<CmsImage id={card.image} sizes="(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw" class="aspect-video w-full border-b border-border-strong object-cover" />
+							{/* Like news cards, with a placeholder where there is no image - or only images, where there are. */}
+							{covers ? (
+								<CoverImage id={card.image} sizes={sizes} />
+							) : (
+								card.image != null && (
+									<CmsImage id={card.image} sizes={sizes} class="aspect-video w-full border-b border-border-strong object-cover" />
+								)
 							)}
 							<div class="flex flex-col gap-3 p-6">
 								{card.eyebrow != null && (

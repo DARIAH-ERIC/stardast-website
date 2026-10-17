@@ -7,6 +7,7 @@
 			"data": {
 				"anchor": "courses",
 				"title": "Courses",
+				"covers": true,
 				"cards": [
 					{
 						"title": "Placeholder course",
@@ -20,6 +21,7 @@
 			"data": {
 				"anchor": "tutorials",
 				"title": "Tutorials",
+				"covers": true,
 				"cards": [
 					{
 						"title": "Placeholder tutorial",
@@ -33,6 +35,7 @@
 			"data": {
 				"anchor": "documentation",
 				"title": "Documentation",
+				"covers": true,
 				"cards": [
 					{
 						"title": "Placeholder document",
