@@ -7,7 +7,7 @@ import { handleRateLimits } from "#/src/lib/cms/http.ts";
 
 /** Receives the file of an upload through the server, for asset storages without direct uploads. */
 export const PUT: APIRoute = handleRateLimits(async (context) => {
-	const length = Number(context.request.headers.get("content-length"));
+	const length = Number(context.request.headers.get("content-length") ?? Number.NaN);
 
 	/** Checked before reading the body, which would otherwise be buffered in full. */
 	if (!Number.isInteger(length) || length > env.CMS_MAX_UPLOAD_SIZE * 1024 * 1024) {
