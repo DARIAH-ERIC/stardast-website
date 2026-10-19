@@ -1,6 +1,7 @@
 ---
 import { EntryEditor } from "#/src/components/admin/entry-editor.tsx";
 import { getCollection, getLatestRevision, loadReferenceOptions } from "#/src/cms/admin.ts";
+import { canPublish } from "#/src/cms/auth.ts";
 import { mediaCollectionName } from "#/src/cms/config.ts";
 import AdminLayout from "#/src/layouts/admin-layout.astro";
 
@@ -28,6 +29,7 @@ const referenceOptions = await loadReferenceOptions(collection.fields, revision)
 		initialData={collection.defaultValue()}
 		hasDraft={false}
 		isPublished={false}
+		canPublish={canPublish(Astro.locals.session)}
 		referenceOptions={referenceOptions}
 	/>
 </AdminLayout>

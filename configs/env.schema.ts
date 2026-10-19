@@ -7,6 +7,17 @@ import * as v from "valibot";
  */
 export const maxUploadSizeLimit = 20;
 
+/** Comma-separated github logins. */
+const LoginListSchema = v.pipe(
+	v.string(),
+	v.transform((value) =>
+		value
+			.split(",")
+			.map((login) => login.trim())
+			.filter((login) => login !== ""),
+	),
+);
+
 /**
  * Inlined into the client and server bundles at build time, so these must be correct when `astro build` runs. Read via
  * `import.meta.env`, so that client and server always see the same value.
@@ -69,20 +80,13 @@ export const serverRuntime = v.object({
 	/** Encrypts the session cookie. Changing it signs everyone out. */
 	CMS_SESSION_SECRET: v.optional(v.pipe(v.string(), v.minLength(32))),
 	/**
-	 * Comma-separated github logins which may edit content. When not set, everyone with write access to
-	 * `CMS_GITHUB_REPOSITORY` may.
+	 * Comma-separated github logins which may edit and publish content. When neither this nor `CMS_CONTRIBUTOR_USERS` is
+	 * set, access follows the role in `CMS_GITHUB_REPOSITORY`: `maintain` and `admin` may publish, `write` may save
+	 * drafts. Otherwise only the listed users may sign in.
 	 */
-	CMS_ADMIN_USERS: v.optional(
-		v.pipe(
-			v.string(),
-			v.transform((value) =>
-				value
-					.split(",")
-					.map((login) => login.trim())
-					.filter((login) => login !== ""),
-			),
-		),
-	),
+	CMS_ADMIN_USERS: v.optional(LoginListSchema),
+	/** Comma-separated github logins which may save drafts, and upload media, but not publish. */
+	CMS_CONTRIBUTOR_USERS: v.optional(LoginListSchema),
 	/** Where uploads go: `repo` commits them to the content repository, `s3` stores them in an object storage. */
 	CMS_ASSETS: v.optional(v.picklist(["repo", "s3"]), "repo"),
 	/** Maximum upload size, in megabytes, at most `maxUploadSizeLimit`. */
