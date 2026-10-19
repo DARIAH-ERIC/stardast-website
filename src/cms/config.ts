@@ -54,11 +54,15 @@ export const eventAttendanceModes = [
 	{ value: "hybrid", label: "In person and online" },
 ] as const;
 
-/** The kinds of career resources - each listed by a resources section, e.g. on the career resources page. */
+/**
+ * The kinds of career resources - each listed by a resources section, e.g. on the career resources page. Resources are
+ * records in the project's zenodo community, see `zenodoCommunity` - and a record's `keyword`, which is matched
+ * ignoring case, picks the section which lists it.
+ */
 export const resourceCategories = [
-	{ value: "institutionalAnalysis", label: "Institutional analysis" },
-	{ value: "cvExamples", label: "CV examples" },
-	{ value: "competencyFrameworks", label: "Competency frameworks" },
+	{ value: "institutionalAnalysis", label: "Institutional analysis", keyword: "Institutional analysis" },
+	{ value: "cvExamples", label: "CV examples", keyword: "CV example" },
+	{ value: "competencyFrameworks", label: "Competency frameworks", keyword: "Competency framework" },
 ] as const;
 
 /** Which listing on the news page a post appears in - `listLabel` names the listing, `label` a post in it. */
@@ -344,7 +348,7 @@ const numberedListSection = block({
 	},
 });
 
-/** Lists the resources of one category, newest first - the resources themselves are edited in the resources collection. */
+/** Lists the resources of one category, newest first - the resources themselves are records on zenodo. */
 const resourcesSection = block({
 	label: "Resources",
 	fields: {
@@ -354,6 +358,8 @@ const resourcesSection = block({
 		lead: optional(fields.textarea({ label: "Lead", validation: [v.maxLength(500)] })),
 		category: fields.select({
 			label: "Category",
+			description:
+				"Lists the records in the project's Zenodo community with this category's keyword, e.g. \"CV example\".",
 			options: resourceCategories,
 			defaultValue: "institutionalAnalysis",
 		}),
@@ -501,31 +507,6 @@ export const partners = collection({
 			description: "E.g. both the seat and the hosting country - leave empty when unknown.",
 			options: countries,
 		}),
-	},
-});
-
-/** Resources have no pages of their own - their cards link to where they are published, e.g. on zenodo. */
-export const resources = collection({
-	label: "Resources",
-	path: "content/resources",
-	slug: { from: "title" },
-	sort: { field: "publicationDate", direction: "desc" },
-	fields: {
-		title: fields.text({ label: "Title", validation: [v.minLength(1)] }),
-		summary: optional(fields.textarea({ label: "Summary", validation: [v.maxLength(300)] })),
-		publicationDate: fields.date({ label: "Publication date" }),
-		category: fields.select({
-			label: "Category",
-			description: "Which resources section lists it.",
-			options: resourceCategories,
-			defaultValue: "institutionalAnalysis",
-		}),
-		image: optional(fields.image({ label: "Cover image" })),
-		href: {
-			...href,
-			label: "Link",
-			description: "Where the resource is published, e.g. its record on Zenodo - or an uploaded pdf, e.g. /media/….",
-		},
 	},
 });
 
@@ -723,7 +704,7 @@ export const site = singleton({
 });
 
 export const config = defineConfig({
-	collections: { events, media, news, pages, partners, people, resources },
+	collections: { events, media, news, pages, partners, people },
 	singletons: { eventsPage, home, navigation, newsPage, newsletter, site },
 });
 
@@ -737,8 +718,6 @@ export type NewsEntryData = InferEntry<typeof news>;
 export type EventEntryData = InferEntry<typeof events>;
 
 export type PersonEntryData = InferEntry<typeof people>;
-
-export type ResourceEntryData = InferEntry<typeof resources>;
 
 export type MediaEntryData = InferEntry<typeof media>;
 

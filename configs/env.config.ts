@@ -43,6 +43,7 @@ export const env = validate({
 		IMGPROXY_KEY: serverEnvironment.IMGPROXY_KEY,
 		IMGPROXY_SALT: serverEnvironment.IMGPROXY_SALT,
 		MATOMO_API_TOKEN: serverEnvironment.MATOMO_API_TOKEN,
+		ZENODO_TOKEN: serverEnvironment.ZENODO_TOKEN,
 	},
 	mode: serverEnvironment.ENV_VALIDATION,
 }).unwrap();
