@@ -29,6 +29,7 @@ ingress:
   annotations:
     # For `*.oeaw.ac.at` domains.
     cert-manager.io/cluster-issuer: "acdh-prod"
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-compress@kubernetescrd
 livenessProbe:
   path: "/api/health/live"
   initialDelaySeconds: 5
