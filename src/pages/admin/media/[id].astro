@@ -105,6 +105,7 @@ const fileUrl = getMediaUrl(id, data);
 		hasDraft={draft != null}
 		isPublished={published.data !== undefined}
 		canPublish={canPublish(Astro.locals.session)}
+		isReviewRequested={draft?.reviewRequest != null}
 		referenceOptions={{}}
 		listUrl="/admin/media"
 	/>

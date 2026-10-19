@@ -1,4 +1,4 @@
-import { ChevronLeft, EllipsisVertical, ExternalLink, Eye, Trash2, Undo2 } from "lucide-react";
+import { ChevronLeft, EllipsisVertical, ExternalLink, Eye, MessageSquareX, Trash2, Undo2 } from "lucide-react";
 import { type ReactNode, useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
 import { Form } from "react-aria-components/Form";
 import { I18nProvider } from "react-aria-components/I18nProvider";
@@ -44,11 +44,13 @@ export interface EntryEditorProps {
 	referenceOptions: Record<string, Array<Option>>;
 	/** Whether the user may publish, and delete published entries - contributors only save drafts. */
 	canPublish: boolean;
+	/** Whether someone asked for the draft to be reviewed - and published. */
+	isReviewRequested: boolean;
 	/** Where the "back" link, and deleting, lead. Defaults to the collection's entry list. */
 	listUrl?: string;
 }
 
-type Action = "delete" | "discard" | "publish" | "save";
+type Action = "delete" | "discard" | "publish" | "review" | "save" | "withdraw-review";
 
 type Status =
 	| { type: "busy"; action: Action }
@@ -77,7 +79,9 @@ const busyLabels: Record<Action, string> = {
 	delete: "Deleting…",
 	discard: "Discarding draft…",
 	publish: "Publishing…",
+	review: "Requesting review…",
 	save: "Saving draft…",
+	"withdraw-review": "Withdrawing review request…",
 };
 
 function formatTime(date: Date): string {
@@ -93,6 +97,7 @@ export function EntryEditor(props: EntryEditorProps): ReactNode {
 	const [revision, setRevision] = useState(props.revision);
 	const [hasDraft, setHasDraft] = useState(props.hasDraft);
 	const [isPublished, setIsPublished] = useState(props.isPublished);
+	const [isReviewRequested, setIsReviewRequested] = useState(props.isReviewRequested);
 	const [status, setStatus] = useState<Status>({ type: "idle" });
 	const [showIssues, setShowIssues] = useState(false);
 	const [serverIssues, setServerIssues] = useState<Array<{ path: string; message: string }>>([]);
@@ -171,10 +176,41 @@ export function EntryEditor(props: EntryEditorProps): ReactNode {
 		return body.message ?? `Something went wrong (${String(response.status)}).`;
 	}
 
+	/** Sends an action's request, based on `base` - the loaded revision, or that of a draft saved right before. */
+	function request(action: Action, base: string): Promise<Response> {
+		switch (action) {
+			case "save": {
+				return send(`${entryUrl}/draft`, "PUT", { data, revision: base });
+			}
+
+			case "publish": {
+				return send(`${entryUrl}/publish`, "POST", { data, revision: base });
+			}
+
+			case "review": {
+				return send(`${entryUrl}/review`, "POST", { revision: base });
+			}
+
+			case "withdraw-review": {
+				return send(`${entryUrl}/review`, "DELETE", { revision: base });
+			}
+
+			case "discard": {
+				return send(`${entryUrl}/draft`, "DELETE", { revision: base });
+			}
+
+			case "delete": {
+				return isPublished
+					? send(entryUrl, "DELETE", { revision: base })
+					: send(`${entryUrl}/draft`, "DELETE", { revision: base });
+			}
+		}
+	}
+
 	async function run(action: Action): Promise<void> {
 		setServerIssues([]);
 
-		if (action === "save" || action === "publish") {
+		if (action === "save" || action === "publish" || action === "review") {
 			setShowIssues(true);
 
 			if (clientIssues.length > 0 || idIssues.length > 0) {
@@ -186,22 +222,34 @@ export function EntryEditor(props: EntryEditorProps): ReactNode {
 		setStatus({ type: "busy", action });
 
 		try {
-			const response =
-				action === "save"
-					? await send(`${entryUrl}/draft`, "PUT", { data, revision })
-					: action === "publish"
-						? await send(`${entryUrl}/publish`, "POST", { data, revision })
-						: action === "discard" || !isPublished
-							? await send(`${entryUrl}/draft`, "DELETE", { revision })
-							: await send(entryUrl, "DELETE", { revision });
+			let base = revision;
+
+			/** A review is of what the editor sees, so unsaved changes are saved first. */
+			if (action === "review" && (isDirty || !hasDraft)) {
+				const saved = await request("save", base);
+
+				if (!saved.ok) {
+					setStatus({ type: "error", message: await readError(saved) });
+					return;
+				}
+
+				base = ((await saved.json()) as { revision: string }).revision;
+				savedData.current = JSON.stringify(data);
+				setRevision(base);
+				setHasDraft(true);
+			}
+
+			const response = await request(action, base);
 
 			if (!response.ok) {
 				setStatus({ type: "error", message: await readError(response) });
 				return;
 			}
 
-			/** Nothing to lose anymore - no warning when navigating away below. */
-			savedData.current = JSON.stringify(data);
+			/** Nothing to lose anymore - no warning when navigating away below. Withdrawing does not save changes. */
+			if (action !== "withdraw-review") {
+				savedData.current = JSON.stringify(data);
+			}
 
 			if (action === "delete") {
 				window.location.assign(listUrl);
@@ -224,13 +272,32 @@ export function EntryEditor(props: EntryEditorProps): ReactNode {
 			setRevision(body.revision);
 			setShowIssues(false);
 
-			if (action === "save") {
-				setHasDraft(true);
-				setStatus({ type: "done", message: `Draft saved at ${formatTime(new Date())}` });
-			} else {
-				setHasDraft(false);
-				setIsPublished(true);
-				setStatus({ type: "done", message: `Published at ${formatTime(new Date())}` });
+			switch (action) {
+				case "save": {
+					setHasDraft(true);
+					setStatus({ type: "done", message: `Draft saved at ${formatTime(new Date())}` });
+					break;
+				}
+
+				case "review": {
+					setIsReviewRequested(true);
+					setStatus({ type: "done", message: `Review requested at ${formatTime(new Date())}` });
+					break;
+				}
+
+				case "withdraw-review": {
+					setIsReviewRequested(false);
+					setStatus({ type: "done", message: "Review request withdrawn" });
+					break;
+				}
+
+				case "publish": {
+					setHasDraft(false);
+					setIsPublished(true);
+					setIsReviewRequested(false);
+					setStatus({ type: "done", message: `Published at ${formatTime(new Date())}` });
+					break;
+				}
 			}
 		} catch {
 			setStatus({ type: "error", message: "The request failed. Check your connection, and try again." });
@@ -313,6 +380,7 @@ export function EntryEditor(props: EntryEditorProps): ReactNode {
 							<Heading className="truncate">{title}</Heading>
 							<div className="flex flex-wrap items-center gap-2 text-sm/6">
 								<Badge intent={state.intent}>{state.label}</Badge>
+								{hasDraft && isReviewRequested && <Badge intent="info">Ready for review</Badge>}
 								<span aria-live="polite" className="text-muted-fg">
 									{status.type === "busy" && busyLabels[status.action]}
 									{status.type === "done" && !isDirty && status.message}
@@ -338,7 +406,7 @@ export function EntryEditor(props: EntryEditorProps): ReactNode {
 									View on site
 								</Link>
 							)}
-							{((hasDraft && isPublished) || canDelete) && (
+							{((hasDraft && isPublished) || (hasDraft && isReviewRequested) || canDelete) && (
 								<Menu>
 									<MenuTrigger
 										aria-label="More actions"
@@ -350,9 +418,20 @@ export function EntryEditor(props: EntryEditorProps): ReactNode {
 									<MenuContent
 										placement="bottom end"
 										onAction={(key) => {
+											if (key === "withdraw-review") {
+												void run("withdraw-review");
+												return;
+											}
+
 											setConfirm(key === "discard" ? "discard" : "delete");
 										}}
 									>
+										{hasDraft && isReviewRequested && (
+											<MenuItem id="withdraw-review" textValue="Withdraw review request">
+												<MessageSquareX aria-hidden={true} />
+												<MenuLabel>Withdraw review request</MenuLabel>
+											</MenuItem>
+										)}
 										{hasDraft && isPublished && (
 											<MenuItem id="discard" textValue="Discard draft">
 												<Undo2 aria-hidden={true} />
@@ -368,9 +447,23 @@ export function EntryEditor(props: EntryEditorProps): ReactNode {
 									</MenuContent>
 								</Menu>
 							)}
-							<Button type="submit" intent={canPublish ? "outline" : "primary"} isDisabled={isBusy}>
+							<Button
+								type="submit"
+								intent={canPublish || !isReviewRequested ? "outline" : "primary"}
+								isDisabled={isBusy}
+							>
 								Save draft
 							</Button>
+							{!canPublish && !isReviewRequested && (
+								<Button
+									isDisabled={isBusy}
+									onPress={() => {
+										void run("review");
+									}}
+								>
+									Request review
+								</Button>
+							)}
 							{canPublish && (
 								<Button
 									isDisabled={isBusy}

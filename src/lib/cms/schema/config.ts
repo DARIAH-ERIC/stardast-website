@@ -106,7 +106,7 @@ export interface AnySingleton {
 	readonly preview?: (entry: { data: never }) => string;
 }
 
-export type CommitAction = "create" | "delete" | "draft" | "publish" | "upload";
+export type CommitAction = "create" | "delete" | "draft" | "publish" | "request-review" | "upload" | "withdraw-review";
 
 export type CommitMessage = (params: {
 	action: CommitAction;

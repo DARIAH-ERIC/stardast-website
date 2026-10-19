@@ -1,8 +1,10 @@
 import { Result } from "better-result";
+import * as v from "valibot";
 
 import type { Config } from "#/src/lib/cms/schema/config.ts";
 import {
 	type Author,
+	type Change,
 	type ContentStorage,
 	type Ref,
 	type Revision,
@@ -46,6 +48,24 @@ export function parseDraftRef(ref: Ref): EntryTarget | undefined {
 	return undefined;
 }
 
+/**
+ * Where a draft's review request is kept: in the draft itself, so that it lasts while the draft is saved again, and
+ * goes away with the draft when it is published, or discarded. Outside of `content/`, so it never belongs to an entry.
+ */
+const reviewRequestPath = ".cms/review";
+
+/** Someone asked editors to review - and publish - a draft, e.g. a contributor, who cannot publish themselves. */
+export interface ReviewRequest {
+	requestedBy: Author;
+	/** An iso date-time. */
+	requestedAt: string;
+}
+
+const ReviewRequestSchema = v.object({
+	requestedBy: v.object({ name: v.string(), email: v.string() }),
+	requestedAt: v.string(),
+});
+
 export interface Draft {
 	target: EntryTarget;
 	ref: Ref;
@@ -56,7 +76,7 @@ export interface Draft {
 
 export interface EntryVersions {
 	published: { revision: Revision; data: unknown };
-	draft?: { revision: Revision; data: unknown };
+	draft?: { revision: Revision; data: unknown; reviewRequest?: ReviewRequest };
 }
 
 export interface Drafts {
@@ -80,6 +100,21 @@ export interface Drafts {
 		revision: Revision;
 		author: Author;
 	}) => Promise<Result<WriteResult, WriteError>>;
+	/** The review request of a draft, by the draft's revision. */
+	getReviewRequest: (revision: Revision) => Promise<ReviewRequest | undefined>;
+	/** Asks for the draft to be reviewed, unless someone else changed it since `revision`. Resolves with the new revision. */
+	requestReview: (params: {
+		target: EntryTarget;
+		revision: Revision;
+		author: Author;
+		now?: Date;
+	}) => Promise<Result<Revision, WriteError>>;
+	/** Withdraws the draft's review request, unless someone else changed the draft since `revision`. */
+	withdrawReview: (params: {
+		target: EntryTarget;
+		revision: Revision;
+		author: Author;
+	}) => Promise<Result<Revision, WriteError>>;
 	/** Deletes the draft, unless someone else changed it since `revision`. */
 	discard: (params: { target: EntryTarget; revision: Revision }) => Promise<Result<void, WriteError>>;
 	/** Deletes the published entry, and its draft. */
@@ -122,6 +157,50 @@ export function createDrafts(params: { config: Config; storage: ContentStorage }
 		return (await storage.getMergeBase(await resolvePublished(), draftHead)) ?? (await resolvePublished());
 	}
 
+	async function getReviewRequest(revision: Revision): Promise<ReviewRequest | undefined> {
+		const data = await storage.read(revision, reviewRequestPath);
+
+		return v.is(ReviewRequestSchema, data) ? data : undefined;
+	}
+
+	/** Commits a change to the review request on top of the draft, which must not have changed since `revision`. */
+	async function updateReviewRequest(params: {
+		target: EntryTarget;
+		revision: Revision;
+		author: Author;
+		change: Change;
+		action: "request-review" | "withdraw-review";
+	}): Promise<Result<Revision, WriteError>> {
+		const { target, revision, author, change, action } = params;
+		const resolved = resolveTarget(config, target);
+
+		if (resolved.isErr()) {
+			return resolved;
+		}
+
+		const ref = getDraftRef(target);
+		const draftHead = await storage.resolve(ref);
+
+		if (draftHead == null) {
+			return Result.err(new EntryNotFoundError({ message: "There is no draft to review. Save a draft first." }));
+		}
+
+		if (draftHead !== revision) {
+			return Result.err(draftChangedError());
+		}
+
+		const { path, getLabel } = resolved.value;
+		const result = await storage.commit({
+			ref,
+			expectedRevision: draftHead,
+			changes: [change],
+			message: config.commitMessage({ action, label: getLabel(await storage.read(draftHead, path)) }),
+			author,
+		});
+
+		return result.isOk() ? Result.ok(result.value) : Result.err(draftChangedError());
+	}
+
 	return {
 		async list() {
 			const refs = await storage.listRefs(draftRefPrefix);
@@ -152,7 +231,14 @@ export function createDrafts(params: { config: Config; storage: ContentStorage }
 
 			return {
 				published: { revision: published, data: await storage.read(published, path) },
-				draft: draft != null ? { revision: draft, data: await storage.read(draft, path) } : undefined,
+				draft:
+					draft != null
+						? {
+								revision: draft,
+								data: await storage.read(draft, path),
+								reviewRequest: await getReviewRequest(draft),
+							}
+						: undefined,
 			};
 		},
 
@@ -224,6 +310,35 @@ export function createDrafts(params: { config: Config; storage: ContentStorage }
 			}
 
 			return result;
+		},
+
+		getReviewRequest,
+
+		requestReview({ target, revision, author, now = new Date() }) {
+			const data = { requestedBy: author, requestedAt: now.toISOString() } satisfies ReviewRequest;
+
+			return updateReviewRequest({
+				target,
+				revision,
+				author,
+				change: { type: "put", path: reviewRequestPath, data },
+				action: "request-review",
+			});
+		},
+
+		async withdrawReview({ target, revision, author }) {
+			/** Nothing to withdraw - e.g. someone else withdrew it already. */
+			if ((await storage.resolve(getDraftRef(target))) === revision && (await getReviewRequest(revision)) == null) {
+				return Result.ok(revision);
+			}
+
+			return updateReviewRequest({
+				target,
+				revision,
+				author,
+				change: { type: "delete", path: reviewRequestPath },
+				action: "withdraw-review",
+			});
 		},
 
 		async discard({ target, revision }) {

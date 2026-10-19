@@ -32,28 +32,42 @@ const singletons = Object.entries(config.singletons as Record<string, { label: s
 	return { name, label: singleton.label };
 });
 
-const draftLinks = await Promise.all(
-	allDrafts.map(async (draft) => {
-		const data = await storage.read(draft.revision, draft.path);
+/** Drafts which are ready for review first, so that editors find them. */
+const draftLinks = (
+	await Promise.all(
+		allDrafts.map(async (draft) => {
+			const [data, reviewRequest] = await Promise.all([
+				storage.read(draft.revision, draft.path),
+				drafts.getReviewRequest(draft.revision),
+			]);
 
-		if (draft.target.kind === "singleton") {
-			return {
-				href: `/admin/singletons/${draft.target.singleton}`,
-				label: getSingleton(draft.target.singleton)?.label ?? draft.target.singleton,
-				section: "Site",
-			};
-		}
+			if (draft.target.kind === "singleton") {
+				return {
+					href: `/admin/singletons/${draft.target.singleton}`,
+					label: getSingleton(draft.target.singleton)?.label ?? draft.target.singleton,
+					section: "Site",
+					reviewRequest,
+				};
+			}
 
 		const collection = config.collections[draft.target.collection as keyof typeof config.collections];
 		const base = draft.target.collection === mediaCollectionName ? "/admin/media" : `/admin/collections/${draft.target.collection}/entries`;
 
-		return {
-			href: `${base}/${draft.target.id}`,
-			label: getEntryLabel(collection, draft.target.id, data),
-			section: collection.label,
-		};
-	}),
-);
+			return {
+				href: `${base}/${draft.target.id}`,
+				label: getEntryLabel(collection, draft.target.id, data),
+				section: collection.label,
+				reviewRequest,
+			};
+		}),
+	)
+).toSorted((a, b) => Number(b.reviewRequest != null) - Number(a.reviewRequest != null));
+
+function formatDate(value: string): string {
+	return new Date(value).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" });
+}
+
+const reviewCount = draftLinks.filter((link) => link.reviewRequest != null).length;
 ---
 
 <AdminLayout title="Dashboard">
@@ -102,7 +116,10 @@ const draftLinks = await Promise.all(
 
 	<section aria-labelledby="drafts-heading" class="mt-12">
 		<div class="mb-4 flex flex-wrap items-center justify-between gap-4">
-			<Heading level={2} id="drafts-heading">Unpublished drafts</Heading>
+			<div class="flex flex-wrap items-center gap-3">
+				<Heading level={2} id="drafts-heading">Unpublished drafts</Heading>
+				{reviewCount > 0 && <Badge intent="info">{`${String(reviewCount)} ready for review`}</Badge>}
+			</div>
 			{
 				draftLinks.length > 0 && (
 					<a href="/?preview" target="_blank" class={buttonStyles({ intent: "outline", size: "sm" })}>
@@ -124,8 +141,16 @@ const draftLinks = await Promise.all(
 							return (
 								<li>
 									<a href={link.href} class="flex items-center justify-between gap-4 px-4 py-3 -outline-offset-2 hover:bg-muted">
-										<span class="min-w-0 truncate text-sm/6 font-medium text-fg">{link.label}</span>
+										<span class="flex min-w-0 flex-col">
+											<span class="truncate text-sm/6 font-medium text-fg">{link.label}</span>
+											{link.reviewRequest != null && (
+												<span class="truncate text-sm/6 text-muted-fg">
+													{`Review requested by ${link.reviewRequest.requestedBy.name}, ${formatDate(link.reviewRequest.requestedAt)}`}
+												</span>
+											)}
+										</span>
 										<span class="flex shrink-0 items-center gap-2">
+											{link.reviewRequest != null && <Badge intent="info">Ready for review</Badge>}
 											<Badge intent="secondary">{link.section}</Badge>
 											<ChevronRight aria-hidden="true" className="size-4 text-muted-fg" />
 										</span>
