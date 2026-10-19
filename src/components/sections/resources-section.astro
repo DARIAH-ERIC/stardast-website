@@ -2,13 +2,19 @@
 import ResourceCard from "#/src/components/resource-card.astro";
 import SectionHeader from "#/src/components/sections/section-header.astro";
 import type { SectionData } from "#/src/cms/config.ts";
+import { limitMaxAge } from "#/src/lib/cms/astro.ts";
+import { getResources, resourcesMaxAge, resourcesRetryAfter } from "#/src/lib/career-resources.ts";
 
 export type Props = SectionData<"resources">;
 
 const { anchor, eyebrow, title, lead, category } = Astro.props;
 
-/** Sorted newest first - see the collection's `sort`. */
-const resources = (await Astro.locals.content.list("resources")).filter((entry) => entry.data.category === category);
+/** Newest first. Records on zenodo are not content, so changing them does not invalidate the page - its age is limited. */
+const result = await getResources(category);
+
+limitMaxAge(Astro, result.isOk() ? resourcesMaxAge : resourcesRetryAfter);
+
+const resources = result.isOk() ? result.value : [];
 ---
 
 {/* Just the title and lead while there are no resources yet, rather than a placeholder. */}
@@ -17,14 +23,21 @@ const resources = (await Astro.locals.content.list("resources")).filter((entry) 
 	{
 		resources.length > 0 && (
 			<ul class="grid border-t border-l border-border-strong sm:grid-cols-2 lg:grid-cols-3" role="list">
-				{resources.map((entry) => {
+				{resources.map((resource) => {
 					return (
 						<li class="border-r border-b border-border-strong">
-							<ResourceCard data={entry.data} headingLevel={title != null ? 3 : 2} />
+							<ResourceCard resource={resource} headingLevel={title != null ? 3 : 2} />
 						</li>
 					);
 				})}
 			</ul>
+		)
+	}
+	{
+		result.isErr() && (
+			<p class="border border-dashed border-border-strong p-8 mono-label text-foreground-muted">
+				The resources could not be loaded - please try again later.
+			</p>
 		)
 	}
 </section>

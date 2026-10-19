@@ -1,32 +1,34 @@
 ---
-import CoverImage from "#/src/components/cover-image.astro";
-import type { ResourceEntryData } from "#/src/cms/config.ts";
+import type { Resource } from "#/src/lib/career-resources.ts";
 import { formatDate } from "#/src/lib/format-date.ts";
 
 export interface Props {
-	data: ResourceEntryData;
+	resource: Resource;
 	/** Below the heading of the list it is part of. */
 	headingLevel: 2 | 3;
 }
 
-const { data, headingLevel } = Astro.props;
+const { resource, headingLevel } = Astro.props;
 
 /** Literal tag names rather than a template string, so that the element's attributes can be type-checked. */
 const Heading = ({ 2: "h2", 3: "h3" } as const)[headingLevel];
 ---
 
-{/* Like a news card - but linking to where the resource is published, since resources have no pages of their own. */}
+{/* Like a news card, without an image - but linking to the record on zenodo, since resources have no pages of their own. */}
 <article class="relative flex h-full flex-col transition-colors has-[a:hover]:bg-background-hover">
-	<CoverImage id={data.image} sizes="(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw" />
 	<div class="flex flex-col gap-1.5 p-5 sm:p-6">
 		<Heading class="order-2 text-title text-balance text-foreground-strong">
 			{/* Stretched over the whole card, so that its text stays selectable rather than being a link label. */}
-			<a href={data.href} class="after:absolute after:inset-0 hover:underline underline-offset-4">{data.title}</a>
+			<a href={resource.href} class="after:absolute after:inset-0 hover:underline underline-offset-4">{resource.title}</a>
 		</Heading>
 		{/* Shown above the title, but read after it. */}
-		<time datetime={data.publicationDate} class="order-1 mono-label text-foreground-muted">
-			{formatDate(data.publicationDate)}
+		<time datetime={resource.publicationDate} class="order-1 mono-label text-foreground-muted">
+			{formatDate(resource.publicationDate)}
 		</time>
-		{data.summary != null && <p class="order-3 mt-1 leading-normal text-pretty text-foreground-muted">{data.summary}</p>}
+		{
+			resource.summary != null && (
+				<p class="order-3 mt-1 leading-normal text-pretty text-foreground-muted">{resource.summary}</p>
+			)
+		}
 	</div>
 </article>

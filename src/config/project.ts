@@ -12,3 +12,9 @@ export const funding = {
 	/** For search engines, see `createProjectJsonLd()`. */
 	funder: { name: "European Commission", url: "https://commission.europa.eu" },
 };
+
+/**
+ * The project's community on zenodo, whose records are listed as career resources - see `resourceCategories`. Assumed,
+ * and to be confirmed: e.g. https://zenodo.org/communities/stardast.
+ */
+export const zenodoCommunity = "stardast";
