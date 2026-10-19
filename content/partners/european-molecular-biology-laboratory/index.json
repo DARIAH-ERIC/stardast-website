@@ -4,5 +4,5 @@
 	"logo": "logo-european-molecular-biology-laboratory",
 	"url": "https://www.embl.org",
 	"linkedin": "https://www.linkedin.com/company/embl/",
-	"country": "DE"
+	"countries": ["DE"]
 }

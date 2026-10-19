@@ -3,5 +3,6 @@
 	"shortName": "AZ",
 	"logo": "placeholder-logo-astrazeneca",
 	"url": "https://www.astrazeneca.com",
-	"linkedin": "https://www.linkedin.com/company/astrazeneca/"
+	"linkedin": "https://www.linkedin.com/company/astrazeneca/",
+	"countries": ["GB"]
 }

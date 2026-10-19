@@ -9,7 +9,7 @@ const { eyebrow, title, lead, links } = Astro.props;
 
 /** Counted from the partners collection, so that the figures stay up to date. */
 const partners = await Astro.locals.content.list("partners");
-const countries = new Set(partners.flatMap((partner) => partner.data.country ?? []));
+const countries = new Set(partners.flatMap((partner) => partner.data.countries));
 
 const facts = [
 	{ label: "Programme", value: funding.programme },

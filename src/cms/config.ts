@@ -496,7 +496,11 @@ export const partners = collection({
 		}),
 		url: optional(fields.url({ label: "Website" })),
 		linkedin: optional(fields.url({ label: "LinkedIn page" })),
-		country: optional(fields.select({ label: "Country", options: countries, defaultValue: "AT" })),
+		countries: fields.multiSelect({
+			label: "Countries",
+			description: "E.g. both the seat and the hosting country - leave empty when unknown.",
+			options: countries,
+		}),
 	},
 });
 

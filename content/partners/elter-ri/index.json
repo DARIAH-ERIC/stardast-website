@@ -2,5 +2,6 @@
 	"name": "eLTER RI",
 	"logo": "logo-elter-ri",
 	"url": "https://elter-ri.eu",
-	"linkedin": "https://www.linkedin.com/company/elter-ri/"
+	"linkedin": "https://www.linkedin.com/company/elter-ri/",
+	"countries": ["FI", "DE"]
 }

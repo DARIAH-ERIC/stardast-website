@@ -4,5 +4,5 @@
 	"logo": "logo-university-of-helsinki",
 	"url": "https://www.helsinki.fi",
 	"linkedin": "https://www.linkedin.com/school/university-of-helsinki/",
-	"country": "FI"
+	"countries": ["FI"]
 }
