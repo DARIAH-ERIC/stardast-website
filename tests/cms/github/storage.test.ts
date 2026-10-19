@@ -4,6 +4,7 @@ import { createGitHubClient, createStaticTokenProvider } from "#/src/lib/cms/sto
 import { createGitHubStorage } from "#/src/lib/cms/storage/github/storage.ts";
 import { ConflictError } from "#/src/lib/cms/storage/types.ts";
 import { createFakeGitHub } from "#/tests/cms/github/fake-github.ts";
+import { getRejection } from "#/tests/helpers.ts";
 
 const author = { name: "Jane Doe", email: "jane@example.org" };
 
@@ -146,6 +147,49 @@ describe("github storage", () => {
 		expect(github.ref("main")).toBe(pushed);
 		/** The stale ref is not reused. */
 		expect(await storage.resolve("main")).toBe(pushed);
+	});
+
+	test("fails with a conflict if the ref was deleted", async () => {
+		const { storage } = setup();
+		const main = (await storage.resolve("main"))!;
+		await storage.createRef("cms/drafts/x", main);
+		await storage.deleteRef("cms/drafts/x");
+
+		const result = await storage.commit({
+			ref: "cms/drafts/x",
+			expectedRevision: main,
+			changes: [{ type: "put", path: "content/news/c", data: { title: "C" } }],
+			message: "Add c",
+			author,
+		});
+
+		expect(result.isErr() && ConflictError.is(result.error)).toBe(true);
+	});
+
+	test("throws if github refuses a ref write, rather than reporting a conflict", async () => {
+		const { github, storage } = setup();
+		const base = (await storage.resolve("main"))!;
+		github.protect("main");
+		github.protect("cms/drafts/x");
+
+		const rejections = await Promise.all([
+			getRejection(
+				storage.commit({
+					ref: "main",
+					expectedRevision: base,
+					changes: [{ type: "put", path: "content/news/c", data: { title: "C" } }],
+					message: "Add c",
+					author,
+				}),
+			),
+			getRejection(storage.createRef("cms/drafts/x", base)),
+			getRejection(storage.deleteRef("main")),
+		]);
+
+		for (const error of rejections) {
+			expect(String(error)).toContain("Repository rule violations found");
+		}
+		expect(github.ref("main")).toBe(base);
 	});
 
 	test("lists changed paths between revisions", async () => {

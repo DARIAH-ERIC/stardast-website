@@ -18,6 +18,8 @@ export interface FakeGitHub {
 	statuses: Array<number>;
 	/** Commits files directly - `null` deletes - e.g. to simulate a push from outside the cms. Returns the commit sha. */
 	push: (branch: string, files: Record<string, string | null>) => string;
+	/** Refuses creating, updating, and deleting the branch, like branch protection or a ruleset - with a 422. */
+	protect: (branch: string) => void;
 	ref: (branch: string) => string | undefined;
 	commit: (sha: string) => Commit | undefined;
 	file: (branch: string, path: string) => string | undefined;
@@ -40,6 +42,7 @@ export function createFakeGitHub(params: { files: Record<string, string>; branch
 	const trees = new Map<string, Map<string, string>>();
 	const commits = new Map<string, Commit>();
 	const refs = new Map<string, string>();
+	const protectedBranches = new Set<string>();
 	const requests: Array<string> = [];
 	const statuses: Array<number> = [];
 
@@ -105,6 +108,17 @@ export function createFakeGitHub(params: { files: Record<string, string>; branch
 		}
 
 		let match: RegExpMatchArray | null;
+
+		if ((match = /^\/git\/refs(?:\/heads\/(?<ref>.+))?$/.exec(path)) && method !== "GET") {
+			const branch =
+				match.groups!.ref != null
+					? decodeURIComponent(match.groups!.ref)
+					: (body!.ref as string).replace(/^refs\/heads\//, "");
+
+			if (protectedBranches.has(branch)) {
+				return json({ message: "Repository rule violations found" }, 422);
+			}
+		}
 
 		if ((match = /^\/git\/ref\/heads\/(?<ref>.+)$/.exec(path)) && method === "GET") {
 			const sha = refs.get(decodeURIComponent(match.groups!.ref!));
@@ -258,6 +272,9 @@ export function createFakeGitHub(params: { files: Record<string, string>; branch
 		requests,
 		statuses,
 		push,
+		protect(branch) {
+			protectedBranches.add(branch);
+		},
 		ref(branch) {
 			return refs.get(branch);
 		},
