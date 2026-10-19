@@ -5,21 +5,26 @@ import Pagination from "#/src/components/pagination.astro";
 import Sections from "#/src/components/sections/sections.astro";
 import { buttonStyles } from "#/src/components/button-styles.ts";
 import { inputStyles } from "#/src/components/input-styles.ts";
+import { newsCategories } from "#/src/cms/config.ts";
 import PageLayout from "#/src/layouts/page-layout.astro";
 import { paginate, parsePageParam } from "#/src/lib/pagination.ts";
 
+type Category = (typeof newsCategories)[number]["value"];
+
 const pageSize = 9;
 
-/** Unknown pages are not found, rather than ignored, so that each page has exactly one url. */
+/** Unknown filters and pages are not found, rather than ignored, so that each listing has exactly one url. */
+const categoryParam = Astro.url.searchParams.get("category");
+const category = newsCategories.find((option) => option.value === categoryParam);
 const pageParam = parsePageParam(Astro.url.searchParams.get("page"));
 
-if (pageParam == null) {
+if ((categoryParam != null && category == null) || pageParam == null) {
 	return new Response(null, { status: 404 });
 }
 
 /** The first page's url has no page number. */
 if (Astro.url.searchParams.get("page") === "1") {
-	return Astro.redirect(getHref(1), 301);
+	return Astro.redirect(getHref({ category: category?.value }), 301);
 }
 
 const { content } = Astro.locals;
@@ -32,21 +37,48 @@ if (page == null) {
 }
 
 /** Sorted by publication date, newest first - see the collection's `sort`. */
-const news = paginate(entries, pageParam, pageSize);
+const news = paginate(
+	entries.filter((entry) => category == null || entry.data.category === category.value),
+	pageParam,
+	pageSize,
+);
 
 if (news == null) {
 	return new Response(null, { status: 404 });
 }
 
-function getHref(number: number): string {
-	return number > 1 ? `/news?page=${String(number)}` : "/news";
+function getHref(params: { category?: Category; page?: number }): string {
+	const searchParams = new URLSearchParams();
+
+	if (params.category != null) {
+		searchParams.set("category", params.category);
+	}
+
+	if (params.page != null && params.page > 1) {
+		searchParams.set("page", String(params.page));
+	}
+
+	const search = searchParams.toString();
+
+	return search === "" ? "/news" : `/news?${search}`;
 }
+
+const filters = [
+	{ value: undefined, label: "All news" },
+	...newsCategories.map((option) => {
+		return { value: option.value, label: option.listLabel };
+	}),
+];
+
+const documentTitle = [page.title, category?.listLabel, news.page > 1 ? `Page ${String(news.page)}` : undefined]
+	.filter((part) => part != null)
+	.join(" - ");
 ---
 
 <PageLayout
-	title={news.page > 1 ? `${page.title} - Page ${String(news.page)}` : page.title}
+	title={documentTitle}
 	description={page.intro}
-	canonical={getHref(news.page)}
+	canonical={getHref({ category: category?.value, page: news.page })}
 >
 	<PageHeader title={page.title} heading={page.heading} intro={page.intro} />
 	<div class="content-container section-spacing">
@@ -66,6 +98,34 @@ function getHref(number: number): string {
 			<button type="submit" class={buttonStyles()}>Search</button>
 		</form>
 
+		{/* Like the filters on the events page. */}
+		<nav aria-label="News categories" class="mt-10 border-b border-border-strong pb-3">
+			<ul class="flex flex-wrap gap-1" role="list">
+				{
+					filters.map((filter) => {
+						const isCurrent = filter.value === category?.value;
+
+						return (
+							<li>
+								<a
+									href={getHref({ category: filter.value })}
+									aria-current={isCurrent ? "page" : undefined}
+									class:list={[
+										"inline-block px-3 py-2.5 mono-label transition-colors",
+										isCurrent
+											? "bg-foreground-strong text-background"
+											: "text-foreground-strong hover:bg-background-hover",
+									]}
+								>
+									{filter.label}
+								</a>
+							</li>
+						);
+					})
+				}
+			</ul>
+		</nav>
+
 		{
 			news.items.length > 0 ? (
 				<ul class="mt-10 grid border-t border-l border-border-strong sm:grid-cols-2 lg:grid-cols-3" role="list">
@@ -84,7 +144,11 @@ function getHref(number: number): string {
 			)
 		}
 
-		<Pagination page={news.page} pageCount={news.pageCount} getHref={getHref} />
+		<Pagination
+			page={news.page}
+			pageCount={news.pageCount}
+			getHref={(number) => getHref({ category: category?.value, page: number })}
+		/>
 	</div>
 	<Sections value={page.sections} />
 </PageLayout>

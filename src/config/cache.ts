@@ -11,6 +11,7 @@ import { newsletterStatusParam } from "#/src/lib/newsletter/status.ts";
  */
 export const cacheKeyQueryParams = [
 	/** Public pages. */
+	"category",
 	"involvement",
 	newsletterStatusParam,
 	"page",

@@ -1,6 +1,6 @@
 ---
 import CoverImage from "#/src/components/cover-image.astro";
-import type { NewsEntryData } from "#/src/cms/config.ts";
+import { type NewsEntryData, newsCategories } from "#/src/cms/config.ts";
 import { formatDate } from "#/src/lib/format-date.ts";
 
 export interface Props {
@@ -14,6 +14,8 @@ const { id, data, headingLevel } = Astro.props;
 
 /** Literal tag names rather than a template string, so that the element's attributes can be type-checked. */
 const Heading = ({ 2: "h2", 3: "h3" } as const)[headingLevel];
+
+const category = newsCategories.find((option) => option.value === data.category);
 ---
 
 <article class="relative flex h-full flex-col transition-colors has-[a:hover]:bg-background-hover">
@@ -24,9 +26,18 @@ const Heading = ({ 2: "h2", 3: "h3" } as const)[headingLevel];
 			<a href={`/news/${id}`} class="after:absolute after:inset-0 hover:underline underline-offset-4">{data.title}</a>
 		</Heading>
 		{/* Shown above the title, but read after it. */}
-		<time datetime={data.publicationDate} class="order-1 mono-label text-foreground-muted">
-			{formatDate(data.publicationDate)}
-		</time>
+		<div class="order-1 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+			{
+				category != null && (
+					<span class="border border-border-strong px-1.5 py-0.5 mono-label text-foreground-strong">
+						{category.label}
+					</span>
+				)
+			}
+			<time datetime={data.publicationDate} class="mono-label text-foreground-muted">
+				{formatDate(data.publicationDate)}
+			</time>
+		</div>
 		<p class="order-3 mt-1 leading-normal text-pretty text-foreground-muted">{data.summary}</p>
 	</div>
 </article>

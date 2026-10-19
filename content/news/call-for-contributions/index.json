@@ -2,12 +2,10 @@
 	"title": "Call for contributions",
 	"summary": "We invite contributions to the first project workshop.",
 	"publicationDate": "2026-10-01",
+	"category": "blog",
 	"authors": [
 		"john-roe",
 		"jane-doe"
-	],
-	"tags": [
-		"call"
 	],
 	"content": {
 		"type": "doc",

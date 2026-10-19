@@ -61,10 +61,11 @@ export const resourceCategories = [
 	{ value: "competencyFrameworks", label: "Competency frameworks" },
 ] as const;
 
-/** Events are a collection of their own, see `events`. */
-const newsTags = [
-	{ value: "release", label: "Release" },
-	{ value: "call", label: "Call" },
+/** Which listing on the news page a post appears in - `listLabel` names the listing, `label` a post in it. */
+export const newsCategories = [
+	{ value: "blog", label: "Blog", listLabel: "Blog" },
+	{ value: "publication", label: "Publication", listLabel: "Publications" },
+	{ value: "pressAndMedia", label: "Press & Media", listLabel: "Press & Media" },
 ] as const;
 
 const href = fields.text({
@@ -455,9 +456,14 @@ export const news = collection({
 		title: fields.text({ label: "Title", validation: [v.minLength(1)] }),
 		summary: fields.textarea({ label: "Summary", validation: [v.minLength(1), v.maxLength(300)] }),
 		publicationDate: fields.date({ label: "Publication date" }),
+		category: fields.select({
+			label: "Category",
+			description: "Which listing on the news page shows it.",
+			options: newsCategories,
+			defaultValue: "blog",
+		}),
 		image: optional(fields.image({ label: "Cover image" })),
 		authors: fields.array(fields.reference({ label: "Author", collection: "people" }), { label: "Authors" }),
-		tags: fields.multiSelect({ label: "Tags", options: newsTags }),
 		content: fields.richText({
 			label: "Content",
 			marks: ["bold", "italic", "link", "code"],
