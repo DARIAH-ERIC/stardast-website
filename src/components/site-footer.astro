@@ -33,17 +33,33 @@ const socialLinks = (site?.socialLinks ?? []).map((link) => {
 
 <footer class="bg-background text-sm text-foreground">
 	<div class="content-container flex flex-col gap-8 pt-12 pb-10">
-		<div class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-			<a href="/" class="shrink-0 self-start lg:self-auto">
-				<img
-					src="/assets/images/logo-stardast-black.svg"
-					alt="STARDAST, EOSC - Home"
-					width="584"
-					height="316"
-					loading="lazy"
-					class="h-16 w-auto"
-				/>
-			</a>
+		<div class="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+			{/* Who we are, and how to reach us. */}
+			<div class="flex shrink-0 flex-col items-start gap-6">
+				<a href="/">
+					<img
+						src="/assets/images/logo-stardast-black.svg"
+						alt="STARDAST, EOSC - Home"
+						width="584"
+						height="316"
+						loading="lazy"
+						class="h-16 w-auto"
+					/>
+				</a>
+				{
+					contactEmail != null && (
+						<p class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+							<span class="mono-label text-foreground-muted">Contact</span>
+							<a
+								href={`mailto:${contactEmail}`}
+								class="text-foreground-strong underline decoration-1 underline-offset-4 transition-colors hover:text-primary-hover"
+							>
+								{contactEmail}
+							</a>
+						</p>
+					)
+				}
+			</div>
 
 			<div class="flex flex-wrap items-center gap-x-8 gap-y-4">
 				{
@@ -85,17 +101,6 @@ const socialLinks = (site?.socialLinks ?? []).map((link) => {
 				}
 			</div>
 		</div>
-
-		{
-			contactEmail != null && (
-				<p>
-					Contact:{" "}
-					<a href={`mailto:${contactEmail}`} class="text-foreground-strong underline hover:text-primary-hover">
-						{contactEmail}
-					</a>
-				</p>
-			)
-		}
 
 		{/* The emblem and the disclaimer are one funding acknowledgement, so they stand together. */}
 		<div class="flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:gap-8">
