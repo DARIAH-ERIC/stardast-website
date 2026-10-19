@@ -2,6 +2,7 @@
 import { EntryEditor } from "#/src/components/admin/entry-editor.tsx";
 import { getSingleton, loadReferenceOptions } from "#/src/cms/admin.ts";
 import { drafts } from "#/src/cms/api.ts";
+import { canPublish } from "#/src/cms/auth.ts";
 import AdminLayout from "#/src/layouts/admin-layout.astro";
 
 const name = Astro.params.singleton!;
@@ -24,6 +25,7 @@ const referenceOptions = await loadReferenceOptions(singleton.fields, published.
 		initialData={draft?.data ?? published.data ?? singleton.defaultValue()}
 		hasDraft={draft != null}
 		isPublished={published.data !== undefined}
+		canPublish={canPublish(Astro.locals.session)}
 		referenceOptions={referenceOptions}
 	/>
 </AdminLayout>

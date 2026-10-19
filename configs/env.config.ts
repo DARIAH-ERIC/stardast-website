@@ -31,6 +31,7 @@ export const env = validate({
 		CMS_GITHUB_OAUTH_CLIENT_SECRET: serverEnvironment.CMS_GITHUB_OAUTH_CLIENT_SECRET,
 		CMS_SESSION_SECRET: serverEnvironment.CMS_SESSION_SECRET,
 		CMS_ADMIN_USERS: serverEnvironment.CMS_ADMIN_USERS,
+		CMS_CONTRIBUTOR_USERS: serverEnvironment.CMS_CONTRIBUTOR_USERS,
 		CMS_ASSETS: serverEnvironment.CMS_ASSETS,
 		CMS_MAX_UPLOAD_SIZE: serverEnvironment.CMS_MAX_UPLOAD_SIZE,
 		CMS_S3_ENDPOINT: serverEnvironment.CMS_S3_ENDPOINT,

@@ -4,6 +4,7 @@ import * as v from "valibot";
 import { EntryEditor } from "#/src/components/admin/entry-editor.tsx";
 import { getCollection, getEntryLabel } from "#/src/cms/admin.ts";
 import { drafts } from "#/src/cms/api.ts";
+import { canPublish } from "#/src/cms/auth.ts";
 import { type MediaEntryData, config, mediaCollectionName } from "#/src/cms/config.ts";
 import { getImageUrl, getMedia, getMediaUrl } from "#/src/cms/media.ts";
 import { storage } from "#/src/cms/server.ts";
@@ -103,6 +104,7 @@ const fileUrl = getMediaUrl(id, data);
 		initialData={data}
 		hasDraft={draft != null}
 		isPublished={published.data !== undefined}
+		canPublish={canPublish(Astro.locals.session)}
 		referenceOptions={{}}
 		listUrl="/admin/media"
 	/>

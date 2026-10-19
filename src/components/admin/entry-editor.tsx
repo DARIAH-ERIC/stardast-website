@@ -42,6 +42,8 @@ export interface EntryEditorProps {
 	hasDraft: boolean;
 	isPublished: boolean;
 	referenceOptions: Record<string, Array<Option>>;
+	/** Whether the user may publish, and delete published entries - contributors only save drafts. */
+	canPublish: boolean;
 	/** Where the "back" link, and deleting, lead. Defaults to the collection's entry list. */
 	listUrl?: string;
 }
@@ -83,7 +85,7 @@ function formatTime(date: Date): string {
 }
 
 export function EntryEditor(props: EntryEditorProps): ReactNode {
-	const { target, referenceOptions } = props;
+	const { target, referenceOptions, canPublish } = props;
 	const descriptor = getDescriptor(target);
 	const isNew = target.kind === "collection" && target.id == null;
 
@@ -189,7 +191,7 @@ export function EntryEditor(props: EntryEditorProps): ReactNode {
 					? await send(`${entryUrl}/draft`, "PUT", { data, revision })
 					: action === "publish"
 						? await send(`${entryUrl}/publish`, "POST", { data, revision })
-						: action === "discard"
+						: action === "discard" || !isPublished
 							? await send(`${entryUrl}/draft`, "DELETE", { revision })
 							: await send(entryUrl, "DELETE", { revision });
 
@@ -266,6 +268,9 @@ export function EntryEditor(props: EntryEditorProps): ReactNode {
 			? { label: "Draft, not published yet", intent: "secondary" }
 			: { label: "Not saved yet", intent: "outline" };
 
+	/** An entry which was never published only exists as a draft, so deleting it discards the draft - which anyone may. */
+	const canDelete = target.kind === "collection" && !isNew && (canPublish || !isPublished);
+
 	const confirmation =
 		confirm === "discard"
 			? {
@@ -333,7 +338,7 @@ export function EntryEditor(props: EntryEditorProps): ReactNode {
 									View on site
 								</Link>
 							)}
-							{((hasDraft && isPublished) || (target.kind === "collection" && !isNew)) && (
+							{((hasDraft && isPublished) || canDelete) && (
 								<Menu>
 									<MenuTrigger
 										aria-label="More actions"
@@ -354,7 +359,7 @@ export function EntryEditor(props: EntryEditorProps): ReactNode {
 												<MenuLabel>Discard draft</MenuLabel>
 											</MenuItem>
 										)}
-										{target.kind === "collection" && !isNew && (
+										{canDelete && (
 											<MenuItem id="delete" textValue="Delete" intent="danger">
 												<Trash2 aria-hidden={true} />
 												<MenuLabel>Delete</MenuLabel>
@@ -363,17 +368,19 @@ export function EntryEditor(props: EntryEditorProps): ReactNode {
 									</MenuContent>
 								</Menu>
 							)}
-							<Button type="submit" intent="outline" isDisabled={isBusy}>
+							<Button type="submit" intent={canPublish ? "outline" : "primary"} isDisabled={isBusy}>
 								Save draft
 							</Button>
-							<Button
-								isDisabled={isBusy}
-								onPress={() => {
-									void run("publish");
-								}}
-							>
-								Publish
-							</Button>
+							{canPublish && (
+								<Button
+									isDisabled={isBusy}
+									onPress={() => {
+										void run("publish");
+									}}
+								>
+									Publish
+								</Button>
+							)}
 						</div>
 					</div>
 
