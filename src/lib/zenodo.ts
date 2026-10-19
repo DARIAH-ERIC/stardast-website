@@ -9,7 +9,7 @@ export class ZenodoError extends TaggedError("ZenodoError")<{ readonly message: 
 export interface ZenodoRecord {
 	id: string;
 	title: string;
-	/** A calendar day, e.g. `2026-10-01`. */
+	/** A year, month or day, e.g. `2026`, `2026-10` or `2026-10-01` - zenodo allows partial dates. */
 	publicationDate: string;
 	/** Html, as entered on zenodo. */
 	description?: string;
@@ -24,19 +24,28 @@ const RecordSchema = v.object({
 	links: v.object({ self_html: v.pipe(v.string(), v.url()) }),
 	metadata: v.object({
 		title: v.string(),
-		publication_date: v.pipe(v.string(), v.isoDate()),
+		/** Edtf, e.g. `2026`, `2026-10-01`, or a range, `2025/2026` - of which only the start is kept. */
+		publication_date: v.pipe(
+			v.string(),
+			v.regex(/^\d{4}(?:-\d{2}(?:-\d{2})?)?(?:\/|$)/),
+			v.transform((value) => value.split("/")[0]!),
+		),
 		description: v.optional(v.string()),
 		keywords: v.optional(v.array(v.string()), []),
 	}),
 });
 
 const PageSchema = v.object({
-	hits: v.object({ hits: v.array(RecordSchema) }),
+	/** Parsed one by one, so that a record zenodo describes unexpectedly is skipped, rather than failing the page. */
+	hits: v.object({ hits: v.array(v.unknown()) }),
 	links: v.object({ next: v.optional(v.pipe(v.string(), v.url())) }),
 });
 
-/** The largest page zenodo serves without an access token. */
-const pageSize = 25;
+/** Zenodo rejects node's default `User-Agent: node` with a 403, so requests always identify the site. */
+const userAgent = "stardast-website (https://github.com/DARIAH-ERIC/stardast-website)";
+
+/** The largest pages zenodo serves, without and with an access token. */
+const pageSize = { guest: 25, authenticated: 100 };
 
 export interface ZenodoClient {
 	/** All records in a community, newest first. */
@@ -47,13 +56,21 @@ export function createZenodoClient(params?: {
 	/** E.g. `https://sandbox.zenodo.org`, for testing. */
 	baseUrl?: string;
 	/**
-	 * Zenodo allows 30 search requests a minute without an access token - so records are fetched in pages of 25, up to
-	 * this many.
+	 * Zenodo allows 30 search requests a minute without an access token - so records are fetched in pages of 25, or of
+	 * 100 with a token, up to this many.
 	 */
 	maxPages?: number;
+	/** A personal access token, without any scopes - only for higher rate limits and larger pages. */
+	token?: string;
 	fetch?: Fetch;
 }): ZenodoClient {
-	const { baseUrl = "https://zenodo.org", maxPages = 10, fetch = globalThis.fetch } = params ?? {};
+	const { baseUrl = "https://zenodo.org", maxPages = 10, token, fetch = globalThis.fetch } = params ?? {};
+
+	const headers: Record<string, string> = { accept: "application/json", "user-agent": userAgent };
+
+	if (token != null && token !== "") {
+		headers.authorization = `Bearer ${token}`;
+	}
 
 	return {
 		async listCommunityRecords(community) {
@@ -63,7 +80,7 @@ export function createZenodoClient(params?: {
 				`api/communities/${encodeURIComponent(community)}/records`,
 				`${baseUrl.replace(/\/$/, "")}/`,
 			);
-			url.searchParams.set("size", String(pageSize));
+			url.searchParams.set("size", String(headers.authorization != null ? pageSize.authenticated : pageSize.guest));
 			url.searchParams.set("sort", "newest");
 
 			/** One page after the other, since each links to the next. */
@@ -72,7 +89,7 @@ export function createZenodoClient(params?: {
 
 				// oxlint-disable-next-line no-await-in-loop
 				const response = await Result.tryPromise({
-					try: () => fetch(request, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(10_000) }),
+					try: () => fetch(request, { headers, signal: AbortSignal.timeout(10_000) }),
 					catch: (error) => new ZenodoError({ message: `Request to zenodo failed: ${String(error)}` }),
 				});
 
@@ -95,7 +112,15 @@ export function createZenodoClient(params?: {
 					);
 				}
 
-				for (const record of body.output.hits.hits) {
+				for (const hit of body.output.hits.hits) {
+					const parsed = v.safeParse(RecordSchema, hit);
+
+					if (!parsed.success) {
+						continue;
+					}
+
+					const record = parsed.output;
+
 					records.push({
 						id: String(record.id),
 						title: record.metadata.title,

@@ -125,6 +125,11 @@ export const serverRuntime = v.object({
 	 * Should belong to a matomo user with view access only, since a token grants everything its user may do.
 	 */
 	MATOMO_API_TOKEN: v.optional(v.string()),
+	/**
+	 * A zenodo personal access token, without any scopes - only for its higher rate limits and larger pages, when listing
+	 * the community's records as career resources. Works without it.
+	 */
+	ZENODO_TOKEN: v.optional(v.string()),
 });
 
 /**

@@ -1,6 +1,6 @@
 ---
 import type { Resource } from "#/src/lib/career-resources.ts";
-import { formatDate } from "#/src/lib/format-date.ts";
+import { formatPartialDate } from "#/src/lib/format-date.ts";
 
 export interface Props {
 	resource: Resource;
@@ -23,7 +23,7 @@ const Heading = ({ 2: "h2", 3: "h3" } as const)[headingLevel];
 		</Heading>
 		{/* Shown above the title, but read after it. */}
 		<time datetime={resource.publicationDate} class="order-1 mono-label text-foreground-muted">
-			{formatDate(resource.publicationDate)}
+			{formatPartialDate(resource.publicationDate)}
 		</time>
 		{
 			resource.summary != null && (

@@ -16,18 +16,20 @@ function record(id: number, keywords?: Array<string>) {
 	};
 }
 
-function createClient(respond: (url: URL) => Response, maxPages?: number) {
+function createClient(respond: (url: URL) => Response, maxPages?: number, token?: string) {
 	const requests: Array<URL> = [];
+	const headers: Array<Headers> = [];
 
-	const fetch: Fetch = (url) => {
+	const fetch: Fetch = (url, init) => {
 		requests.push(url);
+		headers.push(new Headers(init?.headers));
 
 		return Promise.resolve(respond(url));
 	};
 
-	const client = createZenodoClient({ baseUrl: "https://zenodo.example.org/", maxPages, fetch });
+	const client = createZenodoClient({ baseUrl: "https://zenodo.example.org/", maxPages, token, fetch });
 
-	return { client, requests };
+	return { client, requests, headers };
 }
 
 test("lists the records of a community, following the links to further pages", async () => {
@@ -58,6 +60,40 @@ test("lists the records of a community, following the links to further pages", a
 		expect.objectContaining({ id: "2", keywords: [] }),
 		expect.objectContaining({ id: "3" }),
 	]);
+});
+
+function respondEmpty() {
+	return Response.json({ hits: { hits: [] }, links: {} });
+}
+
+test("identifies the site, sends an access token, and asks for larger pages with it", async () => {
+	const guest = createClient(respondEmpty);
+	await guest.client.listCommunityRecords("stardast");
+	expect(guest.requests[0]?.searchParams.get("size")).toBe("25");
+	expect(guest.headers[0]?.has("authorization")).toBe(false);
+	expect(guest.headers[0]?.get("user-agent")).toStartWith("stardast-website");
+
+	const authenticated = createClient(respondEmpty, undefined, "secret");
+	await authenticated.client.listCommunityRecords("stardast");
+	expect(authenticated.requests[0]?.searchParams.get("size")).toBe("100");
+	expect(authenticated.headers[0]?.get("authorization")).toBe("Bearer secret");
+});
+
+function dated(id: number, date: string) {
+	return { ...record(id), metadata: { ...record(id).metadata, publication_date: date } };
+}
+
+test("keeps partial publication dates and the start of ranges, and skips unexpected records", async () => {
+	const { client } = createClient(() =>
+		Response.json({
+			hits: { hits: [dated(1, "2025"), dated(2, "2025-05"), dated(3, "2024-03-01/2025"), dated(4, "unknown")] },
+			links: {},
+		}),
+	);
+
+	const result = await client.listCommunityRecords("stardast");
+
+	expect(result.isOk() && result.value.map((item) => item.publicationDate)).toEqual(["2025", "2025-05", "2024-03-01"]);
 });
 
 test("stops after the maximum number of pages", async () => {
