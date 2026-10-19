@@ -26,6 +26,7 @@ const referenceOptions = await loadReferenceOptions(singleton.fields, published.
 		hasDraft={draft != null}
 		isPublished={published.data !== undefined}
 		canPublish={canPublish(Astro.locals.session)}
+		isReviewRequested={draft?.reviewRequest != null}
 		referenceOptions={referenceOptions}
 	/>
 </AdminLayout>

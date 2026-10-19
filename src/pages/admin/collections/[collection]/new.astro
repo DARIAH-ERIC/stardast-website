@@ -30,6 +30,7 @@ const referenceOptions = await loadReferenceOptions(collection.fields, revision)
 		hasDraft={false}
 		isPublished={false}
 		canPublish={canPublish(Astro.locals.session)}
+		isReviewRequested={false}
 		referenceOptions={referenceOptions}
 	/>
 </AdminLayout>
