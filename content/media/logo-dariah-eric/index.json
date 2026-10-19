@@ -1,10 +1,10 @@
 {
 	"alt": "DARIAH-ERIC",
-	"filename": "logo-dariah-eric.png",
-	"contentType": "image/png",
-	"size": 33984,
-	"width": 2123,
-	"height": 644,
+	"filename": "logo-dariah-eric.svg",
+	"contentType": "image/svg+xml",
+	"size": 6307,
+	"width": 679,
+	"height": 206,
 	"storage": "repo",
-	"key": "content/media/logo-dariah-eric/logo-dariah-eric.png"
+	"key": "content/media/logo-dariah-eric/logo-dariah-eric.svg"
 }
