@@ -1,6 +1,7 @@
 {
 	"description": "STARDAST professionalises data stewardship across science, the humanities and industry, and builds the training, networks and institutional support Open Science needs.",
 	"image": "opengraph-image",
+	"contactEmail": "info@stardast.eu",
 	"socialLinks": [
 		{
 			"platform": "linkedin",
