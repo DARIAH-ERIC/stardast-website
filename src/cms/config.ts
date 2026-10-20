@@ -250,7 +250,7 @@ const cardsSection = block({
 					href: optional({ ...href, description: "Makes the whole card a link." }),
 				},
 			}),
-			{ label: "Cards", validation: [v.minLength(1)] },
+			{ label: "Cards", description: "None shows a coming soon placeholder, e.g. while materials are still to come." },
 		),
 	},
 });

@@ -18,11 +18,10 @@ limitMaxAge(Astro, result.isOk() ? resourcesMaxAge : resourcesRetryAfter);
 const resources = result.isOk() ? result.value : [];
 ---
 
-{/* Just the title and lead while there are no resources yet, rather than a placeholder. */}
 <section id={anchor} class="content-container section-spacing">
 	<SectionHeader eyebrow={eyebrow} title={title} lead={lead} />
 	{
-		resources.length > 0 && (
+		resources.length > 0 ? (
 			<ul class="grid border-t border-l border-border-strong sm:grid-cols-2 lg:grid-cols-3" role="list">
 				{resources.map((resource) => {
 					return (
@@ -32,13 +31,12 @@ const resources = result.isOk() ? result.value : [];
 					);
 				})}
 			</ul>
-		)
-	}
-	{
-		result.isErr() && (
+		) : result.isErr() ? (
 			<p class="border border-dashed border-border-strong p-8 mono-label text-foreground-muted">
 				The resources could not be loaded - please try again later.
 			</p>
+		) : (
+			<p class="border border-dashed border-border-strong p-8 mono-label text-foreground-muted">Coming soon</p>
 		)
 	}
 </section>
