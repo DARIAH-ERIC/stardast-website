@@ -49,7 +49,7 @@ const structuredData = createNewsArticleJsonLd({
 	</p>
 	{
 		entry.data.image != null && (
-			<CmsImage id={entry.data.image} loading="eager" sizes="(min-width: 65ch) 65ch, 100vw" class="border border-border" />
+			<CmsImage id={entry.data.image} loading="eager" fetchpriority="high" sizes="(min-width: 65ch) 65ch, 100vw" class="border border-border" />
 		)
 	}
 	<RichText value={entry.data.content} blocks={{ callout: Callout, figure: Figure }} />

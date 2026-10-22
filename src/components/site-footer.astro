@@ -1,5 +1,6 @@
 ---
 import { socialPlatforms } from "#/src/cms/config.ts";
+import logo from "#/src/assets/images/logo-stardast-eosc-horizontal-color-black.svg";
 import Icon from "#/src/components/icon.astro";
 import { funding, siteName } from "#/src/config/project.ts";
 
@@ -38,10 +39,10 @@ const socialLinks = (site?.socialLinks ?? []).map((link) => {
 			<div class="flex shrink-0 flex-col items-start gap-6">
 				<a href="/">
 					<img
-						src="/assets/images/logo-stardast-eosc-horizontal-color-black.svg"
+						src={logo.src}
 						alt="STARDAST, EOSC - Home"
-						width="1072"
-						height="137"
+						width={logo.width}
+						height={logo.height}
 						loading="lazy"
 						class="h-9 w-auto"
 					/>

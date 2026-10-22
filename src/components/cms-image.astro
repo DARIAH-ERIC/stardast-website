@@ -13,6 +13,8 @@ export interface Props {
 	sizes?: string | ((image: { width?: number; height?: number }) => string);
 	widths?: ReadonlyArray<number>;
 	loading?: "eager" | "lazy";
+	/** E.g. `high` for an image which is likely the largest contentful paint. */
+	fetchpriority?: "auto" | "high" | "low";
 	class?: string;
 }
 
@@ -22,6 +24,7 @@ const {
 	sizes = "100vw",
 	widths = [320, 640, 960, 1280, 1920],
 	loading = "lazy",
+	fetchpriority,
 	class: className,
 } = Astro.props;
 
@@ -40,6 +43,7 @@ const data = entry?.data;
 			width={data.width}
 			height={data.height}
 			loading={loading}
+			fetchpriority={fetchpriority}
 			decoding="async"
 			class={className}
 		/>

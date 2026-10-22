@@ -1,4 +1,5 @@
 ---
+import logo from "#/src/assets/images/logo-stardast-eosc-horizontal-color-black.svg";
 import Icon from "#/src/components/icon.astro";
 
 const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
@@ -39,10 +40,10 @@ const menuId = "mobile-navigation";
 	<div class="content-container flex h-18 items-center justify-between gap-4 sm:gap-8">
 		<a href="/" class="shrink-0">
 			<img
-				src="/assets/images/logo-stardast-eosc-horizontal-color-black.svg"
+				src={logo.src}
 				alt="STARDAST, EOSC - Home"
-				width="1072"
-				height="137"
+				width={logo.width}
+				height={logo.height}
 				class="h-5.5 w-auto sm:h-7"
 			/>
 		</a>
@@ -176,10 +177,10 @@ const menuId = "mobile-navigation";
 				<div class="content-container flex h-18 items-center justify-between gap-4 border-b border-border-strong sm:gap-8">
 					<a href="/" class="shrink-0">
 						<img
-							src="/assets/images/logo-stardast-eosc-horizontal-color-black.svg"
+							src={logo.src}
 							alt="STARDAST, EOSC - Home"
-							width="1072"
-							height="137"
+							width={logo.width}
+							height={logo.height}
 							class="h-5.5 w-auto sm:h-7"
 						/>
 					</a>

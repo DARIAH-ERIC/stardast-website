@@ -74,7 +74,7 @@ const structuredData = createEventJsonLd({
 	</dl>
 	{
 		data.image != null && (
-			<CmsImage id={data.image} loading="eager" sizes="(min-width: 65ch) 65ch, 100vw" class="border border-border" />
+			<CmsImage id={data.image} loading="eager" fetchpriority="high" sizes="(min-width: 65ch) 65ch, 100vw" class="border border-border" />
 		)
 	}
 	<RichText value={data.content} blocks={{ callout: Callout, figure: Figure }} />
