@@ -11,15 +11,31 @@ const { name, shortName, logo, url } = data;
 const label = shortName != null ? `${name} (${shortName})` : name;
 
 /**
- * Logos are contained in a box which is at most 3.5rem high, see `h-14` - so their width follows from their aspect
- * ratio, and e.g. a square logo is far narrower than its cell.
+ * Logos take up about the same area, whatever their aspect ratio - so that a wide wordmark does not look huge next to a
+ * square emblem. Near-square and tall logos are no higher than `maxLogoHeight`, which leaves a little room in their
+ * cell. On narrow screens, wide logos shrink to fit their cell.
  */
-const logoHeight = 56;
+const logoArea = 76 * 76;
+const maxLogoHeight = 72;
+
+function getLogoWidth(image: { width?: number; height?: number }): number | undefined {
+	if (image.width == null || image.height == null) {
+		return undefined;
+	}
+	const ratio = image.width / image.height;
+	return Math.round(Math.min(Math.sqrt(logoArea / ratio), maxLogoHeight) * ratio);
+}
 
 function getLogoSizes(image: { width?: number; height?: number }): string {
-	return image.width != null && image.height != null
-		? `${String(Math.ceil((logoHeight * image.width) / image.height))}px`
-		: "12rem";
+	const width = getLogoWidth(image);
+	return width != null ? `${String(width)}px` : "12rem";
+}
+
+function getLogoStyle(image: { width?: number; height?: number }): string {
+	const width = getLogoWidth(image);
+	return width != null
+		? `width: ${String(width)}px; max-width: 100%; height: auto`
+		: `width: 100%; height: ${String(maxLogoHeight)}px; object-fit: contain`;
 }
 
 const cellClass = "flex h-32 w-full items-center justify-center p-6";
@@ -28,10 +44,10 @@ const cellClass = "flex h-32 w-full items-center justify-center p-6";
 {url != null ? (
 	<a href={url} class:list={[cellClass, "transition-colors hover:bg-background-hover"]}>
 		{/* The logo identifies the partner - its alternative text is the full name, and so the link's name. */}
-		<CmsImage id={logo} alt={label} sizes={getLogoSizes} widths={[160, 320, 384]} class="h-14 w-full object-contain" />
+		<CmsImage id={logo} alt={label} sizes={getLogoSizes} widths={[160, 320, 384]} style={getLogoStyle} />
 	</a>
 ) : (
 	<div class={cellClass}>
-		<CmsImage id={logo} alt={label} sizes={getLogoSizes} widths={[160, 320, 384]} class="h-14 w-full object-contain" />
+		<CmsImage id={logo} alt={label} sizes={getLogoSizes} widths={[160, 320, 384]} style={getLogoStyle} />
 	</div>
 )}

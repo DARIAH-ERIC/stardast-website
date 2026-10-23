@@ -16,6 +16,8 @@ export interface Props {
 	/** E.g. `high` for an image which is likely the largest contentful paint. */
 	fetchpriority?: "auto" | "high" | "low";
 	class?: string;
+	/** A function of the image's size, e.g. for images which are sized by their aspect ratio. */
+	style?: (image: { width?: number; height?: number }) => string;
 }
 
 const {
@@ -26,6 +28,7 @@ const {
 	loading = "lazy",
 	fetchpriority,
 	class: className,
+	style,
 } = Astro.props;
 
 /** Tags the page, so that e.g. editing the alternative text in the media library updates it. */
@@ -45,5 +48,6 @@ const data = entry?.data;
 		fetchpriority={fetchpriority}
 		decoding="async"
 		class={className}
+		style={style?.(data)}
 	/>
 )}
