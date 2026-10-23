@@ -1,6 +1,6 @@
 ---
 import type { SectionData } from "#/src/cms/config.ts";
-import CmsImage from "#/src/components/cms-image.astro";
+import PartnerCell from "#/src/components/partner-cell.astro";
 import SectionHeader from "#/src/components/sections/section-header.astro";
 import { fillPartnerCount } from "#/src/lib/partner-count.ts";
 
@@ -9,27 +9,15 @@ export type Props = SectionData<"partners">;
 const { anchor, eyebrow, title, lead, links } = Astro.props;
 
 /**
- * Sorted by name - see the collection's `sort` - with the project coordinator first, in a row of its own, so that it
- * stands out.
+ * Sorted by name - see the collection's `sort`. The project coordinator is shown above the other partners, set apart by
+ * a gap, so that it stands out - in a cell of the same size.
  */
-const partners = (await Astro.locals.content.list("partners")).toSorted(
-	(a, b) => Number(b.data.coordinator === true) - Number(a.data.coordinator === true),
-);
+const partners = await Astro.locals.content.list("partners");
+const coordinators = partners.filter((partner) => partner.data.coordinator === true);
+const others = partners.filter((partner) => partner.data.coordinator !== true);
 
-/**
- * Logos are contained in a box which is at most 3.5rem high, see `h-14` - so their width follows from their aspect
- * ratio, and e.g. a square logo is far narrower than its cell.
- */
-const logoHeight = 56;
-
-function getLogoSizes(image: { width?: number; height?: number }): string {
-	return image.width != null && image.height != null
-		? `${String(Math.ceil((logoHeight * image.width) / image.height))}px`
-		: "12rem";
-}
-
-/** Cells of a grid which share their dividing lines: each draws its own right and bottom edge. */
-const cellClass = "flex h-32 w-full items-center justify-center p-6";
+/** Shared by both lists, so that the coordinator's cell is the same size as the others. */
+const gridClass = "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4";
 ---
 
 <section id={anchor} class="content-container section-spacing">
@@ -38,36 +26,32 @@ const cellClass = "flex h-32 w-full items-center justify-center p-6";
 		title={fillPartnerCount(title, partners.length)}
 		lead={lead != null ? fillPartnerCount(lead, partners.length) : undefined}
 	/>
-	<ul class="grid grid-cols-2 border-t border-l border-border-strong sm:grid-cols-3 lg:grid-cols-4" role="list">
-		{partners.map((partner) => {
-			const { name, shortName, logo, url, coordinator } = partner.data;
-			const label = shortName != null ? `${name} (${shortName})` : name;
-
-			/** The logo identifies the partner - its alternative text is the full name, and so the link's name. */
-			const image = (
-				<CmsImage
-					id={logo}
-					alt={label}
-					sizes={getLogoSizes}
-					widths={[160, 320, 384]}
-					class="h-14 w-full object-contain"
-				/>
-			);
-
+	{coordinators.length > 0 && (
+		<div class="mb-8">
+			<h3 class="mb-3 mono-label text-foreground-muted">Project coordinator</h3>
+			{/*
+				A list of its own, apart from the other partners, whose cells draw all four edges. Its left edge is
+				transparent, so that its columns are as wide as those of the list below - whose left edge takes up a pixel -
+				and each cell draws its own over it.
+			*/}
+			<ul class:list={[gridClass, "border-l border-transparent"]} role="list">
+				{coordinators.map((partner) => {
+					return (
+						<li class="-ml-px border border-border-strong">
+							<PartnerCell data={partner.data} />
+						</li>
+					);
+				})}
+			</ul>
+		</div>
+	)}
+	{coordinators.length > 0 && <h3 class="mb-3 mono-label text-foreground-muted">Partners</h3>}
+	{/* Cells which share their dividing lines: each draws its own right and bottom edge. */}
+	<ul class:list={[gridClass, "border-t border-l border-border-strong"]} role="list">
+		{others.map((partner) => {
 			return (
-				<li class:list={["border-r border-b border-border-strong", coordinator === true && "relative col-span-full"]}>
-					{coordinator === true && (
-						<p class="pointer-events-none absolute top-4 left-6 mono-label text-foreground-muted">
-							Project coordinator
-						</p>
-					)}
-					{url != null ? (
-						<a href={url} class:list={[cellClass, "transition-colors hover:bg-background-hover"]}>
-							{image}
-						</a>
-					) : (
-						<div class={cellClass}>{image}</div>
-					)}
+				<li class="border-r border-b border-border-strong">
+					<PartnerCell data={partner.data} />
 				</li>
 			);
 		})}

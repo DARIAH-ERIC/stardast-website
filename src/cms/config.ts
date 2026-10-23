@@ -724,6 +724,8 @@ export type EventEntryData = InferEntry<typeof events>;
 
 export type PersonEntryData = InferEntry<typeof people>;
 
+export type PartnerEntryData = InferEntry<typeof partners>;
+
 export type MediaEntryData = InferEntry<typeof media>;
 
 export type HomeData = InferEntry<typeof home>;

@@ -1,0 +1,37 @@
+---
+import type { PartnerEntryData } from "#/src/cms/config.ts";
+import CmsImage from "#/src/components/cms-image.astro";
+
+export interface Props {
+	data: PartnerEntryData;
+}
+
+const { data } = Astro.props;
+const { name, shortName, logo, url } = data;
+const label = shortName != null ? `${name} (${shortName})` : name;
+
+/**
+ * Logos are contained in a box which is at most 3.5rem high, see `h-14` - so their width follows from their aspect
+ * ratio, and e.g. a square logo is far narrower than its cell.
+ */
+const logoHeight = 56;
+
+function getLogoSizes(image: { width?: number; height?: number }): string {
+	return image.width != null && image.height != null
+		? `${String(Math.ceil((logoHeight * image.width) / image.height))}px`
+		: "12rem";
+}
+
+const cellClass = "flex h-32 w-full items-center justify-center p-6";
+---
+
+{url != null ? (
+	<a href={url} class:list={[cellClass, "transition-colors hover:bg-background-hover"]}>
+		{/* The logo identifies the partner - its alternative text is the full name, and so the link's name. */}
+		<CmsImage id={logo} alt={label} sizes={getLogoSizes} widths={[160, 320, 384]} class="h-14 w-full object-contain" />
+	</a>
+) : (
+	<div class={cellClass}>
+		<CmsImage id={logo} alt={label} sizes={getLogoSizes} widths={[160, 320, 384]} class="h-14 w-full object-contain" />
+	</div>
+)}
