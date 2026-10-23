@@ -1,8 +1,10 @@
 {
 	"name": "Heidelberg University",
 	"shortName": "UHEI",
-	"logo": "placeholder-logo-heidelberg-university",
+	"logo": "hd-logo-standard-16cm-rgb-21uy0f",
 	"url": "https://www.uni-heidelberg.de",
 	"linkedin": "https://www.linkedin.com/school/uni-heidelberg/",
-	"countries": ["DE"]
+	"countries": [
+		"DE"
+	]
 }
