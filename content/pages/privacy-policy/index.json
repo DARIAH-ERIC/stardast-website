@@ -341,20 +341,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "The legal basis is your consent (Art. 6(1)(a) GDPR). You can withdraw your consent and unsubscribe at any time "
-								},
-								{
-									"type": "text",
-									"text": "[To be completed: how - e.g. with the link in every email, or by writing to the contact address above]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
-								},
-								{
-									"type": "text",
-									"text": ". We keep your data until you unsubscribe."
+									"text": "The legal basis is your consent (Art. 6(1)(a) GDPR). You can withdraw your consent and unsubscribe at any time with the link at the end of every email we send, or by writing to info@stardast.eu. We keep your data until you unsubscribe."
 								}
 							]
 						}
@@ -375,16 +362,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "This section only concerns members of the project team who edit the website's content. Editors sign in with their GitHub account, which is processed by GitHub, Inc. in the United States. "
-								},
-								{
-									"type": "text",
-									"text": "[To be completed: legal basis for the transfer to the United States, e.g. the EU-U.S. Data Privacy Framework]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
+									"text": "This section only concerns members of the project team who edit the website's content. Editors sign in with their GitHub account, which is processed by GitHub, Inc. in the United States. The transfer is based on the EU-U.S. Data Privacy Framework, under which GitHub, Inc. is certified (Art. 45 GDPR)."
 								}
 							]
 						},
