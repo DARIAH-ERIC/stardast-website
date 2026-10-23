@@ -150,6 +150,20 @@
 }
 
 /**
+ * Forced colours, e.g. windows high contrast mode, drop the background which marks the current page in navigation,
+ * filters, and pagination - so use the system's highlight colours instead. Not layered, so that it wins over the
+ * colour utilities on those links.
+ */
+@media (forced-colors: active) {
+	a[aria-current="page"] {
+		forced-color-adjust: none;
+		color: HighlightText;
+		background-color: Highlight;
+		outline-color: CanvasText;
+	}
+}
+
+/**
  * Centred, width-capped column with responsive side padding. Header, footer, and page sections all use it, so their
  * contents line up, while their backgrounds can still span the full viewport width.
  */
