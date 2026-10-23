@@ -50,11 +50,11 @@ const facts = [
 		<dl class="grid border-t border-border-strong sm:grid-cols-3">
 			{facts.map((fact) => {
 				return (
-					<div class="flex flex-col gap-0.5 border-b border-border py-4 last:border-b-0 sm:border-b-0 sm:border-l sm:px-5 sm:first:border-l-0 sm:first:ps-0">
+					<div class="flex flex-col gap-1.5 border-b border-border py-4 last:border-b-0 sm:border-b-0 sm:border-l sm:px-5 sm:first:border-l-0 sm:first:ps-0">
 						<dt class="font-mono text-[0.6875rem]/4 font-medium tracking-[0.08em] text-foreground-muted uppercase">
 							{fact.label}
 						</dt>
-						<dd class="font-mono text-[0.9375rem] font-medium text-foreground-strong">{fact.value}</dd>
+						<dd class="font-mono text-[0.9375rem]/5 font-medium text-foreground-strong">{fact.value}</dd>
 					</div>
 				);
 			})}
