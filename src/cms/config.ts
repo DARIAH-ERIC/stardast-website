@@ -507,6 +507,12 @@ export const partners = collection({
 			description: "E.g. both the seat and the hosting country - leave empty when unknown.",
 			options: countries,
 		}),
+		coordinator: optional(
+			fields.boolean({
+				label: "Project coordinator",
+				description: "Shown above the other partners, in partners sections.",
+			}),
+		),
 	},
 });
 

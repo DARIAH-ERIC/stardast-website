@@ -8,8 +8,13 @@ export type Props = SectionData<"partners">;
 
 const { anchor, eyebrow, title, lead, links } = Astro.props;
 
-/** Sorted by name - see the collection's `sort`. */
-const partners = await Astro.locals.content.list("partners");
+/**
+ * Sorted by name - see the collection's `sort` - with the project coordinator first, in a row of its own, so that it
+ * stands out.
+ */
+const partners = (await Astro.locals.content.list("partners")).toSorted(
+	(a, b) => Number(b.data.coordinator === true) - Number(a.data.coordinator === true),
+);
 
 /**
  * Logos are contained in a box which is at most 3.5rem high, see `h-14` - so their width follows from their aspect
@@ -35,7 +40,7 @@ const cellClass = "flex h-32 w-full items-center justify-center p-6";
 	/>
 	<ul class="grid grid-cols-2 border-t border-l border-border-strong sm:grid-cols-3 lg:grid-cols-4" role="list">
 		{partners.map((partner) => {
-			const { name, shortName, logo, url } = partner.data;
+			const { name, shortName, logo, url, coordinator } = partner.data;
 			const label = shortName != null ? `${name} (${shortName})` : name;
 
 			/** The logo identifies the partner - its alternative text is the full name, and so the link's name. */
@@ -50,7 +55,12 @@ const cellClass = "flex h-32 w-full items-center justify-center p-6";
 			);
 
 			return (
-				<li class="border-r border-b border-border-strong">
+				<li class:list={["border-r border-b border-border-strong", coordinator === true && "relative col-span-full"]}>
+					{coordinator === true && (
+						<p class="pointer-events-none absolute top-4 left-6 mono-label text-foreground-muted">
+							Project coordinator
+						</p>
+					)}
 					{url != null ? (
 						<a href={url} class:list={[cellClass, "transition-colors hover:bg-background-hover"]}>
 							{image}
