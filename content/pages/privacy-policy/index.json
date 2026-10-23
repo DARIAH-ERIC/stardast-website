@@ -25,10 +25,57 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "[To be completed: name and address of the controller, and a contact email address]",
+									"text": "DARIAH ERIC publishes this website on behalf of the STARDAST consortium."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "DARIAH ERIC"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "c/o CNRS – UAR3598 – Huma-Num"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "54 boulevard Raspail"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "75006 Paris"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "France"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "info@stardast.eu",
 									"marks": [
 										{
-											"type": "bold"
+											"type": "link",
+											"attrs": {
+												"href": "mailto:info@stardast.eu"
+											}
 										}
 									]
 								}
@@ -39,7 +86,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "[To be completed: contact details of the data protection officer, if there is one]",
+									"text": "[To be completed: contact details of DARIAH ERIC's data protection officer or data protection contact - to be confirmed with DARIAH]",
 									"marks": [
 										{
 											"type": "bold"
@@ -385,14 +432,50 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "You also have the right to lodge a complaint with a data protection supervisory authority. "
+									"text": "You also have the right to lodge a complaint with a data protection supervisory authority, in particular in the EU member state where you live or work. The authority responsible for DARIAH ERIC is the French data protection authority:"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Commission Nationale de l'Informatique et des Libertés (CNIL)"
+								},
+								{
+									"type": "hardBreak"
 								},
 								{
 									"type": "text",
-									"text": "[To be completed: name and contact details of the competent supervisory authority]",
+									"text": "3 place de Fontenoy, TSA 80715"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "75334 Paris Cedex 07"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "France"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "www.cnil.fr",
 									"marks": [
 										{
-											"type": "bold"
+											"type": "link",
+											"attrs": {
+												"href": "https://www.cnil.fr"
+											}
 										}
 									]
 								}

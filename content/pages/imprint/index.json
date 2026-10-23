@@ -1,12 +1,13 @@
 {
 	"title": "Imprint",
 	"heading": "Who is responsible for this website",
-	"summary": "Placeholder content for the imprint.",
+	"summary": "Who publishes this website, and how to reach us.",
 	"sections": [
 		{
 			"type": "text",
 			"data": {
 				"layout": "stacked",
+				"title": "Publisher",
 				"content": {
 					"type": "doc",
 					"content": [
@@ -15,7 +16,239 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "This is placeholder content for the imprint."
+									"text": "This website is published by DARIAH ERIC on behalf of the STARDAST consortium."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "DARIAH ERIC"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "c/o CNRS – UAR3598 – Huma-Num"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "54 boulevard Raspail"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "75006 Paris"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "France"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "DARIAH ERIC (Digital Research Infrastructure for the Arts and Humanities) is a European Research Infrastructure Consortium, established under Council Regulation (EC) No 723/2009 by Commission Implementing Decision 2014/526/EU. Its statutory seat is in Paris, France."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Represented by: "
+								},
+								{
+									"type": "text",
+									"text": "[To be completed: name and role of DARIAH ERIC's legal representative - to be confirmed with DARIAH]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Contact",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Email: "
+								},
+								{
+									"type": "text",
+									"text": "info@stardast.eu",
+									"marks": [
+										{
+											"type": "link",
+											"attrs": {
+												"href": "mailto:info@stardast.eu"
+											}
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Responsible for the content",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "[To be completed: name and role of the person responsible for the content (directeur de la publication), at the address above]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "The project",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "STARDAST - STewardship and Recognition for DAta Science Talent - is a Horizon Europe project, funded by the European Union under Grant Agreement No 101268773. It is coordinated by the European Molecular Biology Laboratory (EMBL), Meyerhofstraße 1, 69117 Heidelberg, Germany."
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Hosting",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "This website is hosted by the Austrian Centre for Digital Humanities and Cultural Heritage (ACDH-CH) of the Austrian Academy of Sciences, Bäckerstraße 13, 1010 Vienna, Austria. "
+								},
+								{
+									"type": "text",
+									"text": "[To be completed: confirm the address with ACDH-CH]",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Links to other websites",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "This website links to the websites of our partners and others. We have no influence on their content, and are not responsible for it. If we learn that a linked page contains unlawful content, we will remove the link."
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Source code",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "The source code of this website is published under the MIT licence at "
+								},
+								{
+									"type": "text",
+									"text": "github.com/DARIAH-ERIC/stardast-website",
+									"marks": [
+										{
+											"type": "link",
+											"attrs": {
+												"href": "https://github.com/DARIAH-ERIC/stardast-website"
+											}
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": "."
 								}
 							]
 						}
