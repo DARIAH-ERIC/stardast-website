@@ -68,7 +68,6 @@ export const resourceCategories = [
 /** Which listing on the news page a post appears in - `listLabel` names the listing, `label` a post in it. */
 export const newsCategories = [
 	{ value: "blog", label: "Blog", listLabel: "Blog" },
-	{ value: "publication", label: "Publication", listLabel: "Publications" },
 	{ value: "pressAndMedia", label: "Press & Media", listLabel: "Press & Media" },
 ] as const;
 
