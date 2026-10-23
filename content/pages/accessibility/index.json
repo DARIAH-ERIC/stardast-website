@@ -16,25 +16,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "[To be completed: name of the responsible organisation]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
-								},
-								{
-									"type": "text",
-									"text": " is committed to making this website accessible to everyone, including people with disabilities. "
-								},
-								{
-									"type": "text",
-									"text": "[To be completed: the applicable law, if any - e.g. the national transposition of Directive (EU) 2016/2102]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
+									"text": "The STARDAST project is committed to making this website accessible to everyone, including people with disabilities. We publish this statement voluntarily, following the model accessibility statement of the EU Web Accessibility Directive (Directive (EU) 2016/2102)."
 								}
 							]
 						},
@@ -43,20 +25,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "This statement applies to the public website at "
-								},
-								{
-									"type": "text",
-									"text": "[To be completed: production address]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
-								},
-								{
-									"type": "text",
-									"text": ". It does not cover the editing interface used by the project team."
+									"text": "This statement applies to the public pages of this website. It does not cover the editing interface used by the project team."
 								}
 							]
 						}
@@ -77,16 +46,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "We aim to meet the Web Content Accessibility Guidelines (WCAG) 2.2 at level AA. "
-								},
-								{
-									"type": "text",
-									"text": "[To be completed: compliance status - fully or partially compliant - once the manual review has been carried out]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
+									"text": "We aim to meet the Web Content Accessibility Guidelines (WCAG) 2.2 at level AA. To the best of our knowledge, this website meets that standard: the checks described below did not find any failures. However, the website has not yet been tested by people who use assistive technologies such as screen readers, so there may be problems we have not found."
 								}
 							]
 						}
@@ -194,12 +154,16 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "[To be completed: content which is not yet accessible, if any, as found in the manual review]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
+									"text": "We are not aware of any content on this website which is not accessible."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Some of the resources and publications we link to are hosted on Zenodo and on other websites which we do not control. Documents published there, such as PDF files, may not be fully accessible."
 								}
 							]
 						},
@@ -229,29 +193,100 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "This statement was prepared on "
-								},
+									"text": "This statement was prepared on 23 October 2026, based on a self-assessment by the project team."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
 								{
 									"type": "text",
-									"text": "[To be completed: date]",
-									"marks": [
+									"text": "All pages were tested automatically with axe-core against WCAG 2.2 level AA, at desktop and mobile screen sizes. In addition, we checked in the browser that:"
+								}
+							]
+						},
+						{
+							"type": "bulletList",
+							"content": [
+								{
+									"type": "listItem",
+									"content": [
 										{
-											"type": "bold"
+											"type": "paragraph",
+											"content": [
+												{
+													"type": "text",
+													"text": "every page can be used with a keyboard alone, with a visible focus indicator which is never hidden by other content"
+												}
+											]
 										}
 									]
 								},
 								{
-									"type": "text",
-									"text": ", based on a self-assessment. On 16 October 2026, a sample of pages was tested automatically with axe-core against WCAG 2.2 level AA, without finding any issues. "
-								},
-								{
-									"type": "text",
-									"text": "[To be completed: the manual review, e.g. with a keyboard and a screen reader]",
-									"marks": [
+									"type": "listItem",
+									"content": [
 										{
-											"type": "bold"
+											"type": "paragraph",
+											"content": [
+												{
+													"type": "text",
+													"text": "the menu, the search and the mailing list form work with a keyboard"
+												}
+											]
 										}
 									]
+								},
+								{
+									"type": "listItem",
+									"content": [
+										{
+											"type": "paragraph",
+											"content": [
+												{
+													"type": "text",
+													"text": "pages can be read without scrolling sideways at a width of 320 pixels, which corresponds to 400% zoom"
+												}
+											]
+										}
+									]
+								},
+								{
+									"type": "listItem",
+									"content": [
+										{
+											"type": "paragraph",
+											"content": [
+												{
+													"type": "text",
+													"text": "no text is cut off when the text size is doubled, or when line, letter and word spacing are increased"
+												}
+											]
+										}
+									]
+								},
+								{
+									"type": "listItem",
+									"content": [
+										{
+											"type": "paragraph",
+											"content": [
+												{
+													"type": "text",
+													"text": "page titles, headings, landmarks, and the names of links, buttons, images and form fields - the structure that screen readers rely on - are complete and meaningful"
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "None of these checks found a failure."
 								}
 							]
 						}
@@ -276,63 +311,28 @@
 								},
 								{
 									"type": "text",
-									"text": "[To be completed: contact email address]",
+									"text": "info@stardast.eu",
 									"marks": [
 										{
-											"type": "bold"
+											"type": "link",
+											"attrs": {
+												"href": "mailto:info@stardast.eu"
+											}
 										}
 									]
 								},
 								{
 									"type": "text",
-									"text": ". We aim to respond within "
-								},
-								{
-									"type": "text",
-									"text": "[To be completed: response time, e.g. two weeks]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
-								},
-								{
-									"type": "text",
-									"text": "."
+									"text": ". Please tell us the address of the page and describe the problem. We aim to respond within two weeks."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Enforcement procedure",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
 						{
 							"type": "paragraph",
 							"content": [
 								{
 									"type": "text",
-									"text": "If you are not satisfied with our response, you can contact "
-								},
-								{
-									"type": "text",
-									"text": "[To be completed: the competent enforcement body, if any]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
-								},
-								{
-									"type": "text",
-									"text": "."
+									"text": "If you are not satisfied with our response, please write to us again, and we will pass your request on to the project coordinator."
 								}
 							]
 						}
