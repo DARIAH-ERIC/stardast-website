@@ -1,13 +1,13 @@
 ---
+import { type SearchType, searchIndex, searchTypes } from "#/src/cms/search.ts";
 import { buttonStyles } from "#/src/components/button-styles.ts";
 import { inputStyles } from "#/src/components/input-styles.ts";
 import PageHeader from "#/src/components/page-header.astro";
 import Pagination from "#/src/components/pagination.astro";
-import { type SearchType, searchIndex, searchTypes } from "#/src/cms/search.ts";
 import PageLayout from "#/src/layouts/page-layout.astro";
 import type { PageTracking } from "#/src/lib/analytics/matomo-tracking.ts";
-import { parsePageParam } from "#/src/lib/pagination.ts";
 import type { SearchResults } from "#/src/lib/cms/search/types.ts";
+import { parsePageParam } from "#/src/lib/pagination.ts";
 
 const perPage = 10;
 const maxQueryLength = 200;
@@ -95,7 +95,9 @@ const tracking: PageTracking =
 	<PageHeader title="Search" heading="Search our website" />
 	<div class="content-container section-spacing">
 		<form role="search" action="/search" method="get" class="flex max-w-2xl flex-wrap gap-3">
-			<label for="search-query" class="sr-only">Search the site</label>
+			<label for="search-query" class="sr-only">
+				Search the site
+			</label>
 			<input
 				id="search-query"
 				type="search"
@@ -106,96 +108,89 @@ const tracking: PageTracking =
 				autocomplete="off"
 				class={inputStyles({ class: "min-w-0 flex-1" })}
 			/>
-			<button type="submit" class={buttonStyles()}>Search</button>
+			<button type="submit" class={buttonStyles()}>
+				Search
+			</button>
 		</form>
 
-		{
-			hasFailed && (
-				<p role="alert" class="mt-8 border border-danger p-4 text-danger">
-					Sorry, search is not available right now. Please try again later.
+		{hasFailed && (
+			<p role="alert" class="mt-8 border border-danger p-4 text-danger">
+				Sorry, search is not available right now. Please try again later.
+			</p>
+		)}
+
+		{results != null && (
+			<>
+				{/* Announced on page load, so that screen reader users hear the outcome of their search. */}
+				<p role="status" class="mt-8 text-foreground-muted">
+					{results.total === 0
+						? `No ${type != null ? `${type.label.toLowerCase()} ` : ""}results for "${query}".`
+						: `${String(results.total)} ${pluralize(results.total)} for "${query}"${type != null ? ` in ${type.label.toLowerCase()}` : ""}.`}
 				</p>
-			)
-		}
 
-		{
-			results != null && (
-				<>
-					{/* Announced on page load, so that screen reader users hear the outcome of their search. */}
-					<p role="status" class="mt-8 text-foreground-muted">
-						{results.total === 0
-							? `No ${type != null ? `${type.label.toLowerCase()} ` : ""}results for "${query}".`
-							: `${String(results.total)} ${pluralize(results.total)} for "${query}"${type != null ? ` in ${type.label.toLowerCase()}` : ""}.`}
-					</p>
+				{allCount > 0 && (
+					<nav aria-label="Result types" class="mt-6 border-b border-border-strong pb-3">
+						<ul class="flex flex-wrap gap-1" role="list">
+							{filters.map((filter) => {
+								const isCurrent = filter.value === type?.value;
 
-					{allCount > 0 && (
-						<nav aria-label="Result types" class="mt-6 border-b border-border-strong pb-3">
-							<ul class="flex flex-wrap gap-1" role="list">
-								{filters.map((filter) => {
-									const isCurrent = filter.value === type?.value;
-
-									return (
-										<li>
-											<a
-												href={getHref({ type: filter.value })}
-												aria-current={isCurrent ? "page" : undefined}
-												class:list={[
-													"inline-block px-3 py-2.5 mono-label transition-colors",
-													isCurrent
-														? "bg-foreground-strong text-background"
-														: "text-foreground-strong hover:bg-background-hover",
-												]}
-											>
-												{filter.label}{" "}
-												<span class="opacity-70">({filter.count})</span>
-											</a>
-										</li>
-									);
-								})}
-							</ul>
-						</nav>
-					)}
-
-					{results.hits.length > 0 && (
-						<ol class="mt-8 flex max-w-3xl flex-col" role="list">
-							{results.hits.map((hit) => {
 								return (
-									<li class="border-b border-border">
-										<article class="flex flex-col gap-1.5 py-5">
-											<p class="mono-label text-foreground-muted">
-												{typeLabels[hit.document.type] ?? hit.document.type}
-											</p>
-											<h2 class="text-title text-balance">
-												<a href={hit.document.url} class="text-foreground-strong hover:underline underline-offset-4">
-													{hit.document.title}
-												</a>
-											</h2>
-											{hit.snippet.length > 0 && (
-												<p class="text-pretty text-foreground-muted">
-													{hit.snippet.map((segment) =>
-														segment.highlight ? (
-															<mark class="bg-background-highlight px-0.5 text-foreground-strong">
-																{segment.text}
-															</mark>
-														) : (
-															segment.text
-														),
-													)}
-												</p>
-											)}
-										</article>
+									<li>
+										<a
+											href={getHref({ type: filter.value })}
+											aria-current={isCurrent ? "page" : undefined}
+											class:list={[
+												"inline-block px-3 py-2.5 mono-label transition-colors",
+												isCurrent
+													? "bg-foreground-strong text-background"
+													: "text-foreground-strong hover:bg-background-hover",
+											]}
+										>
+											{filter.label} <span class="opacity-70">({filter.count})</span>
+										</a>
 									</li>
 								);
 							})}
-						</ol>
-					)}
+						</ul>
+					</nav>
+				)}
 
-					<Pagination
-						page={page}
-						pageCount={pageCount}
-						getHref={(number) => getHref({ type: type?.value, page: number })}
-					/>
-				</>
-			)
-		}
+				{results.hits.length > 0 && (
+					<ol class="mt-8 flex max-w-3xl flex-col" role="list">
+						{results.hits.map((hit) => {
+							return (
+								<li class="border-b border-border">
+									<article class="flex flex-col gap-1.5 py-5">
+										<p class="mono-label text-foreground-muted">{typeLabels[hit.document.type] ?? hit.document.type}</p>
+										<h2 class="text-title text-balance">
+											<a href={hit.document.url} class="text-foreground-strong hover:underline underline-offset-4">
+												{hit.document.title}
+											</a>
+										</h2>
+										{hit.snippet.length > 0 && (
+											<p class="text-pretty text-foreground-muted">
+												{hit.snippet.map((segment) =>
+													segment.highlight ? (
+														<mark class="bg-background-highlight px-0.5 text-foreground-strong">{segment.text}</mark>
+													) : (
+														segment.text
+													),
+												)}
+											</p>
+										)}
+									</article>
+								</li>
+							);
+						})}
+					</ol>
+				)}
+
+				<Pagination
+					page={page}
+					pageCount={pageCount}
+					getHref={(number) => getHref({ type: type?.value, page: number })}
+				/>
+			</>
+		)}
 	</div>
 </PageLayout>

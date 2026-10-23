@@ -13,16 +13,14 @@ const text = caption ?? media?.data.caption;
 const credit = media?.data.credit;
 ---
 
-{
-	media != null && (
-		<figure>
-			<CmsImage id={image} sizes="(min-width: 65ch) 65ch, 100vw" class="border border-border" />
-			{(text != null || credit != null) && (
-				<figcaption>
-					{text}
-					{credit != null && <span class="block text-xs">{credit}</span>}
-				</figcaption>
-			)}
-		</figure>
-	)
-}
+{media != null && (
+	<figure>
+		<CmsImage id={image} sizes="(min-width: 65ch) 65ch, 100vw" class="border border-border" />
+		{(text != null || credit != null) && (
+			<figcaption>
+				{text}
+				{credit != null && <span class="block text-xs">{credit}</span>}
+			</figcaption>
+		)}
+	</figure>
+)}

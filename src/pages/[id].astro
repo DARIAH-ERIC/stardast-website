@@ -17,7 +17,9 @@ if (entry == null) {
 
 /** A page linked from a navigation menu is shown below the menu, e.g. Home › About › Objectives. */
 const href = `/${entry.id}`;
-const menu = navigation?.main.find((item) => item.type === "menu" && item.data.links.some((link) => link.href === href));
+const menu = navigation?.main.find(
+	(item) => item.type === "menu" && item.data.links.some((link) => link.href === href),
+);
 const parents: Array<Breadcrumb> = menu?.type === "menu" ? [{ label: menu.data.label }] : [];
 
 /** Every section which can be linked to, named by its eyebrow - or its title, when it has none. */

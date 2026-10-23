@@ -1,9 +1,9 @@
 ---
+import { eventInvolvements } from "#/src/cms/config.ts";
 import EventCard from "#/src/components/event-card.astro";
 import PageHeader from "#/src/components/page-header.astro";
 import Pagination from "#/src/components/pagination.astro";
 import Sections from "#/src/components/sections/sections.astro";
-import { eventInvolvements } from "#/src/cms/config.ts";
 import PageLayout from "#/src/layouts/page-layout.astro";
 import { limitMaxAge } from "#/src/lib/cms/astro.ts";
 import { getSecondsUntilTomorrow, getToday, isUpcoming } from "#/src/lib/events.ts";
@@ -95,64 +95,37 @@ const isFirstPage = pastEvents.page === 1;
 	<div class="content-container section-spacing">
 		<nav aria-label="Event types" class="border-b border-border-strong pb-3">
 			<ul class="flex flex-wrap gap-1" role="list">
-				{
-					filters.map((filter) => {
-						const isCurrent = filter.value === involvement?.value;
+				{filters.map((filter) => {
+					const isCurrent = filter.value === involvement?.value;
 
-						return (
-							<li>
-								<a
-									href={getHref({ involvement: filter.value })}
-									aria-current={isCurrent ? "page" : undefined}
-									class:list={[
-										"inline-block px-3 py-2.5 mono-label transition-colors",
-										isCurrent
-											? "bg-foreground-strong text-background"
-											: "text-foreground-strong hover:bg-background-hover",
-									]}
-								>
-									{filter.label}
-								</a>
-							</li>
-						);
-					})
-				}
+					return (
+						<li>
+							<a
+								href={getHref({ involvement: filter.value })}
+								aria-current={isCurrent ? "page" : undefined}
+								class:list={[
+									"inline-block px-3 py-2.5 mono-label transition-colors",
+									isCurrent
+										? "bg-foreground-strong text-background"
+										: "text-foreground-strong hover:bg-background-hover",
+								]}
+							>
+								{filter.label}
+							</a>
+						</li>
+					);
+				})}
 			</ul>
 		</nav>
 
-		{
-			isFirstPage && (
-				<section aria-labelledby="upcoming-events" class="mt-12">
-					<h2 id="upcoming-events" class="text-headline text-foreground-strong">
-						Upcoming events
-					</h2>
-					{upcomingEvents.length > 0 ? (
-						<ul class="mt-6 grid border-t border-l border-border-strong sm:grid-cols-2 lg:grid-cols-3" role="list">
-							{upcomingEvents.map((entry) => {
-								return (
-									<li class="border-r border-b border-border-strong">
-										<EventCard id={entry.id} data={entry.data} headingLevel={3} />
-									</li>
-								);
-							})}
-						</ul>
-					) : (
-						<p class="mt-6 border border-dashed border-border-strong p-8 mono-label text-foreground-muted">
-							Coming soon
-						</p>
-					)}
-				</section>
-			)
-		}
-
-		{
-			pastEvents.items.length > 0 && (
-				<section aria-labelledby="past-events" class="mt-16">
-					<h2 id="past-events" class="text-headline text-foreground-strong">
-						Past events
-					</h2>
+		{isFirstPage && (
+			<section aria-labelledby="upcoming-events" class="mt-12">
+				<h2 id="upcoming-events" class="text-headline text-foreground-strong">
+					Upcoming events
+				</h2>
+				{upcomingEvents.length > 0 ? (
 					<ul class="mt-6 grid border-t border-l border-border-strong sm:grid-cols-2 lg:grid-cols-3" role="list">
-						{pastEvents.items.map((entry) => {
+						{upcomingEvents.map((entry) => {
 							return (
 								<li class="border-r border-b border-border-strong">
 									<EventCard id={entry.id} data={entry.data} headingLevel={3} />
@@ -160,14 +133,33 @@ const isFirstPage = pastEvents.page === 1;
 							);
 						})}
 					</ul>
-					<Pagination
-						page={pastEvents.page}
-						pageCount={pastEvents.pageCount}
-						getHref={(number) => getHref({ involvement: involvement?.value, page: number })}
-					/>
-				</section>
-			)
-		}
+				) : (
+					<p class="mt-6 border border-dashed border-border-strong p-8 mono-label text-foreground-muted">Coming soon</p>
+				)}
+			</section>
+		)}
+
+		{pastEvents.items.length > 0 && (
+			<section aria-labelledby="past-events" class="mt-16">
+				<h2 id="past-events" class="text-headline text-foreground-strong">
+					Past events
+				</h2>
+				<ul class="mt-6 grid border-t border-l border-border-strong sm:grid-cols-2 lg:grid-cols-3" role="list">
+					{pastEvents.items.map((entry) => {
+						return (
+							<li class="border-r border-b border-border-strong">
+								<EventCard id={entry.id} data={entry.data} headingLevel={3} />
+							</li>
+						);
+					})}
+				</ul>
+				<Pagination
+					page={pastEvents.page}
+					pageCount={pastEvents.pageCount}
+					getHref={(number) => getHref({ involvement: involvement?.value, page: number })}
+				/>
+			</section>
+		)}
 	</div>
 	<Sections value={page.sections} />
 </PageLayout>

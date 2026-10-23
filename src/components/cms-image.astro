@@ -33,19 +33,17 @@ const entry = await Astro.locals.content.entry("media", id);
 const data = entry?.data;
 ---
 
-{
-	data != null && data.contentType.startsWith("image/") && (
-		<img
-			src={getImageUrl(id, data, { width: 960 })}
-			srcset={getImageSrcSet(id, data, widths)}
-			sizes={typeof sizes === "function" ? sizes(data) : sizes}
-			alt={alt ?? data.alt}
-			width={data.width}
-			height={data.height}
-			loading={loading}
-			fetchpriority={fetchpriority}
-			decoding="async"
-			class={className}
-		/>
-	)
-}
+{data != null && data.contentType.startsWith("image/") && (
+	<img
+		src={getImageUrl(id, data, { width: 960 })}
+		srcset={getImageSrcSet(id, data, widths)}
+		sizes={typeof sizes === "function" ? sizes(data) : sizes}
+		alt={alt ?? data.alt}
+		width={data.width}
+		height={data.height}
+		loading={loading}
+		fetchpriority={fetchpriority}
+		decoding="async"
+		class={className}
+	/>
+)}

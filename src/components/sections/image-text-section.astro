@@ -1,7 +1,7 @@
 ---
+import type { SectionData } from "#/src/cms/config.ts";
 import CmsImage from "#/src/components/cms-image.astro";
 import RichText from "#/src/components/rich-text/rich-text.astro";
-import type { SectionData } from "#/src/cms/config.ts";
 
 export type Props = SectionData<"imageText">;
 
@@ -10,14 +10,12 @@ const { anchor, image, imagePosition, eyebrow, title, content } = Astro.props;
 
 <section id={anchor} class="content-container grid items-center gap-8 section-spacing md:grid-cols-2 lg:gap-12">
 	<div class:list={["flex flex-col gap-4", imagePosition === "start" && "md:order-last"]}>
-		{
-			(eyebrow != null || title != null) && (
-				<hgroup class="flex flex-col items-start gap-4">
-					{eyebrow != null && <p class="label-marker mono-label text-foreground-strong">{eyebrow}</p>}
-					{title != null && <h2 class="text-headline text-balance text-foreground-strong">{title}</h2>}
-				</hgroup>
-			)
-		}
+		{(eyebrow != null || title != null) && (
+			<hgroup class="flex flex-col items-start gap-4">
+				{eyebrow != null && <p class="label-marker mono-label text-foreground-strong">{eyebrow}</p>}
+				{title != null && <h2 class="text-headline text-balance text-foreground-strong">{title}</h2>}
+			</hgroup>
+		)}
 		<div class="prose">
 			<RichText value={content} />
 		</div>

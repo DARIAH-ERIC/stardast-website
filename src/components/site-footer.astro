@@ -1,6 +1,6 @@
 ---
-import { socialPlatforms } from "#/src/cms/config.ts";
 import logo from "#/src/assets/images/logo-stardast-eosc-horizontal-color-black.svg";
+import { socialPlatforms } from "#/src/cms/config.ts";
 import Icon from "#/src/components/icon.astro";
 import { funding, siteName } from "#/src/config/project.ts";
 
@@ -29,7 +29,6 @@ const socialLinks = (site?.socialLinks ?? []).map((link) => {
 
 	return { href: link.url, icon: link.platform, label: `${siteName} on ${platform?.label ?? link.platform}` };
 });
-
 ---
 
 <footer class="bg-background text-sm text-foreground">
@@ -47,59 +46,56 @@ const socialLinks = (site?.socialLinks ?? []).map((link) => {
 						class="h-9 w-auto"
 					/>
 				</a>
-				{
-					contactEmail != null && (
-						<p class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-							<span class="mono-label text-foreground-muted">Contact</span>
-							<a
-								href={`mailto:${contactEmail}`}
-								class="text-foreground-strong underline decoration-1 underline-offset-4 transition-colors hover:text-primary-hover"
-							>
-								{contactEmail}
-							</a>
-						</p>
-					)
-				}
+				{contactEmail != null && (
+					<p class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+						<span class="mono-label text-foreground-muted">Contact</span>
+						<a
+							href={`mailto:${contactEmail}`}
+							class="text-foreground-strong underline decoration-1 underline-offset-4 transition-colors hover:text-primary-hover"
+						>
+							{contactEmail}
+						</a>
+					</p>
+				)}
 			</div>
 
 			<div class="flex flex-wrap items-center gap-x-8 gap-y-4">
-				{
-					mainNavigation.length > 0 && (
-						<nav aria-label="Footer">
-							<ul class="flex flex-wrap gap-x-6 gap-y-3" role="list">
-								{mainNavigation.map((link) => {
-									return (
-										<li>
-											<a href={link.href} class="mono-label text-foreground-strong hover:text-primary-hover hover:underline underline-offset-4">
-												{link.label}
-											</a>
-										</li>
-									);
-								})}
-							</ul>
-						</nav>
-					)
-				}
-				{
-					socialLinks.length > 0 && (
-						<ul class="flex gap-3" role="list">
-							{socialLinks.map((link) => {
+				{mainNavigation.length > 0 && (
+					<nav aria-label="Footer">
+						<ul class="flex flex-wrap gap-x-6 gap-y-3" role="list">
+							{mainNavigation.map((link) => {
 								return (
 									<li>
 										<a
 											href={link.href}
-											rel="me"
-											class="inline-flex size-10 items-center justify-center border border-foreground-strong text-foreground-strong transition-colors hover:bg-foreground-strong hover:text-background"
+											class="mono-label text-foreground-strong hover:text-primary-hover hover:underline underline-offset-4"
 										>
-											<Icon name={link.icon} class="size-4" />
-											<span class="sr-only">{link.label}</span>
+											{link.label}
 										</a>
 									</li>
 								);
 							})}
 						</ul>
-					)
-				}
+					</nav>
+				)}
+				{socialLinks.length > 0 && (
+					<ul class="flex gap-3" role="list">
+						{socialLinks.map((link) => {
+							return (
+								<li>
+									<a
+										href={link.href}
+										rel="me"
+										class="inline-flex size-10 items-center justify-center border border-foreground-strong text-foreground-strong transition-colors hover:bg-foreground-strong hover:text-background"
+									>
+										<Icon name={link.icon} class="size-4" />
+										<span class="sr-only">{link.label}</span>
+									</a>
+								</li>
+							);
+						})}
+					</ul>
+				)}
 			</div>
 		</div>
 
@@ -119,23 +115,21 @@ const socialLinks = (site?.socialLinks ?? []).map((link) => {
 		<div class="border-t border-border pt-6">
 			<div class="flex flex-col gap-4 mono-label text-foreground-muted sm:flex-row sm:items-center sm:justify-between">
 				<p>&copy; {year} STARDAST</p>
-				{
-					legalNavigation.length > 0 && (
-						<nav aria-label="Legal">
-							<ul class="flex flex-wrap gap-x-6 gap-y-2" role="list">
-								{legalNavigation.map((link) => {
-									return (
-										<li>
-											<a href={link.href} class="hover:text-foreground-strong hover:underline underline-offset-4">
-												{link.label}
-											</a>
-										</li>
-									);
-								})}
-							</ul>
-						</nav>
-					)
-				}
+				{legalNavigation.length > 0 && (
+					<nav aria-label="Legal">
+						<ul class="flex flex-wrap gap-x-6 gap-y-2" role="list">
+							{legalNavigation.map((link) => {
+								return (
+									<li>
+										<a href={link.href} class="hover:text-foreground-strong hover:underline underline-offset-4">
+											{link.label}
+										</a>
+									</li>
+								);
+							})}
+						</ul>
+					</nav>
+				)}
 			</div>
 		</div>
 	</div>

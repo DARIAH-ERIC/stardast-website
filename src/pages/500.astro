@@ -1,10 +1,10 @@
 ---
+import "#/src/styles/index.css";
+
 import { Font } from "astro:assets";
 
 import { buttonStyles } from "#/src/components/button-styles.ts";
 import { locale, siteName } from "#/src/config/project.ts";
-
-import "#/src/styles/index.css";
 
 /**
  * Rendered for unhandled errors. Deliberately without the site layout, which reads the cms - whose failure may be the
@@ -37,10 +37,10 @@ import "#/src/styles/index.css";
 				/>
 			</a>
 			<h1 class="text-headline text-balance text-foreground-strong">Something went wrong</h1>
-			<p class="max-w-[60ch] text-pretty">
-				Sorry, this page could not be loaded. Please try again in a moment.
-			</p>
-			<a href="/" class={buttonStyles()}>Go to the home page</a>
+			<p class="max-w-[60ch] text-pretty">Sorry, this page could not be loaded. Please try again in a moment.</p>
+			<a href="/" class={buttonStyles()}>
+				Go to the home page
+			</a>
 		</main>
 	</body>
 </html>

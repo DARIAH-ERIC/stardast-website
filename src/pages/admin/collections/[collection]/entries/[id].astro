@@ -1,11 +1,12 @@
 ---
-import { EntryEditor } from "#/src/components/admin/entry-editor.tsx";
+import * as v from "valibot";
+
 import { getCollection, loadReferenceOptions } from "#/src/cms/admin.ts";
 import { drafts } from "#/src/cms/api.ts";
 import { mediaCollectionName } from "#/src/cms/config.ts";
+import { EntryEditor } from "#/src/components/admin/entry-editor.tsx";
 import AdminLayout from "#/src/layouts/admin-layout.astro";
 import { EntryIdSchema } from "#/src/lib/cms/schema/index.ts";
-import * as v from "valibot";
 
 const name = Astro.params.collection!;
 const id = Astro.params.id!;

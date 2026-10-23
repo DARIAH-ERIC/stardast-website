@@ -1,14 +1,13 @@
 ---
+import { ExternalLink } from "lucide-react";
 import * as v from "valibot";
 
-import { EntryEditor } from "#/src/components/admin/entry-editor.tsx";
 import { getCollection, getEntryLabel } from "#/src/cms/admin.ts";
 import { drafts } from "#/src/cms/api.ts";
 import { type MediaEntryData, config, mediaCollectionName } from "#/src/cms/config.ts";
 import { getImageUrl, getMedia, getMediaUrl } from "#/src/cms/media.ts";
 import { storage } from "#/src/cms/server.ts";
-import { ExternalLink } from "lucide-react";
-
+import { EntryEditor } from "#/src/components/admin/entry-editor.tsx";
 import { Badge } from "#/src/components/admin/ui/badge.tsx";
 import { buttonStyles } from "#/src/components/admin/ui/button.tsx";
 import { Card } from "#/src/components/admin/ui/card.tsx";
@@ -57,42 +56,45 @@ const fileUrl = getMediaUrl(id, data);
 
 <AdminLayout title={data.filename}>
 	<Card className="mb-8 flex-col gap-6 px-6 sm:flex-row">
-		{
-			data.contentType.startsWith("image/") ? (
-				<img
-					src={getImageUrl(id, data, { width: 640 })}
-					alt=""
-					class="max-h-80 w-full rounded-md bg-muted object-contain sm:w-80"
-				/>
-			) : (
-				<span class="flex h-40 w-full items-center justify-center rounded-md bg-muted text-muted-fg uppercase sm:w-80">
-					{data.contentType.split("/")[1]}
-				</span>
-			)
-		}
+		{data.contentType.startsWith("image/") ? (
+			<img
+				src={getImageUrl(id, data, { width: 640 })}
+				alt=""
+				class="max-h-80 w-full rounded-md bg-muted object-contain sm:w-80"
+			/>
+		) : (
+			<span class="flex h-40 w-full items-center justify-center rounded-md bg-muted text-muted-fg uppercase sm:w-80">
+				{data.contentType.split("/")[1]}
+			</span>
+		)}
 		<div class="flex min-w-0 flex-col gap-4">
-			<a href={fileUrl} target="_blank" rel="noreferrer" class={buttonStyles({ intent: "outline", size: "sm", className: "w-fit" })}>
+			<a
+				href={fileUrl}
+				target="_blank"
+				rel="noreferrer"
+				class={buttonStyles({ intent: "outline", size: "sm", className: "w-fit" })}
+			>
 				<ExternalLink aria-hidden="true" />
 				Open original file
 			</a>
 			<section aria-labelledby="usages-heading" class="flex flex-col gap-2">
-				<Heading level={3} id="usages-heading">Used in</Heading>
-				{
-					usages.length === 0 ? (
-						<Text>Not used anywhere yet - it can be deleted.</Text>
-					) : (
-						<ul class="flex flex-col gap-1 text-sm/6" role="list">
-							{usages.map((usage) => {
-								return (
-									<li class="flex flex-wrap items-center gap-2">
-										<TextLink href={usage.href}>{usage.label}</TextLink>
-										{usage.isDraft && <Badge intent="secondary">Draft</Badge>}
-									</li>
-								);
-							})}
-						</ul>
-					)
-				}
+				<Heading level={3} id="usages-heading">
+					Used in
+				</Heading>
+				{usages.length === 0 ? (
+					<Text>Not used anywhere yet - it can be deleted.</Text>
+				) : (
+					<ul class="flex flex-col gap-1 text-sm/6" role="list">
+						{usages.map((usage) => {
+							return (
+								<li class="flex flex-wrap items-center gap-2">
+									<TextLink href={usage.href}>{usage.label}</TextLink>
+									{usage.isDraft && <Badge intent="secondary">Draft</Badge>}
+								</li>
+							);
+						})}
+					</ul>
+				)}
 			</section>
 		</div>
 	</Card>

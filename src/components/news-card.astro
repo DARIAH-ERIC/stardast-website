@@ -1,6 +1,6 @@
 ---
-import CoverImage from "#/src/components/cover-image.astro";
 import { type NewsEntryData, newsCategories } from "#/src/cms/config.ts";
+import CoverImage from "#/src/components/cover-image.astro";
 import { formatDate } from "#/src/lib/format-date.ts";
 
 export interface Props {
@@ -23,17 +23,17 @@ const category = newsCategories.find((option) => option.value === data.category)
 	<div class="flex flex-col gap-1.5 p-5 sm:p-6">
 		<Heading class="order-2 text-title text-balance text-foreground-strong">
 			{/* Stretched over the whole card, so that its text stays selectable rather than being a link label. */}
-			<a href={`/news/${id}`} class="after:absolute after:inset-0 hover:underline underline-offset-4">{data.title}</a>
+			<a href={`/news/${id}`} class="after:absolute after:inset-0 hover:underline underline-offset-4">
+				{data.title}
+			</a>
 		</Heading>
 		{/* Shown above the title, but read after it. */}
 		<div class="order-1 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-			{
-				category != null && (
-					<span class="border border-border-strong px-1.5 py-0.5 mono-label text-foreground-strong">
-						{category.label}
-					</span>
-				)
-			}
+			{category != null && (
+				<span class="border border-border-strong px-1.5 py-0.5 mono-label text-foreground-strong">
+					{category.label}
+				</span>
+			)}
 			<time datetime={data.publicationDate} class="mono-label text-foreground-muted">
 				{formatDate(data.publicationDate)}
 			</time>

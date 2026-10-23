@@ -1,8 +1,8 @@
 ---
+import type { SectionData } from "#/src/cms/config.ts";
 import EventTeaser from "#/src/components/event-teaser.astro";
 import NewsTeaser from "#/src/components/news-teaser.astro";
 import SectionHeader from "#/src/components/sections/section-header.astro";
-import type { SectionData } from "#/src/cms/config.ts";
 import { limitMaxAge } from "#/src/lib/cms/astro.ts";
 import { getSecondsUntilTomorrow, getToday, isUpcoming } from "#/src/lib/events.ts";
 
@@ -42,44 +42,47 @@ limitMaxAge(Astro, getSecondsUntilTomorrow());
 							All news <span aria-hidden="true">&rarr;</span>
 						</a>
 					</div>
-					{
-						latestNews.length > 0 ? (
-							<ul class="flex flex-col" role="list">
-								{latestNews.map((entry) => {
-									return (
-										<li class="border-b border-border">
-											<NewsTeaser id={entry.id} data={entry.data} headingLevel={4} />
-										</li>
-									);
-								})}
-							</ul>
-						) : (
-							<p class="mt-6 border border-dashed border-border-strong p-8 mono-label text-foreground-muted">Coming soon</p>
-						)
-					}
+					{latestNews.length > 0 ? (
+						<ul class="flex flex-col" role="list">
+							{latestNews.map((entry) => {
+								return (
+									<li class="border-b border-border">
+										<NewsTeaser id={entry.id} data={entry.data} headingLevel={4} />
+									</li>
+								);
+							})}
+						</ul>
+					) : (
+						<p class="mt-6 border border-dashed border-border-strong p-8 mono-label text-foreground-muted">
+							Coming soon
+						</p>
+					)}
 				</div>
 				<div class="flex flex-col">
 					<div class="flex flex-wrap items-baseline justify-between gap-4 border-b border-border-strong pb-3">
 						<h3 class="label-marker mono-label text-foreground-strong">Upcoming events</h3>
-						<a href="/events" class="mono-label text-primary hover:text-primary-hover hover:underline underline-offset-4">
+						<a
+							href="/events"
+							class="mono-label text-primary hover:text-primary-hover hover:underline underline-offset-4"
+						>
 							All events <span aria-hidden="true">&rarr;</span>
 						</a>
 					</div>
-					{
-						upcomingEvents.length > 0 ? (
-							<ul class="flex flex-col" role="list">
-								{upcomingEvents.map((entry) => {
-									return (
-										<li class="border-b border-border">
-											<EventTeaser id={entry.id} data={entry.data} headingLevel={4} />
-										</li>
-									);
-								})}
-							</ul>
-						) : (
-							<p class="mt-6 border border-dashed border-border-strong p-8 mono-label text-foreground-muted">Coming soon</p>
-						)
-					}
+					{upcomingEvents.length > 0 ? (
+						<ul class="flex flex-col" role="list">
+							{upcomingEvents.map((entry) => {
+								return (
+									<li class="border-b border-border">
+										<EventTeaser id={entry.id} data={entry.data} headingLevel={4} />
+									</li>
+								);
+							})}
+						</ul>
+					) : (
+						<p class="mt-6 border border-dashed border-border-strong p-8 mono-label text-foreground-muted">
+							Coming soon
+						</p>
+					)}
 				</div>
 			</div>
 		)

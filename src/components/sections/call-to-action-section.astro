@@ -1,6 +1,6 @@
 ---
-import LinkButton from "#/src/components/link-button.astro";
 import type { SectionData } from "#/src/cms/config.ts";
+import LinkButton from "#/src/components/link-button.astro";
 
 export type Props = SectionData<"callToAction">;
 
@@ -16,20 +16,18 @@ const { anchor, eyebrow, title, text, links } = Astro.props;
 			</hgroup>
 			{text != null && <p class="text-pretty">{text}</p>}
 		</div>
-		{
-			links.length > 0 && (
-				<ul class="flex shrink-0 flex-wrap gap-4" role="list">
-					{links.map((link, index) => {
-						return (
-							<li>
-								<LinkButton href={link.href} variant={index === 0 ? "primary" : "secondary"}>
-									{link.label}
-								</LinkButton>
-							</li>
-						);
-					})}
-				</ul>
-			)
-		}
+		{links.length > 0 && (
+			<ul class="flex shrink-0 flex-wrap gap-4" role="list">
+				{links.map((link, index) => {
+					return (
+						<li>
+							<LinkButton href={link.href} variant={index === 0 ? "primary" : "secondary"}>
+								{link.label}
+							</LinkButton>
+						</li>
+					);
+				})}
+			</ul>
+		)}
 	</div>
 </section>

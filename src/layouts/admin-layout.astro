@@ -1,11 +1,11 @@
 ---
+import "#/src/styles/admin.css";
+
 import { Font } from "astro:assets";
 
 import { env } from "#/configs/env.config.ts";
-import { AdminNavigation, type NavigationSection } from "#/src/components/admin/admin-navigation.tsx";
 import { config, mediaCollectionName } from "#/src/cms/config.ts";
-
-import "#/src/styles/admin.css";
+import { AdminNavigation, type NavigationSection } from "#/src/components/admin/admin-navigation.tsx";
 
 export interface Props {
 	title: string;
@@ -73,21 +73,19 @@ const navigation = { sections, currentRoute, userName: session?.identity.name };
 		<Font cssVariable="--font-roboto" preload={[{ subset: "latin", style: "normal" }]} />
 	</head>
 	<body>
-		{
-			session == null ? (
-				<main class="min-h-dvh w-full bg-muted px-4 py-8 sm:px-6">
-					<slot />
+		{session == null ? (
+			<main class="min-h-dvh w-full bg-muted px-4 py-8 sm:px-6">
+				<slot />
+			</main>
+		) : (
+			<div class="flex min-h-dvh flex-col md:flex-row">
+				<AdminNavigation client:load {...navigation} />
+				<main class="w-full min-w-0 flex-1 px-4 py-8 sm:px-6 lg:px-10">
+					<div class="mx-auto max-w-5xl">
+						<slot />
+					</div>
 				</main>
-			) : (
-				<div class="flex min-h-dvh flex-col md:flex-row">
-					<AdminNavigation client:load {...navigation} />
-					<main class="w-full min-w-0 flex-1 px-4 py-8 sm:px-6 lg:px-10">
-						<div class="mx-auto max-w-5xl">
-							<slot />
-						</div>
-					</main>
-				</div>
-			)
-		}
+			</div>
+		)}
 	</body>
 </html>

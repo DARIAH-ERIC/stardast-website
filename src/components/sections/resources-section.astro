@@ -1,10 +1,10 @@
 ---
+import type { SectionData } from "#/src/cms/config.ts";
 import ResourceCard from "#/src/components/resource-card.astro";
 import SectionHeader from "#/src/components/sections/section-header.astro";
-import type { SectionData } from "#/src/cms/config.ts";
-import { limitMaxAge } from "#/src/lib/cms/astro.ts";
-import { resourcesMaxAge, resourcesRetryAfter } from "#/src/lib/career-resources.ts";
 import { getResources } from "#/src/lib/career-resources-loader.ts";
+import { resourcesMaxAge, resourcesRetryAfter } from "#/src/lib/career-resources.ts";
+import { limitMaxAge } from "#/src/lib/cms/astro.ts";
 
 export type Props = SectionData<"resources">;
 
@@ -20,23 +20,21 @@ const resources = result.isOk() ? result.value : [];
 
 <section id={anchor} class="content-container section-spacing">
 	<SectionHeader eyebrow={eyebrow} title={title} lead={lead} />
-	{
-		resources.length > 0 ? (
-			<ul class="grid border-t border-l border-border-strong sm:grid-cols-2 lg:grid-cols-3" role="list">
-				{resources.map((resource) => {
-					return (
-						<li class="border-r border-b border-border-strong">
-							<ResourceCard resource={resource} headingLevel={title != null ? 3 : 2} />
-						</li>
-					);
-				})}
-			</ul>
-		) : result.isErr() ? (
-			<p class="border border-dashed border-border-strong p-8 mono-label text-foreground-muted">
-				The resources could not be loaded - please try again later.
-			</p>
-		) : (
-			<p class="border border-dashed border-border-strong p-8 mono-label text-foreground-muted">Coming soon</p>
-		)
-	}
+	{resources.length > 0 ? (
+		<ul class="grid border-t border-l border-border-strong sm:grid-cols-2 lg:grid-cols-3" role="list">
+			{resources.map((resource) => {
+				return (
+					<li class="border-r border-b border-border-strong">
+						<ResourceCard resource={resource} headingLevel={title != null ? 3 : 2} />
+					</li>
+				);
+			})}
+		</ul>
+	) : result.isErr() ? (
+		<p class="border border-dashed border-border-strong p-8 mono-label text-foreground-muted">
+			The resources could not be loaded - please try again later.
+		</p>
+	) : (
+		<p class="border border-dashed border-border-strong p-8 mono-label text-foreground-muted">Coming soon</p>
+	)}
 </section>

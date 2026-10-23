@@ -25,16 +25,14 @@ const commands =
 		: [];
 ---
 
-{
-	isEnabled && (
-		<>
-			<script is:inline define:vars={{ commands }}>
-				const queue = (window._paq = window._paq || []);
-				for (const command of commands) {
-					queue.push(command);
-				}
-			</script>
-			<script is:inline async src={`${baseUrl}matomo.js`} />
-		</>
-	)
-}
+{isEnabled && (
+	<>
+		<script is:inline define:vars={{ commands }}>
+			const queue = (window._paq = window._paq || []);
+			for (const command of commands) {
+				queue.push(command);
+			}
+		</script>
+		<script is:inline async src={`${baseUrl}matomo.js`} />
+	</>
+)}

@@ -1,7 +1,7 @@
 ---
-import { getAuth, getSafeReturnTo } from "#/src/cms/auth.ts";
 import { LogIn } from "lucide-react";
 
+import { getAuth, getSafeReturnTo } from "#/src/cms/auth.ts";
 import { buttonStyles } from "#/src/components/admin/ui/button.tsx";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "#/src/components/admin/ui/card.tsx";
 import { Note } from "#/src/components/admin/ui/note.tsx";
@@ -16,7 +16,8 @@ const { provider } = getAuth();
 const errors: Record<string, string> = {
 	denied: "Sign-in was cancelled.",
 	failed: "Sign-in failed. Please try again.",
-	forbidden: "Your account is not allowed to edit content. Ask a maintainer for write access to the content repository.",
+	forbidden:
+		"Your account is not allowed to edit content. Ask a maintainer for write access to the content repository.",
 };
 
 const error = errors[Astro.url.searchParams.get("error") ?? ""];
@@ -32,13 +33,11 @@ const href = `/api/cms/auth/login?returnTo=${encodeURIComponent(returnTo)}`;
 			<CardDescription>Edit the website's content, and manage its media.</CardDescription>
 		</CardHeader>
 		<CardContent className="flex flex-col gap-4">
-			{
-				error != null && (
-					<Note intent="danger" role="alert">
-						{error}
-					</Note>
-				)
-			}
+			{error != null && (
+				<Note intent="danger" role="alert">
+					{error}
+				</Note>
+			)}
 			<a href={href} class={buttonStyles({ className: "w-full" })}>
 				<LogIn aria-hidden="true" />
 				Sign in with {provider.label}

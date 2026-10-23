@@ -15,67 +15,89 @@ const { value, blocks = {} } = Astro.props;
 const nodes = "type" in value ? value.content : value;
 ---
 
-{
-	nodes.map((node) => {
-		if (isTextNode(node)) {
-			return <RichTextMarks text={node.text} marks={node.marks ?? []} />;
+{nodes.map((node) => {
+	if (isTextNode(node)) {
+		return <RichTextMarks text={node.text} marks={node.marks ?? []} />;
+	}
+
+	const content = node.content ?? [];
+
+	switch (node.type) {
+		case "paragraph": {
+			/** Empty paragraphs are editor artefacts - e.g. the one tiptap keeps after a trailing block - not spacing. */
+			if (content.length === 0) {
+				return null;
+			}
+
+			return (
+				<p>
+					<Astro.self value={content} blocks={blocks} />
+				</p>
+			);
 		}
 
-		const content = node.content ?? [];
-
-		switch (node.type) {
-			case "paragraph": {
-				/** Empty paragraphs are editor artefacts - e.g. the one tiptap keeps after a trailing block - not spacing. */
-				if (content.length === 0) {
-					return null;
-				}
-
-				return <p><Astro.self value={content} blocks={blocks} /></p>;
-			}
-
-			case "heading": {
-				const Heading = `h${String(node.attrs?.level ?? 2)}`;
-				return <Heading><Astro.self value={content} blocks={blocks} /></Heading>;
-			}
-
-			case "bulletList": {
-				return <ul><Astro.self value={content} blocks={blocks} /></ul>;
-			}
-
-			case "orderedList": {
-				return <ol start={node.attrs?.start as number | undefined}><Astro.self value={content} blocks={blocks} /></ol>;
-			}
-
-			case "listItem": {
-				return <li><Astro.self value={content} blocks={blocks} /></li>;
-			}
-
-			case "blockquote": {
-				return <blockquote><Astro.self value={content} blocks={blocks} /></blockquote>;
-			}
-
-			case "codeBlock": {
-				return <pre><code>{content.map((child) => (isTextNode(child) ? child.text : "")).join("")}</code></pre>;
-			}
-
-			case "horizontalRule": {
-				return <hr />;
-			}
-
-			case "hardBreak": {
-				return <br />;
-			}
-
-			default: {
-				const Block = blocks[node.type];
-
-				/** The schema only allows configured blocks, so a missing component is a bug, not a content error. */
-				if (Block == null) {
-					throw new Error(`No component for rich text block "${node.type}".`);
-				}
-
-				return <Block {...node.attrs} />;
-			}
+		case "heading": {
+			const Heading = `h${String(node.attrs?.level ?? 2)}`;
+			return (
+				<Heading>
+					<Astro.self value={content} blocks={blocks} />
+				</Heading>
+			);
 		}
-	})
-}
+
+		case "bulletList": {
+			return (
+				<ul>
+					<Astro.self value={content} blocks={blocks} />
+				</ul>
+			);
+		}
+
+		case "orderedList": {
+			return (
+				<ol start={node.attrs?.start as number | undefined}>
+					<Astro.self value={content} blocks={blocks} />
+				</ol>
+			);
+		}
+
+		case "listItem": {
+			return (
+				<li>
+					<Astro.self value={content} blocks={blocks} />
+				</li>
+			);
+		}
+
+		case "blockquote": {
+			return (
+				<blockquote>
+					<Astro.self value={content} blocks={blocks} />
+				</blockquote>
+			);
+		}
+
+		case "codeBlock": {
+			return <pre><code>{content.map((child) => (isTextNode(child) ? child.text : "")).join("")}</code></pre>;
+		}
+
+		case "horizontalRule": {
+			return <hr />;
+		}
+
+		case "hardBreak": {
+			return <br />;
+		}
+
+		default: {
+			const Block = blocks[node.type];
+
+			/** The schema only allows configured blocks, so a missing component is a bug, not a content error. */
+			if (Block == null) {
+				throw new Error(`No component for rich text block "${node.type}".`);
+			}
+
+			return <Block {...node.attrs} />;
+		}
+	}
+})}

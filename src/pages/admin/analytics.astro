@@ -95,54 +95,52 @@ const unavailable = "Currently unavailable. Please try again later.";
 	/>
 
 	<section aria-labelledby="visits-heading">
-		<Heading level={2} id="visits-heading" className="mb-4">Visitor numbers</Heading>
-		{
-			visits != null ? (
-				<StatsTable
-					labelledBy="visits-heading"
-					columns={["Month", "Visits", "Page views"]}
-					rows={visits.toReversed().map((month) => {
-						return [
-							monthFormatter.format(new Date(`${month.month}-01`)),
-							numberFormatter.format(month.visits),
-							numberFormatter.format(month.pageViews),
-						];
-					})}
-					footer={["Total", numberFormatter.format(total.visits), numberFormatter.format(total.pageViews)]}
-				/>
-			) : (
-				<Note intent="warning">{unavailable}</Note>
-			)
-		}
+		<Heading level={2} id="visits-heading" className="mb-4">
+			Visitor numbers
+		</Heading>
+		{visits != null ? (
+			<StatsTable
+				labelledBy="visits-heading"
+				columns={["Month", "Visits", "Page views"]}
+				rows={visits.toReversed().map((month) => {
+					return [
+						monthFormatter.format(new Date(`${month.month}-01`)),
+						numberFormatter.format(month.visits),
+						numberFormatter.format(month.pageViews),
+					];
+				})}
+				footer={["Total", numberFormatter.format(total.visits), numberFormatter.format(total.pageViews)]}
+			/>
+		) : (
+			<Note intent="warning">{unavailable}</Note>
+		)}
 	</section>
 
-	{
-		searchReports.map((report) => {
-			const headingId = `${report.id}-heading`;
+	{searchReports.map((report) => {
+		const headingId = `${report.id}-heading`;
 
-			return (
-				<section aria-labelledby={headingId} class="mt-12">
-					<div class="mb-4 flex flex-col gap-1">
-						<Heading level={2} id={headingId}>
-							{report.title}
-						</Heading>
-						<p class="text-sm/6 text-muted-fg">{report.description}</p>
+		return (
+			<section aria-labelledby={headingId} class="mt-12">
+				<div class="mb-4 flex flex-col gap-1">
+					<Heading level={2} id={headingId}>
+						{report.title}
+					</Heading>
+					<p class="text-sm/6 text-muted-fg">{report.description}</p>
+				</div>
+				{report.keywords == null ? (
+					<Note intent="warning">{unavailable}</Note>
+				) : report.keywords.length === 0 ? (
+					<div class="rounded-lg border border-dashed border-input p-8 text-center text-sm text-muted-fg">
+						{report.empty}
 					</div>
-					{report.keywords == null ? (
-						<Note intent="warning">{unavailable}</Note>
-					) : report.keywords.length === 0 ? (
-						<div class="rounded-lg border border-dashed border-input p-8 text-center text-sm text-muted-fg">
-							{report.empty}
-						</div>
-					) : (
-						<StatsTable
-							labelledBy={headingId}
-							columns={["Search term", "Visits"]}
-							rows={report.keywords.map((keyword) => [keyword.keyword, numberFormatter.format(keyword.visits)])}
-						/>
-					)}
-				</section>
-			);
-		})
-	}
+				) : (
+					<StatsTable
+						labelledBy={headingId}
+						columns={["Search term", "Visits"]}
+						rows={report.keywords.map((keyword) => [keyword.keyword, numberFormatter.format(keyword.visits)])}
+					/>
+				)}
+			</section>
+		);
+	})}
 </AdminLayout>

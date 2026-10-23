@@ -1,11 +1,11 @@
 ---
+import { newsCategories } from "#/src/cms/config.ts";
+import { buttonStyles } from "#/src/components/button-styles.ts";
+import { inputStyles } from "#/src/components/input-styles.ts";
 import NewsCard from "#/src/components/news-card.astro";
 import PageHeader from "#/src/components/page-header.astro";
 import Pagination from "#/src/components/pagination.astro";
 import Sections from "#/src/components/sections/sections.astro";
-import { buttonStyles } from "#/src/components/button-styles.ts";
-import { inputStyles } from "#/src/components/input-styles.ts";
-import { newsCategories } from "#/src/cms/config.ts";
 import PageLayout from "#/src/layouts/page-layout.astro";
 import { paginate, parsePageParam } from "#/src/lib/pagination.ts";
 
@@ -85,7 +85,9 @@ const documentTitle = [page.title, category?.listLabel, news.page > 1 ? `Page ${
 		{/* Like the form on the search page, which it leads to. */}
 		<form role="search" action="/search" method="get" class="flex max-w-2xl flex-wrap gap-3">
 			<input type="hidden" name="type" value="news" />
-			<label for="news-search-query" class="sr-only">Search news</label>
+			<label for="news-search-query" class="sr-only">
+				Search news
+			</label>
 			<input
 				id="news-search-query"
 				type="search"
@@ -95,54 +97,50 @@ const documentTitle = [page.title, category?.listLabel, news.page > 1 ? `Page ${
 				autocomplete="off"
 				class={inputStyles({ class: "min-w-0 flex-1" })}
 			/>
-			<button type="submit" class={buttonStyles()}>Search</button>
+			<button type="submit" class={buttonStyles()}>
+				Search
+			</button>
 		</form>
 
 		{/* Like the filters on the events page. */}
 		<nav aria-label="News categories" class="mt-10 border-b border-border-strong pb-3">
 			<ul class="flex flex-wrap gap-1" role="list">
-				{
-					filters.map((filter) => {
-						const isCurrent = filter.value === category?.value;
+				{filters.map((filter) => {
+					const isCurrent = filter.value === category?.value;
 
-						return (
-							<li>
-								<a
-									href={getHref({ category: filter.value })}
-									aria-current={isCurrent ? "page" : undefined}
-									class:list={[
-										"inline-block px-3 py-2.5 mono-label transition-colors",
-										isCurrent
-											? "bg-foreground-strong text-background"
-											: "text-foreground-strong hover:bg-background-hover",
-									]}
-								>
-									{filter.label}
-								</a>
-							</li>
-						);
-					})
-				}
+					return (
+						<li>
+							<a
+								href={getHref({ category: filter.value })}
+								aria-current={isCurrent ? "page" : undefined}
+								class:list={[
+									"inline-block px-3 py-2.5 mono-label transition-colors",
+									isCurrent
+										? "bg-foreground-strong text-background"
+										: "text-foreground-strong hover:bg-background-hover",
+								]}
+							>
+								{filter.label}
+							</a>
+						</li>
+					);
+				})}
 			</ul>
 		</nav>
 
-		{
-			news.items.length > 0 ? (
-				<ul class="mt-10 grid border-t border-l border-border-strong sm:grid-cols-2 lg:grid-cols-3" role="list">
-					{news.items.map((entry) => {
-						return (
-							<li class="border-r border-b border-border-strong">
-								<NewsCard id={entry.id} data={entry.data} headingLevel={2} />
-							</li>
-						);
-					})}
-				</ul>
-			) : (
-				<p class="mt-10 border border-dashed border-border-strong p-8 mono-label text-foreground-muted">
-					Coming soon
-				</p>
-			)
-		}
+		{news.items.length > 0 ? (
+			<ul class="mt-10 grid border-t border-l border-border-strong sm:grid-cols-2 lg:grid-cols-3" role="list">
+				{news.items.map((entry) => {
+					return (
+						<li class="border-r border-b border-border-strong">
+							<NewsCard id={entry.id} data={entry.data} headingLevel={2} />
+						</li>
+					);
+				})}
+			</ul>
+		) : (
+			<p class="mt-10 border border-dashed border-border-strong p-8 mono-label text-foreground-muted">Coming soon</p>
+		)}
 
 		<Pagination
 			page={news.page}
