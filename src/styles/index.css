@@ -224,6 +224,19 @@
 	text-transform: uppercase;
 }
 
+/**
+ * Logos are drawn for light backgrounds, on transparent ones - so in dark forced colours themes, e.g. windows high
+ * contrast mode, they would all but vanish. Gives them a white backing there, with a margin which does not change the
+ * layout.
+ */
+@utility logo-backing {
+	@variant forced-colors {
+		forced-color-adjust: none;
+		background-color: white;
+		box-shadow: 0 0 0 --spacing(1.5) white;
+	}
+}
+
 /** A small square in the primary colour before a label, e.g. above the hero title. */
 @utility label-marker {
 	display: inline-flex;

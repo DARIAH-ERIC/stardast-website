@@ -43,7 +43,7 @@ const socialLinks = (site?.socialLinks ?? []).map((link) => {
 						width={logo.width}
 						height={logo.height}
 						loading="lazy"
-						class="h-9 w-auto"
+						class="logo-backing h-9 w-auto"
 					/>
 				</a>
 				{(contactEmail != null || socialLinks.length > 0) && (
@@ -112,7 +112,7 @@ const socialLinks = (site?.socialLinks ?? []).map((link) => {
 				width="990"
 				height="220"
 				loading="lazy"
-				class="h-11 w-auto shrink-0 self-start sm:self-auto"
+				class="logo-backing h-11 w-auto shrink-0 self-start sm:self-auto"
 			/>
 			<p class="max-w-[72ch] text-[0.8125rem]/relaxed text-foreground-muted">{disclaimer}</p>
 		</div>
