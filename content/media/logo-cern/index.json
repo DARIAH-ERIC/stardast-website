@@ -1,10 +1,10 @@
 {
 	"alt": "CERN",
-	"filename": "logo-cern.png",
-	"contentType": "image/png",
-	"size": 55832,
-	"width": 1182,
-	"height": 1182,
+	"filename": "logo-cern.svg",
+	"contentType": "image/svg+xml",
+	"size": 4659,
+	"width": 580,
+	"height": 574,
 	"storage": "repo",
-	"key": "content/media/logo-cern/logo-cern.png"
+	"key": "content/media/logo-cern/logo-cern.svg"
 }

@@ -1,10 +1,10 @@
 {
 	"alt": "EATRIS",
-	"filename": "logo-eatris.png",
-	"contentType": "image/png",
-	"size": 25743,
-	"width": 874,
-	"height": 224,
+	"filename": "logo-eatris.svg",
+	"contentType": "image/svg+xml",
+	"size": 4275,
+	"width": 117,
+	"height": 29,
 	"storage": "repo",
-	"key": "content/media/logo-eatris/logo-eatris.png"
+	"key": "content/media/logo-eatris/logo-eatris.svg"
 }

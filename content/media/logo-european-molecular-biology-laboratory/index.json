@@ -1,10 +1,10 @@
 {
 	"alt": "EMBL",
-	"filename": "logo-european-molecular-biology-laboratory.png",
-	"contentType": "image/png",
-	"size": 24159,
-	"width": 1415,
-	"height": 603,
+	"filename": "logo-european-molecular-biology-laboratory.svg",
+	"contentType": "image/svg+xml",
+	"size": 10448,
+	"width": 350,
+	"height": 149,
 	"storage": "repo",
-	"key": "content/media/logo-european-molecular-biology-laboratory/logo-european-molecular-biology-laboratory.png"
+	"key": "content/media/logo-european-molecular-biology-laboratory/logo-european-molecular-biology-laboratory.svg"
 }
