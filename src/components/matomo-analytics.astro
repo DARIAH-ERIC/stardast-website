@@ -14,6 +14,12 @@ const baseUrl = `${env.PUBLIC_APP_MATOMO_BASE_URL.replace(/\/$/, "")}/`;
 /** Editors previewing drafts are not visitors. */
 const isEnabled = siteId != null && Astro.locals.preview == null;
 
+/**
+ * A page which is prerendered on hover, see the speculation rules in `document-layout.astro`, is only tracked once it
+ * is shown, as it may never be. Matomo's own check, `setCountPreRendered`, looks for the legacy `visibilityState`
+ * "prerender", which browsers no longer set. Rather than deferring only the commands, the tracker itself is loaded once
+ * the page is shown, as it ignores commands which are queued after it has loaded without any.
+ */
 const commands =
 	siteId != null
 		? getTrackerCommands({
@@ -25,14 +31,22 @@ const commands =
 		: [];
 ---
 
-{isEnabled && (
-	<>
-		<script is:inline define:vars={{ commands }}>
-			const queue = (window._paq = window._paq || []);
-			for (const command of commands) {
-				queue.push(command);
-			}
-		</script>
-		<script is:inline async src={`${baseUrl}matomo.js`} />
-	</>
-)}
+{isEnabled && <script is:inline define:vars={{ commands, src: `${baseUrl}matomo.js` }}>
+	function track() {
+		const queue = (window._paq = window._paq || []);
+		for (const command of commands) {
+			queue.push(command);
+		}
+
+		const script = document.createElement("script");
+		script.async = true;
+		script.src = src;
+		document.head.append(script);
+	}
+
+	if (document.prerendering) {
+		document.addEventListener("prerenderingchange", track, { once: true });
+	} else {
+		track();
+	}
+</script>}
