@@ -44,6 +44,29 @@ const pageDescription = description ?? site?.description;
 const url = new URL(canonical ?? Astro.url.pathname, Astro.site).href;
 
 const sharingImage = await getSharingImage(content, [image, site?.image], Astro.site);
+
+/**
+ * Prefetches pages when a visitor hovers over a link, in browsers which support speculation rules. Rather than astro's
+ * `prefetch`, which ships a script to every page, and whose fallback in safari - a plain `fetch` - only helps when the
+ * response is cacheable, which pages are not. Prefetch, not prerender: prerendering would run analytics for pages which
+ * are never visited. Admin and api routes are excluded, as are media and feeds, which are files, not pages.
+ */
+const speculationRules = {
+	prefetch: [
+		{
+			where: {
+				and: [
+					{ href_matches: "/*" },
+					{ not: { href_matches: "/admin{/*}?" } },
+					{ not: { href_matches: "/api/*" } },
+					{ not: { href_matches: "/media/*" } },
+					{ not: { href_matches: "/*.xml" } },
+				],
+			},
+			eagerness: "moderate",
+		},
+	],
+};
 ---
 
 <!doctype html>
@@ -89,6 +112,7 @@ const sharingImage = await getSharingImage(content, [image, site?.image], Astro.
 		<Font cssVariable="--font-roboto-mono" />
 		{structuredData != null && <JsonLd value={structuredData} />}
 		<MatomoAnalytics tracking={tracking} />
+		<script is:inline type="speculationrules" set:html={JSON.stringify(speculationRules)} />
 	</head>
 	<body>
 		<slot />

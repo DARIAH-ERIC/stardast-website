@@ -164,6 +164,17 @@
 }
 
 /**
+ * Cross-fades between pages, in browsers which support cross-document view transitions - others navigate as usual.
+ * Both pages must opt in, so there is none between the site and the admin ui, which has its own styles. Not for
+ * visitors who prefer reduced motion.
+ */
+@media (prefers-reduced-motion: no-preference) {
+	@view-transition {
+		navigation: auto;
+	}
+}
+
+/**
  * Centred, width-capped column with responsive side padding. Header, footer, and page sections all use it, so their
  * contents line up, while their backgrounds can still span the full viewport width.
  */
