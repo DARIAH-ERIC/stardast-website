@@ -1,8 +1,10 @@
 {
 	"name": "Leibniz-Institut für Deutsche Sprache",
 	"shortName": "IDS",
-	"logo": "placeholder-logo-leibniz-institut-fur-deutsche-sprache",
+	"logo": "ids2019-farbig-auf-hell-300dpi-65tz15",
 	"url": "https://www.ids-mannheim.de",
 	"linkedin": "https://www.linkedin.com/company/leibniz-institut-für-deutsche-sprache-ids/",
-	"countries": ["DE"]
+	"countries": [
+		"DE"
+	]
 }
