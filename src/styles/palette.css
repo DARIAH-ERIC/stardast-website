@@ -6,23 +6,27 @@
 :root {
 	--palette-white: #fff;
 	--palette-black: #000;
-	--palette-blue: #2b6cb4;
 
 	/**
-	 * A deep tone of the brand blue - the primary colour, for buttons, links, and brand-coloured bands, see
-	 * `scheme-brand`. 10.8:1 contrast on white. The logo blue itself is used for hover and focus states.
+	 * The brand blue, from the colour guidelines - the primary colour, for buttons, links, and brand-coloured bands, see
+	 * `scheme-brand`. 5.4:1 contrast on white, so text on it must be white or a very light tint.
 	 */
-	--palette-blue-deep: #163d74;
+	--palette-blue: #2b6cb4;
 
-	/** Text on `--palette-blue-deep`: 8.8:1 and 6:1 contrast. */
-	--palette-blue-50: #e2e9f3;
-	--palette-blue-200: #b3c3d8;
+	/** A darker shade of the brand blue, for hover states only. 10.8:1 contrast on white. */
+	--palette-blue-dark: #163d74;
+
+	/** Muted text on `--palette-blue`, and the hover state of light buttons there. 4.8:1 contrast. */
+	--palette-blue-50: #eef3f9;
 
 	/** A light tint of the brand blue, e.g. for search highlights. */
 	--palette-blue-100: #dbe8f6;
 
-	/** For error messages on `--palette-blue-deep` - not a brand colour. 7.4:1 contrast. */
-	--palette-red-200: #fecaca;
+	/** The brand pink, from the colour guidelines - for the current page in the main navigation. */
+	--palette-pink: #eb609f;
+
+	/** For error messages on `--palette-blue` - not a brand colour. 4.6:1 contrast. */
+	--palette-red-50: #ffe8e8;
 
 	/** For error messages - not a brand colour. 6.5:1 contrast on white. */
 	--palette-red: #b91c1c;
