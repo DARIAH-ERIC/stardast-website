@@ -25,15 +25,6 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "DARIAH ERIC publishes this website on behalf of the STARDAST consortium."
-								}
-							]
-						},
-						{
-							"type": "paragraph",
-							"content": [
-								{
-									"type": "text",
 									"text": "DARIAH ERIC"
 								},
 								{
@@ -86,12 +77,26 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "[To be completed: contact details of DARIAH ERIC's data protection officer or data protection contact - to be confirmed with DARIAH]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
+									"text": "DARIAH ERIC publishes this website on behalf of the STARDAST consortium. "
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Data Protection Officer: Arnaud Roi, arnaud.roi@dariah.eu  "
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "DARIAH ERIC runs this website and decides how personal data collected through it is used. The Austrian Centre for Digital Humanities and Cultural Heritage (ACDH-CH) hosts the website and operates the analytics and the mailing list database on behalf of DARIAH ERIC. The European Molecular Biology Laboratory (EMBL), as coordinator of the STARDAST project, is responsible for the content of this website (see Imprint)."
 								}
 							]
 						}
@@ -332,9 +337,12 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "If you subscribe to our mailing list, we store your first name, last name, email address, and - if you provide it - your institution. We use this information only to send you the STARDAST mailing list. It is stored in a database run by ACDH-CH."
+									"text": "If you subscribe to our mailing list, we store your first name, last name, email address, and - if you provide it - your institution. We use this information only to send you the STARDAST mailing list. It is stored in a database run by ACDH-CH. Your data is only accessible to DARIAH ERIC, ACDH-CH and STARDAST consortium partners. "
 								}
 							]
+						},
+						{
+							"type": "paragraph"
 						},
 						{
 							"type": "paragraph",
@@ -401,7 +409,39 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "You have the right to access, correct, and delete your personal data, to restrict or object to its processing, and to data portability. Where processing is based on your consent, you can withdraw it at any time, without affecting the processing before. To exercise these rights, please contact us at the address above."
+									"text": "You have the right to access, correct, and delete your personal data, to restrict or object to its processing, and to data portability. Where processing is based on your consent, you can withdraw it at any time, without affecting the processing before. To exercise these rights, please write to "
+								},
+								{
+									"type": "text",
+									"text": "info@stardast.eu",
+									"marks": [
+										{
+											"type": "link",
+											"attrs": {
+												"href": "mailto:info@stardast.eu"
+											}
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": " or to our data protection officer, Arnaud Roi ("
+								},
+								{
+									"type": "text",
+									"text": "arnaud.roi@dariah.eu",
+									"marks": [
+										{
+											"type": "link",
+											"attrs": {
+												"href": "mailto:arnaud.roi@dariah.eu"
+											}
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": ")"
 								}
 							]
 						},
@@ -456,6 +496,31 @@
 											}
 										}
 									]
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "Other Project Activities ",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "This policy only covers this website. Personal data processed in other STARDAST activities, such as recruitment, mentoring, training, and cascading grants, is handled by the partner organisations involved and is covered by their own privacy information."
 								}
 							]
 						}
@@ -476,20 +541,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "Last updated: "
-								},
-								{
-									"type": "text",
-									"text": "[To be completed: date of publication]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
-								},
-								{
-									"type": "text",
-									"text": "."
+									"text": "Last updated: 27 October 2026"
 								}
 							]
 						}
