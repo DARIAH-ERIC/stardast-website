@@ -134,10 +134,17 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "[To be completed: name and role of the person responsible for the content (directeur de la publication), at the address above]",
+									"text": "EMBL, as coordinator of the STARDAST project, is responsible for the content of this website. Responsible person: Isabela Paredes Cisneros, Project Coordinator, EMBL, Meyerhofstraße 1, 69117 Heidelberg, Germany. Contact: "
+								},
+								{
+									"type": "text",
+									"text": "info@stardast.eu",
 									"marks": [
 										{
-											"type": "bold"
+											"type": "link",
+											"attrs": {
+												"href": "mailto:info@stardast.eu"
+											}
 										}
 									]
 								}
