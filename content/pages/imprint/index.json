@@ -72,7 +72,7 @@
 								},
 								{
 									"type": "text",
-									"text": "Data Protection Officer: Arnaud Roi, "
+									"text": "Represented by: Data Protection Officer - Arnaud Roi, "
 								},
 								{
 									"type": "text",
@@ -234,7 +234,7 @@
 			"type": "text",
 			"data": {
 				"layout": "stacked",
-				"title": "Links to other websites",
+				"title": "Disclaimer",
 				"content": {
 					"type": "doc",
 					"content": [
