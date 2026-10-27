@@ -63,20 +63,27 @@
 								{
 									"type": "text",
 									"text": "DARIAH ERIC (Digital Research Infrastructure for the Arts and Humanities) is a European Research Infrastructure Consortium, established under Council Regulation (EC) No 723/2009 by Commission Implementing Decision 2014/526/EU. Its statutory seat is in Paris, France."
-								}
-							]
-						},
-						{
-							"type": "paragraph",
-							"content": [
+								},
 								{
-									"type": "text",
-									"text": "Represented by: "
+									"type": "hardBreak"
+								},
+								{
+									"type": "hardBreak"
 								},
 								{
 									"type": "text",
-									"text": "[To be completed: name and role of DARIAH ERIC's legal representative - to be confirmed with DARIAH]",
+									"text": "Data Control Officer: Arnaud Roi, "
+								},
+								{
+									"type": "text",
+									"text": "arnaud.roi@dariah.eu",
 									"marks": [
+										{
+											"type": "link",
+											"attrs": {
+												"href": "mailto:arnaud.roi@dariah.eu"
+											}
+										},
 										{
 											"type": "bold"
 										}
@@ -167,7 +174,25 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "STARDAST - STewardship and Recognition for DAta Science Talent - is a Horizon Europe project, funded by the European Union under Grant Agreement No 101268773. It is coordinated by the European Molecular Biology Laboratory (EMBL), Meyerhofstraße 1, 69117 Heidelberg, Germany."
+									"text": "STARDAST – STewardship and Recognition for DAta Science Talent",
+									"marks": [
+										{
+											"type": "bold"
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": " – is a Horizon Europe project (call HORIZON-INFRA-2025-01), funded by the European Union under Grant Agreement No 101268773 and granted by the European Research Executive Agency (REA). It runs for 48 months until 31 August 2030. It is coordinated by the European Molecular Biology Laboratory (EMBL), Meyerhofstraße 1, 69117 Heidelberg, Germany. The consortium partners are listed on our partners page."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Funded by the European Union. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or the European Research Executive Agency (REA). Neither the European Union nor the granting authority can be held responsible for them."
 								}
 							]
 						}
@@ -218,7 +243,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "This website links to the websites of our partners and others. We have no influence on their content, and are not responsible for it. If we learn that a linked page contains unlawful content, we will remove the link."
+									"text": "We aim to publish accurate and up-to-date information, but we cannot guarantee that it is complete or error-free. This website links to the websites of our partners and others. We have no influence on their content and are not responsible for it. If we learn that a linked page contains unlawful content, we will remove the link."
 								}
 							]
 						}
