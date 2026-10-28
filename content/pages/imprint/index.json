@@ -228,16 +228,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "This website is hosted by the Austrian Centre for Digital Humanities (ACDH) of the Austrian Academy of Sciences, Bäckerstraße 13, 1010 Vienna, Austria. "
-								},
-								{
-									"type": "text",
-									"text": "[To be completed: confirm the address with ACDH]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
+									"text": "This website is hosted by the Austrian Centre for Digital Humanities (ACDH) of the Austrian Academy of Sciences, Bäckerstraße 13, 1010 Vienna, Austria."
 								}
 							]
 						}

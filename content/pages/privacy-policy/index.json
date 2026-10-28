@@ -171,12 +171,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "[To be completed: whether server logs are kept, and for how long – to be confirmed with ACDH]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
+									"text": "This information is stored in server logs, which are deleted after 90 days."
 								}
 							]
 						}
@@ -329,12 +324,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "[To be completed: whether ACDH's Matomo anonymises IP addresses, and how long data is kept – to be confirmed with ACDH]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
+									"text": "IP addresses are anonymised before they are stored. Data about individual visits is deleted after five years. After that, only aggregated statistics are kept, which cannot be related to individual visitors."
 								}
 							]
 						},
@@ -593,7 +583,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "Last updated: 27 October 2026"
+									"text": "Last updated: 28 October 2026"
 								}
 							]
 						}
