@@ -72,7 +72,7 @@ const menuId = "mobile-navigation";
 									class:list={[
 										"block px-2.5 py-2 mono-label transition-colors",
 										entry.isCurrent
-											? "bg-foreground-strong text-background"
+											? "bg-accent text-accent-foreground"
 											: "text-foreground-strong hover:bg-background-hover",
 									]}
 								>
@@ -91,7 +91,7 @@ const menuId = "mobile-navigation";
 								class:list={[
 									"group inline-flex items-center gap-1 px-2.5 py-2 mono-label transition-colors",
 									entry.isCurrent
-										? "bg-foreground-strong text-background"
+										? "bg-accent text-accent-foreground"
 										: "text-foreground-strong hover:bg-background-hover aria-expanded:bg-background-hover",
 								]}
 							>
@@ -139,7 +139,7 @@ const menuId = "mobile-navigation";
 			<a
 				href="/search"
 				aria-current={pathname === "/search" ? "page" : undefined}
-				class="inline-flex size-11 items-center justify-center border border-foreground-strong text-foreground-strong transition-colors hover:bg-foreground-strong hover:text-background aria-[current=page]:bg-foreground-strong aria-[current=page]:text-background"
+				class="inline-flex size-11 items-center justify-center border border-foreground-strong text-foreground-strong transition-colors hover:bg-foreground-strong hover:text-background aria-[current=page]:border-accent aria-[current=page]:bg-accent aria-[current=page]:text-accent-foreground"
 			>
 				<Icon name="search" class="size-5" />
 				<span class="sr-only">Search</span>

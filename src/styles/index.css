@@ -43,12 +43,19 @@
 	--color-foreground-code: var(--palette-neutral-200);
 	--color-backdrop: color-mix(in oklab, var(--palette-black) 40%, transparent);
 	--color-focus-ring: var(--palette-blue);
-	--color-primary: var(--palette-blue-deep);
-	--color-primary-hover: var(--palette-blue);
+	--color-primary: var(--palette-blue);
+	--color-primary-hover: var(--palette-blue-dark);
 	--color-primary-foreground: var(--palette-white);
 
 	/** Brand-coloured bands, e.g. the home hero - see `scheme-brand`. */
-	--color-brand: var(--palette-blue-deep);
+	--color-brand: var(--palette-blue);
+
+	/**
+	 * The current page in the main navigation. White text has only 3.1:1 contrast on the brand pink, so text on it is
+	 * near-black - 6.2:1.
+	 */
+	--color-accent: var(--palette-pink);
+	--color-accent-foreground: var(--palette-neutral-950);
 	--color-danger: var(--palette-red);
 
 	/**
@@ -205,19 +212,19 @@
  * fields keep their colours, see `--color-field`.
  */
 @utility scheme-brand {
-	--color-background: var(--palette-blue-deep);
+	--color-background: var(--palette-blue);
 	--color-background-muted: color-mix(in oklab, var(--palette-white) 8%, transparent);
 	--color-background-hover: color-mix(in oklab, var(--palette-white) 10%, transparent);
-	--color-foreground: var(--palette-blue-50);
+	--color-foreground: var(--palette-white);
 	--color-foreground-strong: var(--palette-white);
-	--color-foreground-muted: var(--palette-blue-200);
+	--color-foreground-muted: var(--palette-blue-50);
 	--color-border: color-mix(in oklab, var(--palette-white) 26%, transparent);
 	--color-border-strong: var(--palette-white);
 	--color-focus-ring: var(--palette-white);
 	--color-primary: var(--palette-white);
-	--color-primary-hover: var(--palette-blue-100);
-	--color-primary-foreground: var(--palette-blue-deep);
-	--color-danger: var(--palette-red-200);
+	--color-primary-hover: var(--palette-blue-50);
+	--color-primary-foreground: var(--palette-blue);
+	--color-danger: var(--palette-red-50);
 
 	color: var(--color-foreground);
 	background-color: var(--color-background);
