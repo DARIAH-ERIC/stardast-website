@@ -29,10 +29,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      # `setup-bun` only reads `packageManager` and `engines.bun` from `package.json`, not `engines.runtime`.
+      - name: Read bun version
+        id: bun
+        run: |
+          # The minimum version of `engines.runtime`, e.g. `1.4.4` for `^1.4.4` or `~1.4.4`.
+          version="$(jq -er '.engines.runtime.version | sub("^[\\^~]"; "") | select(test("^\\d+\\.\\d+\\.\\d+$"))' package.json)"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
       - name: Use bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: "1.4.3"
+          bun-version: "${{ steps.bun.outputs.version }}"
 
       - name: Use node
         uses: actions/setup-node@v6

@@ -1,9 +1,16 @@
 # syntax=docker/dockerfile:1
+# check=skip=InvalidDefaultArgInFrom
+
+# Required, without a default, so that the version is only set in `package.json`: the minimum version of
+# `engines.runtime`, e.g. `1.4.4` for `^1.4.4` or `~1.4.4`, see `.github/workflows/build-deploy.yaml`.
+#
+#   docker build --build-arg BUN_VERSION="$(jq -r '.engines.runtime.version | sub("^[\\^~]"; "")' package.json)" .
+ARG BUN_VERSION
 
 # base
 # ---------------------------------------------------------------------------------------------------------------------
 
-FROM oven/bun:1.4.3-alpine AS base
+FROM oven/bun:${BUN_VERSION}-alpine AS base
 WORKDIR /app
 
 # install

@@ -36,6 +36,13 @@ jobs:
           username: "${{ github.actor }}"
           password: "${{ secrets.GITHUB_TOKEN }}"
 
+      - name: Read bun version
+        id: bun
+        run: |
+          # The minimum version of `engines.runtime`, e.g. `1.4.4` for `^1.4.4` or `~1.4.4`.
+          version="$(jq -er '.engines.runtime.version | sub("^[\\^~]"; "") | select(test("^\\d+\\.\\d+\\.\\d+$"))' package.json)"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
       - name: Extract metadata (tags, labels) for docker image
         id: meta
         uses: docker/metadata-action@v6
@@ -52,8 +59,9 @@ jobs:
           push: true
           tags: "${{ steps.meta.outputs.tags }}"
           labels: "${{ steps.meta.outputs.labels }}"
-          # Inlined at build time, see `configs/env.schema.ts`.
+          # `BUN_VERSION` selects the base image. The others are inlined at build time, see `configs/env.schema.ts`.
           build-args: |
+            "BUN_VERSION=${{ steps.bun.outputs.version }}"
             "PUBLIC_APP_BASE_URL=${{ vars.PUBLIC_APP_BASE_URL }}"
             "PUBLIC_APP_BOTS=${{ vars.PUBLIC_APP_BOTS }}"
             "PUBLIC_APP_GOOGLE_SITE_VERIFICATION=${{ vars.PUBLIC_APP_GOOGLE_SITE_VERIFICATION }}"
