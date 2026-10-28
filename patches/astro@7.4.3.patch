@@ -1,0 +1,13 @@
+diff --git a/components/ClientRouter.astro b/components/ClientRouter.astro
+index 94a9c13c93a2b76b7f1e27c2dc06cefcebfb1f21..3c4d5beb835388d7a260c43e95a85a682cd39553 100644
+--- a/components/ClientRouter.astro
++++ b/components/ClientRouter.astro
+@@ -65,7 +65,7 @@ const { fallback = 'animate' } = Astro.props;
+ 			lastClickedElementLeavingWindow = leavesWindow(ev) ? link : null;
+ 
+ 			if (ev.composed) {
+-				link = ev.composedPath()[0];
++				link = ev.composedPath()[0] ?? null;
+ 			}
+ 			if (link instanceof Element) {
+ 				link = link.closest('a, area');

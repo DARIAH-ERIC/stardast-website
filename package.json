@@ -26,7 +26,7 @@
 	"dependencies": {
 		"@acdh-oeaw/lib": "^1.0.7",
 		"@astrojs/node": "^11.1.9",
-		"@astrojs/react": "^7.1.1",
+		"@astrojs/react": "^7.1.2",
 		"@internationalized/date": "^3.12.4",
 		"@tiptap/core": "^3.31.4",
 		"@tiptap/extension-subscript": "^3.31.4",
@@ -34,10 +34,10 @@
 		"@tiptap/pm": "^3.31.4",
 		"@tiptap/react": "^3.31.4",
 		"@tiptap/starter-kit": "^3.31.4",
-		"astro": "^7.4.2",
+		"astro": "^7.4.3",
 		"better-result": "^3.0.1",
 		"invokers-polyfill": "^1.0.4",
-		"lucide-react": "^1.61.0",
+		"lucide-react": "^1.63.0",
 		"minisearch": "^7.2.0",
 		"react": "^19.3.0",
 		"react-aria-components": "^1.22.1",
@@ -67,8 +67,8 @@
 		"eslint-plugin-regexp": "^3.3.1",
 		"is-in-ci": "^2.0.0",
 		"lefthook": "^2.2.1",
-		"oxfmt": "^0.74.0",
-		"oxlint": "^1.89.0",
+		"oxfmt": "^0.75.0",
+		"oxlint": "^1.90.0",
 		"oxlint-tsgolint": "^7.0.2005",
 		"stylelint": "^17.16.0",
 		"stylelint-order": "^8.1.2",
@@ -114,6 +114,6 @@
 		}
 	},
 	"patchedDependencies": {
-		"astro@7.4.2": "patches/astro@7.4.2.patch"
+		"astro@7.4.3": "patches/astro@7.4.3.patch"
 	}
 }
