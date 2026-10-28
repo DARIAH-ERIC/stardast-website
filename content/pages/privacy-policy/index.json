@@ -144,16 +144,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "This website is hosted by the Austrian Centre for Digital Humanities (ACDH) of the Austrian Academy of Sciences, in Vienna, Austria. "
-								},
-								{
-									"type": "text",
-									"text": "[To be completed: confirm the hosting arrangement, e.g. a data processing agreement with the Austrian Academy of Sciences]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
+									"text": "This website is hosted by the Austrian Centre for Digital Humanities (ACDH) of the Austrian Academy of Sciences, in Vienna, Austria."
 								}
 							]
 						},
