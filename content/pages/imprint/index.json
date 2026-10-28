@@ -63,16 +63,15 @@
 								{
 									"type": "text",
 									"text": "DARIAH ERIC (Digital Research Infrastructure for the Arts and Humanities) is a European Research Infrastructure Consortium, established under Council Regulation (EC) No 723/2009 by Commission Implementing Decision 2014/526/EU. Its statutory seat is in Paris, France."
-								},
-								{
-									"type": "hardBreak"
-								},
-								{
-									"type": "hardBreak"
-								},
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
 								{
 									"type": "text",
-									"text": "Represented by: Data Protection Officer - Arnaud Roi, "
+									"text": "Represented by: Data Protection Officer – Arnaud Roi, "
 								},
 								{
 									"type": "text",
@@ -183,7 +182,23 @@
 								},
 								{
 									"type": "text",
-									"text": " – is a Horizon Europe project (call HORIZON-INFRA-2025-01), funded by the European Union under Grant Agreement No 101268773 and granted by the European Research Executive Agency (REA). It runs for 48 months until 31 August 2030. It is coordinated by the European Molecular Biology Laboratory (EMBL), Meyerhofstraße 1, 69117 Heidelberg, Germany. The consortium partners are listed on our partners page."
+									"text": " – is a Horizon Europe project (call HORIZON-INFRA-2025-01), funded by the European Union under Grant Agreement No 101268773 and granted by the European Research Executive Agency (REA). It runs for 48 months until 31 August 2030. It is coordinated by the European Molecular Biology Laboratory (EMBL), Meyerhofstraße 1, 69117 Heidelberg, Germany. The consortium partners are listed on our "
+								},
+								{
+									"type": "text",
+									"text": "partners page",
+									"marks": [
+										{
+											"type": "link",
+											"attrs": {
+												"href": "/about#partners"
+											}
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": "."
 								}
 							]
 						},
@@ -213,11 +228,11 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "This website is hosted by the Austrian Centre for Digital Humanities and Cultural Heritage (ACDH-CH) of the Austrian Academy of Sciences, Bäckerstraße 13, 1010 Vienna, Austria. "
+									"text": "This website is hosted by the Austrian Centre for Digital Humanities (ACDH) of the Austrian Academy of Sciences, Bäckerstraße 13, 1010 Vienna, Austria. "
 								},
 								{
 									"type": "text",
-									"text": "[To be completed: confirm the address with ACDH-CH]",
+									"text": "[To be completed: confirm the address with ACDH]",
 									"marks": [
 										{
 											"type": "bold"

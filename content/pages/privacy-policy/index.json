@@ -77,7 +77,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "DARIAH ERIC publishes this website on behalf of the STARDAST consortium. "
+									"text": "DARIAH ERIC publishes this website on behalf of the STARDAST consortium."
 								}
 							]
 						},
@@ -86,17 +86,44 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "Data Protection Officer: Arnaud Roi, arnaud.roi@dariah.eu  "
-								},
-								{
-									"type": "hardBreak"
-								},
-								{
-									"type": "hardBreak"
+									"text": "Data Protection Officer: Arnaud Roi, "
 								},
 								{
 									"type": "text",
-									"text": "DARIAH ERIC runs this website and decides how personal data collected through it is used. The Austrian Centre for Digital Humanities and Cultural Heritage (ACDH-CH) hosts the website and operates the analytics and the mailing list database on behalf of DARIAH ERIC. The European Molecular Biology Laboratory (EMBL), as coordinator of the STARDAST project, is responsible for the content of this website (see Imprint)."
+									"text": "arnaud.roi@dariah.eu",
+									"marks": [
+										{
+											"type": "link",
+											"attrs": {
+												"href": "mailto:arnaud.roi@dariah.eu"
+											}
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "DARIAH ERIC runs this website and decides how personal data collected through it is used. The Austrian Centre for Digital Humanities (ACDH) hosts the website and operates the analytics and the mailing list database on behalf of DARIAH ERIC. The European Molecular Biology Laboratory (EMBL), as coordinator of the STARDAST project, is responsible for the content of this website (see "
+								},
+								{
+									"type": "text",
+									"text": "Imprint",
+									"marks": [
+										{
+											"type": "link",
+											"attrs": {
+												"href": "/imprint"
+											}
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": ")."
 								}
 							]
 						}
@@ -117,7 +144,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "This website is hosted by the Austrian Centre for Digital Humanities and Cultural Heritage (ACDH-CH) of the Austrian Academy of Sciences, in Vienna, Austria. "
+									"text": "This website is hosted by the Austrian Centre for Digital Humanities (ACDH) of the Austrian Academy of Sciences, in Vienna, Austria. "
 								},
 								{
 									"type": "text",
@@ -144,7 +171,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "[To be completed: whether server logs are kept, and for how long - to be confirmed with ACDH-CH]",
+									"text": "[To be completed: whether server logs are kept, and for how long – to be confirmed with ACDH]",
 									"marks": [
 										{
 											"type": "bold"
@@ -200,7 +227,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "To understand how the website is used, we use Matomo, an open-source analytics service, run by ACDH-CH on its own servers at matomo.acdh.oeaw.ac.at. Your data is not shared with third parties."
+									"text": "To understand how the website is used, we use Matomo, an open-source analytics service, run by ACDH on its own servers at matomo.acdh.oeaw.ac.at. Your data is not shared with third parties."
 								}
 							]
 						},
@@ -302,7 +329,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "[To be completed: whether ACDH-CH's Matomo anonymises IP addresses, and how long data is kept - to be confirmed with ACDH-CH]",
+									"text": "[To be completed: whether ACDH's Matomo anonymises IP addresses, and how long data is kept – to be confirmed with ACDH]",
 									"marks": [
 										{
 											"type": "bold"
@@ -337,19 +364,32 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "If you subscribe to our mailing list, we store your first name, last name, email address, and - if you provide it - your institution. We use this information only to send you the STARDAST mailing list. It is stored in a database run by ACDH-CH. Your data is only accessible to DARIAH ERIC, ACDH-CH and STARDAST consortium partners. "
+									"text": "If you subscribe to our mailing list, we store your first name, last name, email address, and – if you provide it – your institution. We use this information only to send you the STARDAST mailing list. It is stored in a database run by ACDH. Your data is only accessible to DARIAH ERIC, ACDH, and STARDAST consortium partners."
 								}
 							]
-						},
-						{
-							"type": "paragraph"
 						},
 						{
 							"type": "paragraph",
 							"content": [
 								{
 									"type": "text",
-									"text": "The legal basis is your consent (Art. 6(1)(a) GDPR). You can withdraw your consent and unsubscribe at any time with the link at the end of every email we send, or by writing to info@stardast.eu. We keep your data until you unsubscribe."
+									"text": "The legal basis is your consent (Art. 6(1)(a) GDPR). You can withdraw your consent and unsubscribe at any time with the link at the end of every email we send, or by writing to "
+								},
+								{
+									"type": "text",
+									"text": "info@stardast.eu",
+									"marks": [
+										{
+											"type": "link",
+											"attrs": {
+												"href": "mailto:info@stardast.eu"
+											}
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": ". We keep your data until you unsubscribe."
 								}
 							]
 						}
@@ -388,7 +428,23 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "Changes are saved in a public GitHub repository, DARIAH-ERIC/stardast-website, with the editor's name and GitHub no-reply address as the author - not their email address."
+									"text": "Changes are saved in a public GitHub repository, "
+								},
+								{
+									"type": "text",
+									"text": "DARIAH-ERIC/stardast-website",
+									"marks": [
+										{
+											"type": "link",
+											"attrs": {
+												"href": "https://github.com/DARIAH-ERIC/stardast-website"
+											}
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": ", with the editor's name and GitHub no-reply address as the author – not their email address."
 								}
 							]
 						}
@@ -441,7 +497,7 @@
 								},
 								{
 									"type": "text",
-									"text": ")"
+									"text": ")."
 								}
 							]
 						},
@@ -496,28 +552,24 @@
 											}
 										}
 									]
-								},
-								{
-									"type": "hardBreak"
-								},
-								{
-									"type": "hardBreak"
-								},
-								{
-									"type": "text",
-									"text": "Other Project Activities ",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
-								},
-								{
-									"type": "hardBreak"
-								},
-								{
-									"type": "hardBreak"
-								},
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		{
+			"type": "text",
+			"data": {
+				"layout": "stacked",
+				"title": "Other project activities",
+				"content": {
+					"type": "doc",
+					"content": [
+						{
+							"type": "paragraph",
+							"content": [
 								{
 									"type": "text",
 									"text": "This policy only covers this website. Personal data processed in other STARDAST activities, such as recruitment, mentoring, training, and cascading grants, is handled by the partner organisations involved and is covered by their own privacy information."

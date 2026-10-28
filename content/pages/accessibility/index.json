@@ -231,7 +231,7 @@
 											"content": [
 												{
 													"type": "text",
-													"text": "the menu, the search and the mailing list form work with a keyboard"
+													"text": "the menu, the search, and the mailing list form work with a keyboard"
 												}
 											]
 										}
@@ -259,7 +259,7 @@
 											"content": [
 												{
 													"type": "text",
-													"text": "no text is cut off when the text size is doubled, or when line, letter and word spacing are increased"
+													"text": "no text is cut off when the text size is doubled, or when line, letter, and word spacing are increased"
 												}
 											]
 										}
@@ -273,7 +273,7 @@
 											"content": [
 												{
 													"type": "text",
-													"text": "page titles, headings, landmarks, and the names of links, buttons, images and form fields - the structure that screen readers rely on - are complete and meaningful"
+													"text": "page titles, headings, landmarks, and the names of links, buttons, images, and form fields – the structure that screen readers rely on – are complete and meaningful"
 												}
 											]
 										}
