@@ -1,8 +1,10 @@
 {
 	"name": "AstraZeneca",
 	"shortName": "AZ",
-	"logo": "placeholder-logo-astrazeneca",
+	"logo": "astrazeneca-logo-colour-ze9jwr",
 	"url": "https://www.astrazeneca.com",
 	"linkedin": "https://www.linkedin.com/company/astrazeneca/",
-	"countries": ["GB"]
+	"countries": [
+		"GB"
+	]
 }
