@@ -23,10 +23,12 @@ service:
 ingress:
   enabled: true
   path: "/"
+  className: "rke2-ingress-nginx-migration"
   # Without a class name, the cluster's default ingress class is used - traefik, which has no request body limit by
   # default, so uploads through the server, up to `CMS_MAX_UPLOAD_SIZE`, need no annotation. `traefik-proxy-protocol` is
   # only needed for the clients' ip addresses, which the app does not use.
   annotations:
+    acme.cert-manager.io/http01-ingress-ingressclassname: "rke2-ingress-nginx-migration"
     # For domains outside `*.oeaw.ac.at`, e.g. `www.stardast.eu`.
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     traefik.ingress.kubernetes.io/router.middlewares: kube-system-compress@kubernetescrd
