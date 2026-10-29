@@ -28,16 +28,16 @@
 		"@astrojs/node": "^11.1.9",
 		"@astrojs/react": "^7.1.2",
 		"@internationalized/date": "^3.12.4",
-		"@tiptap/core": "^3.31.4",
-		"@tiptap/extension-subscript": "^3.31.4",
-		"@tiptap/extension-superscript": "^3.31.4",
-		"@tiptap/pm": "^3.31.4",
-		"@tiptap/react": "^3.31.4",
-		"@tiptap/starter-kit": "^3.31.4",
-		"astro": "^7.4.3",
+		"@tiptap/core": "^3.32.1",
+		"@tiptap/extension-subscript": "^3.32.1",
+		"@tiptap/extension-superscript": "^3.32.1",
+		"@tiptap/pm": "^3.32.1",
+		"@tiptap/react": "^3.32.1",
+		"@tiptap/starter-kit": "^3.32.1",
+		"astro": "^7.4.4",
 		"better-result": "^3.0.1",
 		"invokers-polyfill": "^1.0.4",
-		"lucide-react": "^1.63.0",
+		"lucide-react": "^1.64.0",
 		"minisearch": "^7.2.0",
 		"react": "^19.3.0",
 		"react-aria-components": "^1.22.1",
@@ -64,7 +64,7 @@
 		"axe-playwright": "^2.2.2",
 		"eslint-plugin-better-tailwindcss": "^4.10.0",
 		"eslint-plugin-playwright": "^2.12.1",
-		"eslint-plugin-regexp": "^3.3.1",
+		"eslint-plugin-regexp": "^3.3.2",
 		"is-in-ci": "^2.0.0",
 		"lefthook": "^2.2.1",
 		"oxfmt": "^0.75.0",
@@ -114,6 +114,6 @@
 		}
 	},
 	"patchedDependencies": {
-		"astro@7.4.3": "patches/astro@7.4.3.patch"
+		"astro@7.4.4": "patches/astro@7.4.4.patch"
 	}
 }
