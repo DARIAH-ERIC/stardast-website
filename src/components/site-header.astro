@@ -164,6 +164,7 @@ const menuId = "mobile-navigation";
 			 */}
 			<dialog
 				id={menuId}
+				data-navigation-dialog
 				aria-label="Main menu"
 				closedby="any"
 				class="inset-x-0 top-0 bottom-auto m-0 max-h-dvh w-full max-w-none overflow-y-auto border-0 border-b border-border-strong bg-background p-0 text-foreground-strong backdrop:bg-backdrop"
@@ -276,6 +277,13 @@ const menuId = "mobile-navigation";
 			});
 		}
 	}
+
+	/** Pages restored from the back/forward cache keep their state, so the menu dialog would still be open. */
+	window.addEventListener("pagehide", () => {
+		for (const dialog of document.querySelectorAll<HTMLDialogElement>("dialog[data-navigation-dialog]")) {
+			dialog.close();
+		}
+	});
 
 	/**
 	 * Disclosure navigation, see https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/.
@@ -415,6 +423,14 @@ const menuId = "mobile-navigation";
 			if (!navigation.contains(event.target as Node)) {
 				closeAll();
 			}
+		});
+
+		/**
+		 * Pages restored from the back/forward cache keep their state, so a menu whose link was followed would still be
+		 * open.
+		 */
+		window.addEventListener("pagehide", () => {
+			closeAll();
 		});
 	}
 </script>
