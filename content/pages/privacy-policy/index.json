@@ -7,10 +7,21 @@
 			"type": "text",
 			"data": {
 				"layout": "stacked",
-				"title": "Who is responsible",
 				"content": {
 					"type": "doc",
 					"content": [
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Who is responsible"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -126,19 +137,19 @@
 									"text": ")."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Hosting",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Hosting"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -165,19 +176,19 @@
 									"text": "This information is stored in server logs, which are deleted after 90 days."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Cookies",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Cookies"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -195,19 +206,19 @@
 									"text": "Links to the websites of our partners and to LinkedIn are ordinary links: those websites only receive information about you if you follow a link."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Analytics",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Analytics"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -327,19 +338,19 @@
 									"text": "The legal basis is our legitimate interest in improving the website and reporting on its use (Art. 6(1)(f) GDPR)."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Mailing list",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Mailing list"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -373,19 +384,19 @@
 									"text": ". We keep your data until you unsubscribe."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Editors",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Editors"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -428,19 +439,19 @@
 									"text": ", with the editor's name and GitHub no-reply address as the author – not their email address."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Your rights",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Your rights"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -535,19 +546,19 @@
 									]
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Other project activities",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Other project activities"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -556,19 +567,19 @@
 									"text": "This policy only covers this website. Personal data processed in other STARDAST activities, such as recruitment, mentoring, training, and cascading grants, is handled by the partner organisations involved and is covered by their own privacy information."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Changes to this policy",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Changes to this policy"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [

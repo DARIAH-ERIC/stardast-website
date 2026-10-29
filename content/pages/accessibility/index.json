@@ -7,10 +7,21 @@
 			"type": "text",
 			"data": {
 				"layout": "stacked",
-				"title": "Our commitment",
 				"content": {
 					"type": "doc",
 					"content": [
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Our commitment"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -28,19 +39,19 @@
 									"text": "This statement applies to the public pages of this website. It does not cover the editing interface used by the project team."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Compliance status",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Compliance status"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -49,19 +60,19 @@
 									"text": "We aim to meet the Web Content Accessibility Guidelines (WCAG) 2.2 at level AA. To the best of our knowledge, this website meets that standard: the checks described below did not find any failures. However, the website has not yet been tested by people who use assistive technologies such as screen readers, so there may be problems we have not found."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "What we do",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "What we do"
+								}
+							]
+						},
 						{
 							"type": "bulletList",
 							"content": [
@@ -136,19 +147,19 @@
 									]
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Known limitations",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Known limitations"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -175,19 +186,19 @@
 									"text": "Documents and images published by the project team may not always meet these requirements. If you find content you cannot access, please let us know, and we will provide it in an accessible format."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "How this statement was prepared",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "How this statement was prepared"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -289,19 +300,19 @@
 									"text": "None of these checks found a failure."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Feedback and contact",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Feedback and contact"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [

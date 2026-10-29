@@ -7,10 +7,21 @@
 			"type": "text",
 			"data": {
 				"layout": "stacked",
-				"title": "Publisher",
 				"content": {
 					"type": "doc",
 					"content": [
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Publisher"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -89,19 +100,19 @@
 									]
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Contact",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Contact"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -122,19 +133,19 @@
 									]
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Responsible for the content",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Responsible for the content"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -155,19 +166,19 @@
 									]
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "The project",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "The project"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -210,19 +221,19 @@
 									"text": "Funded by the European Union. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or the European Research Executive Agency (REA). Neither the European Union nor the granting authority can be held responsible for them."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Hosting",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Hosting"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -231,19 +242,19 @@
 									"text": "This website is hosted by the Austrian Centre for Digital Humanities (ACDH) of the Austrian Academy of Sciences, Bäckerstraße 13, 1010 Vienna, Austria."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Disclaimer",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Disclaimer"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -252,19 +263,19 @@
 									"text": "We aim to publish accurate and up-to-date information, but we cannot guarantee that it is complete or error-free. This website links to the websites of our partners and others. We have no influence on their content and are not responsible for it. If we learn that a linked page contains unlawful content, we will remove the link."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Source code",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Source code"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
