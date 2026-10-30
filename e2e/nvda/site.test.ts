@@ -109,6 +109,8 @@ test.describe("nvda", () => {
 
 	test("should search the site and announce the results", async ({ page, nvda }) => {
 		const query = "STARDAST";
+		/** Nvda leaves out the quotes around the query. */
+		const summary = new RegExp(`\\d+ results? for\\W+${query}`, "i");
 
 		await page.goto("/search");
 		await page.getByRole("search").waitFor();
@@ -124,23 +126,26 @@ test.describe("nvda", () => {
 		/** Enter switches from browse mode to focus mode, in which keys are typed into the field. */
 		await nvda.act();
 		await nvda.type(query);
-		await nvda.press("Enter");
 
-		const status = page.getByRole("status");
-		await expect(status).toContainText(`for "${query}"`);
+		/** Nvda announces the title of the new page, which has the number of results. */
+		const loaded = await spokenDuring(nvda, async () => {
+			await nvda.press("Enter");
+			await page.getByRole("heading", { level: 2, name: summary }).waitFor();
+		});
+
+		expect(loaded).toMatch(summary);
+
 		await nvda.navigateToWebContent();
 
-		/**
-		 * Reads on to the status: nvda does not announce it when the page loads, only the page title, which has the query
-		 * but not the number of results.
-		 */
-		await nvda.navigateNextUntil(new RegExp(`results? for\\W+${query}`, "i"), { maxNavigationAttempts: 30 });
+		/** The number of results is a heading, and the results are its subheadings. */
+		await nvda.navigateNextHeadingUntil(summary);
 
-		/** Result titles are headings, so that users can move from result to result. */
+		expect(await nvda.lastSpokenPhrase()).toMatch(/heading,? +level 2/i);
+
 		await nvda.nextHeading();
 		const result = await nvda.lastSpokenPhrase();
 
-		expect(result).toMatch(/heading,? +level 2/i);
+		expect(result).toMatch(/heading,? +level 3/i);
 		expect(result).toMatch(/link/i);
 	});
 });
