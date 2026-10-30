@@ -98,6 +98,20 @@
 											"content": [
 												{
 													"type": "text",
+													"text": "Automated tests with the NVDA screen reader check, on every change to the website's code, that landmarks, headings, the skip link, the search, and the mailing list form are announced as intended."
+												}
+											]
+										}
+									]
+								},
+								{
+									"type": "listItem",
+									"content": [
+										{
+											"type": "paragraph",
+											"content": [
+												{
+													"type": "text",
 													"text": "All content and menus can be reached and used with a keyboard, and a skip link leads directly to the main content."
 												}
 											]

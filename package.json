@@ -20,6 +20,7 @@
 		"lint:styles:fix": "bun run --bun stylelint \"./**/*.css\" --cache --fix --ignore-path ./.gitignore",
 		"start": "bun run --bun astro preview",
 		"test:e2e": "playwright test --config ./e2e/playwright.config.ts --update-snapshots=missing",
+		"test:e2e:nvda": "playwright test --config ./e2e/nvda.config.ts",
 		"test:unit": "bun test ./tests/",
 		"types:check": "bun run --bun tsc --noEmit --runExternalCode"
 	},
@@ -52,6 +53,8 @@
 	"devDependencies": {
 		"@astrojs/compiler-rs": "^0.5.2",
 		"@astrojs/ts-content-mapper": "^0.2.0",
+		"@guidepup/guidepup": "^0.39.0",
+		"@guidepup/playwright": "^0.21.0",
 		"@playwright/cli": "^0.1.22",
 		"@playwright/test": "^1.64.0",
 		"@react-aria/optimize-locales-plugin": "^2.1.0",

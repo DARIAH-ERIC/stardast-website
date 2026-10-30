@@ -79,6 +79,24 @@ const typeLabels: Record<string, string> = Object.fromEntries(
 
 const pluralize = (count: number) => (count === 1 ? "result" : "results");
 
+const summary =
+	results == null
+		? undefined
+		: results.total === 0
+			? `No ${type != null ? `${type.label.toLowerCase()} ` : ""}results for "${query}"`
+			: `${String(results.total)} ${pluralize(results.total)} for "${query}"${type != null ? ` in ${type.label.toLowerCase()}` : ""}`;
+
+/**
+ * The outcome of a search is in the title, since that is what screen readers announce when the results page loads - a
+ * live region which is already on a new page is not announced, see `e2e/nvda/site.test.ts`.
+ */
+const documentTitle =
+	summary != null
+		? [summary, page > 1 ? `Page ${String(page)}` : undefined].filter((part) => part != null).join(" - ")
+		: query !== ""
+			? `Search for "${query}"`
+			: "Search";
+
 /**
  * Reported to analytics as a site search, rather than a page view - once per search, i.e. not again for further pages
  * of its results, and with the search terms in matomo's site search report, rather than in page urls.
@@ -91,7 +109,7 @@ const tracking: PageTracking =
 			: { kind: "siteSearch", url: "/search", keyword: query, category: type?.label, resultsCount: results?.total };
 ---
 
-<PageLayout title={query !== "" ? `Search results for "${query}"` : "Search"} tracking={tracking}>
+<PageLayout title={documentTitle} tracking={tracking}>
 	<PageHeader title="Search" heading="Search our website" />
 	<div class="content-container section-spacing">
 		<form role="search" action="/search" method="get" class="flex max-w-2xl flex-wrap gap-3">
@@ -121,12 +139,8 @@ const tracking: PageTracking =
 
 		{results != null && (
 			<>
-				{/* Announced on page load, so that screen reader users hear the outcome of their search. */}
-				<p role="status" class="mt-8 text-foreground-muted">
-					{results.total === 0
-						? `No ${type != null ? `${type.label.toLowerCase()} ` : ""}results for "${query}".`
-						: `${String(results.total)} ${pluralize(results.total)} for "${query}"${type != null ? ` in ${type.label.toLowerCase()}` : ""}.`}
-				</p>
+				{/* A heading, so that screen reader users can move straight to it, with the results as its subheadings. */}
+				<h2 class="mt-8 text-foreground-muted">{summary}</h2>
 
 				{allCount > 0 && (
 					<nav aria-label="Result types" class="mt-6 border-b border-border-strong pb-3">
@@ -162,11 +176,11 @@ const tracking: PageTracking =
 								<li class="border-b border-border">
 									<article class="flex flex-col gap-1.5 py-5">
 										<p class="mono-label text-foreground-muted">{typeLabels[hit.document.type] ?? hit.document.type}</p>
-										<h2 class="text-title text-balance">
+										<h3 class="text-title text-balance">
 											<a href={hit.document.url} class="text-foreground-strong hover:underline underline-offset-4">
 												{hit.document.title}
 											</a>
-										</h2>
+										</h3>
 										{hit.snippet.length > 0 && (
 											<p class="text-pretty text-foreground-muted">
 												{hit.snippet.map((segment) =>
