@@ -3,7 +3,9 @@ import { expect } from "@playwright/test";
 
 /**
  * Asserts on parts of what nvda says - names, roles, states - rather than on whole phrases, whose wording and order
- * change between nvda versions.
+ * change between nvda versions, and between moving by item and by element type. Case-insensitive, since nvda reports
+ * text styled with `text-transform: uppercase` in capitals, and punctuation-insensitive, since it leaves out e.g.
+ * quotes and puts commas between a landmark's name and its role.
  */
 
 /** What nvda says while `action` runs, which may be several commands. */
@@ -29,14 +31,15 @@ test.describe("nvda", () => {
 		await nvda.navigateToWebContent();
 
 		const spoken = await spokenDuring(nvda, async () => {
-			await nvda.navigateNextLandmarkUntil(/legal navigation landmark/i, { maxNavigationAttempts: 12 });
+			await nvda.navigateNextLandmarkUntil(/legal,? navigation landmark/i, { maxNavigationAttempts: 12 });
 		});
 
 		expect(spoken).toMatch(/banner landmark/i);
-		expect(spoken).toMatch(/main navigation landmark/i);
+		expect(spoken).toMatch(/main,? navigation landmark/i);
 		expect(spoken).toMatch(/main landmark/i);
+		expect(spoken).toMatch(/subscribe to our mailing list,? region/i);
 		expect(spoken).toMatch(/content ?info landmark/i);
-		expect(spoken).toMatch(/footer navigation landmark/i);
+		expect(spoken).toMatch(/footer,? navigation landmark/i);
 	});
 
 	test("should move to the main content with the skip link", async ({ page, nvda }) => {
@@ -44,10 +47,10 @@ test.describe("nvda", () => {
 		await page.getByRole("main").waitFor();
 		await nvda.navigateToWebContent();
 
-		await nvda.press("Tab");
+		/** The first thing on the page, where nvda starts reading. */
 		const skipLink = await nvda.lastSpokenPhrase();
 
-		expect(skipLink).toContain("Skip to main content");
+		expect(skipLink).toMatch(/skip to main content/i);
 		expect(skipLink).toMatch(/link/i);
 
 		const spoken = await spokenDuring(nvda, async () => {
@@ -89,18 +92,18 @@ test.describe("nvda", () => {
 		const institution = await nextFormField();
 		const subscribe = await nextFormField();
 
-		expect(firstName).toContain("First name");
+		expect(firstName).toMatch(/first name/i);
 		expect(firstName).toMatch(/required/i);
-		expect(lastName).toContain("Last name");
+		expect(lastName).toMatch(/last name/i);
 		expect(lastName).toMatch(/required/i);
-		expect(email).toContain("Email");
+		expect(email).toMatch(/email/i);
 		expect(email).toMatch(/required/i);
 		/** The notice and privacy policy, via `aria-describedby`. */
-		expect(email).toContain("You can unsubscribe at any time.");
-		expect(institution).toContain("Institution");
-		expect(institution).toContain("optional");
+		expect(email).toMatch(/you can unsubscribe at any time/i);
+		expect(institution).toMatch(/institution/i);
+		expect(institution).toMatch(/optional/i);
 		expect(institution).not.toMatch(/required/i);
-		expect(subscribe).toContain("Subscribe");
+		expect(subscribe).toMatch(/subscribe/i);
 		expect(subscribe).toMatch(/button/i);
 	});
 
@@ -115,7 +118,7 @@ test.describe("nvda", () => {
 		await nvda.perform(nvda.keyboardCommands.moveToNextFormField);
 		const field = await nvda.lastSpokenPhrase();
 
-		expect(field).toContain("Search the site");
+		expect(field).toMatch(/search the site/i);
 		expect(field).toMatch(/required/i);
 
 		/** Enter switches from browse mode to focus mode, in which keys are typed into the field. */
@@ -128,11 +131,10 @@ test.describe("nvda", () => {
 		await nvda.navigateToWebContent();
 
 		/**
-		 * Reads on to the status, rather than waiting for it to be announced on page load - screen readers differ in
-		 * whether they announce live regions which are already on a new page. The attached spoken phrases show what nvda
-		 * does.
+		 * Reads on to the status: nvda does not announce it when the page loads, only the page title, which has the query
+		 * but not the number of results.
 		 */
-		await nvda.navigateNextUntil(new RegExp(`results? for "${query}"`), { maxNavigationAttempts: 30 });
+		await nvda.navigateNextUntil(new RegExp(`results? for\\W+${query}`, "i"), { maxNavigationAttempts: 30 });
 
 		/** Result titles are headings, so that users can move from result to result. */
 		await nvda.nextHeading();
