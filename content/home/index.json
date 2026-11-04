@@ -72,8 +72,8 @@
 		{
 			"type": "partners",
 			"data": {
-				"eyebrow": "Our consortium",
-				"title": "Partners from science, humanities and industry",
+				"title": "Our consortium",
+				"lead": "International organisations, research infrastructures, universities and companies, working across the life and biomedical sciences, physics, environmental research, the humanities and language data.",
 				"links": []
 			}
 		}
