@@ -44,17 +44,17 @@
 				"title": "The impact we want to create",
 				"cards": [
 					{
-						"eyebrow": "Networks",
+						"eyebrow": "NETWORKS",
 						"title": "Lasting connections across Europe",
 						"text": "Sustainable FAIR and Open Science networks, built through competence centres, peer learning and staff exchanges across institutions, disciplines and countries."
 					},
 					{
-						"eyebrow": "Practice",
+						"eyebrow": "PRACTICE",
 						"title": "Higher-quality research through skilled data stewardship",
 						"text": "Better data practices and more reproducible research, supported by an open curriculum, shared tools and training."
 					},
 					{
-						"eyebrow": "Culture",
+						"eyebrow": "CULTURE",
 						"title": "A culture that values data stewardship",
 						"text": "Recognition of data stewardship as a profession, supported by career pathways and recognition frameworks across institutions."
 					}
