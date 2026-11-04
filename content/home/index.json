@@ -1,8 +1,8 @@
 {
 	"hero": {
-		"eyebrow": "STARDAST · Horizon Europe project (1 September 2026 - 31 December 2030)",
-		"title": "Giving Europe’s data stewards the recognition, skills and careers they deserve",
-		"lead": "STARDAST professionalises data stewardship across science, the humanities and industry, and builds the training, networks and institutional support Open Science needs.",
+		"eyebrow": "STARDAST · Horizon Europe project (September 2026 - August 2030)",
+		"title": "Recognition, skills and careers for Europe’s data stewards",
+		"lead": "STARDAST is a Horizon Europe project helping to train, recognise and retain data stewards across disciplines and sectors, so that FAIR data and Open Science become everyday practice.",
 		"links": [
 			{
 				"label": "Explore the project",
@@ -29,16 +29,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "Data stewards turn FAIR and Open Science principles into daily practice, yet their role is still undervalued, with unclear career paths and uneven institutional support. STewardship and Recognition for DAta Science Talent (STARDAST) will work to make data stewardship a recognised, skilled and connected profession across Europe."
-								}
-							]
-						},
-						{
-							"type": "paragraph",
-							"content": [
-								{
-									"type": "text",
-									"text": "It will help institutions build the roles, skills, career pathways and support structures that enable data stewards to thrive, and help researchers put FAIR and Open Science into practice. STARDAST builds on Skills4EOSC and FAIR-IMPACT and contributes to the European Open Science Cloud (EOSC)."
+									"text": "Data stewards turn FAIR data and Open Science into everyday research practice, yet their role is often undervalued, their career paths unclear and institutional support uneven. STARDAST aims to make data stewardship a recognised, skilled and connected profession across Europe. At its heart is a cohort of data stewards embedded across our consortium in nine countries, working together on training, career frameworks and FAIR practice."
 								}
 							]
 						}
@@ -54,18 +45,18 @@
 				"cards": [
 					{
 						"eyebrow": "Networks",
-						"title": "Connected European networks",
-						"text": "Stronger, sustainable networks for FAIR and Open Science, connecting expertise across institutions, disciplines and countries."
+						"title": "Lasting connections across Europe",
+						"text": "Sustainable FAIR and Open Science networks, built through competence centres, peer learning and staff exchanges across institutions, disciplines and countries."
 					},
 					{
 						"eyebrow": "Practice",
-						"title": "Better research through better data stewardship",
-						"text": "Better data practices, research quality and reproducibility, supported by skilled and consistent data stewardship."
+						"title": "Higher-quality research through skilled data stewardship",
+						"text": "Better data practices and more reproducible research, supported by an open curriculum, shared tools and training."
 					},
 					{
 						"eyebrow": "Culture",
 						"title": "A culture that values data stewardship",
-						"text": "Recognition for data stewardship as a profession and for the people who make FAIR data and Open Science possible."
+						"text": "Recognition of data stewardship as a profession, supported by career pathways and recognition frameworks across institutions."
 					}
 				]
 			}
@@ -81,8 +72,8 @@
 		{
 			"type": "partners",
 			"data": {
-				"eyebrow": "Consortium",
-				"title": "Partners from science, the humanities and industry across Europe",
+				"eyebrow": "Our consortium",
+				"title": "International organisations, research infrastructures, universities and companies, working across the life and biomedical sciences, physics, environmental research, the humanities and language data.",
 				"links": []
 			}
 		}
