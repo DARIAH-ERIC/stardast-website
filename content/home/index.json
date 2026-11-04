@@ -1,6 +1,6 @@
 {
 	"hero": {
-		"eyebrow": "STARDAST · Horizon Europe project",
+		"eyebrow": "STARDAST · Horizon Europe project (1 September 2026 - 31 December 2030)",
 		"title": "Giving Europe’s data stewards the recognition, skills and careers they deserve",
 		"lead": "STARDAST professionalises data stewardship across science, the humanities and industry, and builds the training, networks and institutional support Open Science needs.",
 		"links": [
@@ -18,8 +18,8 @@
 		{
 			"type": "text",
 			"data": {
-				"layout": "stacked",
 				"eyebrow": "Vision",
+				"layout": "stacked",
 				"title": "Our vision",
 				"content": {
 					"type": "doc",
