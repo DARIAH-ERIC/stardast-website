@@ -114,8 +114,7 @@
 			"type": "partners",
 			"data": {
 				"anchor": "partners",
-				"eyebrow": "Our Consortium",
-				"title": "Partners",
+				"title": "Our Consortium",
 				"lead": "International organisations, research infrastructures, universities and companies, working across the life and biomedical sciences, physics, environmental research, the humanities and language data.",
 				"links": []
 			}
