@@ -51,11 +51,11 @@
 	--color-brand: var(--palette-blue);
 
 	/**
-	 * The current page in the main navigation. White text has only 3.1:1 contrast on the brand pink, so text on it is
-	 * near-black - 6.2:1.
+	 * The current page in the main navigation. White text has only 3.1:1 contrast on the brand pink, and near-black text
+	 * passes but reads worse, so this is a darker shade with white text - 4.51:1.
 	 */
-	--color-accent: var(--palette-pink);
-	--color-accent-foreground: var(--palette-neutral-950);
+	--color-accent: var(--palette-pink-dark);
+	--color-accent-foreground: var(--palette-white);
 	--color-danger: var(--palette-red);
 
 	/**
