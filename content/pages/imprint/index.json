@@ -300,6 +300,43 @@
 									"text": "."
 								}
 							]
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Content licence"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Unless otherwise noted, the content of this website is published under the "
+								},
+								{
+									"type": "text",
+									"text": "Creative Commons Attribution 4.0 International licence (CC BY 4.0)",
+									"marks": [
+										{
+											"type": "link",
+											"attrs": {
+												"href": "https://creativecommons.org/licenses/by/4.0/"
+											}
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": ". Please credit the STARDAST consortium when reusing it. Logos are not covered by this licence and remain the property of their respective owners."
+								}
+							]
 						}
 					]
 				}
