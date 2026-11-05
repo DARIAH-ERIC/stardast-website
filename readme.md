@@ -17,3 +17,6 @@ Neither license applies to:
 - the STARDAST icons in `public`
 
 All rights to them remain with their respective owners.
+
+The Roboto and Roboto Mono fonts are not part of this repository. They are downloaded at build
+time and are published under the [SIL Open Font License 1.1](https://openfontlicense.org).
