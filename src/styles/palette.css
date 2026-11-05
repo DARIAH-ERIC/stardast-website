@@ -22,8 +22,14 @@
 	/** A light tint of the brand blue, e.g. for search highlights. */
 	--palette-blue-100: #dbe8f6;
 
-	/** The brand pink, from the colour guidelines - for the current page in the main navigation. */
+	/** The brand pink, from the colour guidelines. 3.1:1 contrast on white, so too light for white text. */
 	--palette-pink: #eb609f;
+
+	/**
+	 * The brand pink with only its oklch lightness lowered, so it keeps its hue and chroma - for the current page in the
+	 * main navigation. 4.51:1 contrast with white text, so it cannot get any lighter.
+	 */
+	--palette-pink-dark: #cb4284;
 
 	/** For error messages on `--palette-blue` - not a brand colour. 4.6:1 contrast. */
 	--palette-red-50: #ffe8e8;
