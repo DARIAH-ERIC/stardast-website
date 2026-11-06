@@ -12,7 +12,8 @@
 		}
 	},
 	/**
-	 * Lets `tsc` type-check `.astro` files. Requires TypeScript 7.1+, and the `--runExternalCode` flag.
+	 * Lets `tsc` type-check `.astro` files. Requires TypeScript 7.1+, and the `--runExternalCode` flag. `oxlint` cannot
+	 * forward that flag to `tsrs-lint`, so it is passed as `TSRS_LINT_RUN_EXTERNAL_CODE=1` instead.
 	 *
 	 * @see {@link https://github.com/withastro/astro/tree/main/packages/language-tools/ts-content-mapper}
 	 */
