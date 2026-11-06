@@ -17,7 +17,7 @@ service:
   enabled: true
   name: "web"
   url: "$public_url"
-  # Gets the apex domain onto the certificate, so it can be redirected to `www.` over https.
+  # Gets the apex domain onto the certificate and into the ingress rules, so it can be redirected to `www.` over https.
   additionalHosts:
     - "stardast.eu"
   type: ClusterIP
@@ -26,16 +26,15 @@ service:
 ingress:
   enabled: true
   path: "/"
-  className: "rke2-ingress-nginx-migration"
-  # Without a class name, the cluster's default ingress class is used - traefik, which has no request body limit by
-  # default, so uploads through the server, up to `CMS_MAX_UPLOAD_SIZE`, need no annotation. `traefik-proxy-protocol` is
-  # only needed for the clients' ip addresses, which the app does not use.
+  # Set explicitly: the cluster's default class is `rke2-ingress-nginx-migration`, which ignores `traefik.ingress.*`
+  # annotations, so its responses are not compressed. Plain traefik has no request body limit by default, so uploads
+  # through the server, up to `CMS_MAX_UPLOAD_SIZE`, need no annotation. `traefik-proxy-protocol` is only needed for the
+  # clients' ip addresses, which the app does not use.
+  className: "traefik"
   annotations:
-    acme.cert-manager.io/http01-ingress-ingressclassname: "rke2-ingress-nginx-migration"
+    acme.cert-manager.io/http01-ingress-ingressclassname: "traefik"
     # For domains outside `*.oeaw.ac.at`, e.g. `www.stardast.eu`.
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    # The class is served by traefik's ingress-nginx provider, which supports this annotation.
-    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
     traefik.ingress.kubernetes.io/router.middlewares: kube-system-compress@kubernetescrd
 livenessProbe:
   path: "/api/health/live"
