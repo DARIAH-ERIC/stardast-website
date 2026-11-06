@@ -3,6 +3,7 @@
 	"pre-commit": {
 		"commands": {
 			"oxlint": {
+				"env": { "TSRS_LINT_RUN_EXTERNAL_CODE": "1" },
 				"run": "bun run --bun oxlint --fix --no-error-on-unmatched-pattern --report-unused-disable-directives --type-aware --type-check {staged_files}",
 				"stage_fixed": true
 			},
