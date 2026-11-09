@@ -18,7 +18,7 @@
 /**
  * The stylesheet of the admin ui, separate from the site's `index.css`: the intent ui components in
  * `src/components/admin/ui/` use intent ui's semantic token names, some of which clash with the site's - e.g. `accent`
- * is a neutral highlight here, but the brand pink on the site.
+ * is a neutral highlight here, but a shade of the brand pink on the site.
  *
  * @see {@link https://intentui.com/docs/getting-started/theming}
  */

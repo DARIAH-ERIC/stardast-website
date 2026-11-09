@@ -1,6 +1,9 @@
 {
 	"name": "RICAPACITY",
-	"logo": "placeholder-logo-ricapacity",
+	"logo": "logo-ricapacity",
 	"url": "https://ricapacity.com/",
-	"linkedin": "https://www.linkedin.com/company/ricapacity/"
+	"linkedin": "https://www.linkedin.com/company/ricapacity/",
+	"countries": [
+		"DE"
+	]
 }

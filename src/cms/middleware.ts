@@ -14,6 +14,22 @@ function isPathWithin(pathname: string, prefix: string): boolean {
 	return pathname === prefix || pathname.startsWith(`${prefix}/`);
 }
 
+/**
+ * Astro streams pages: `next()` returns once the page's frontmatter has run, and the cache reads the page's tags from
+ * its headers right then - before components, e.g. `cms-image.astro`, have read, and tagged, their content. Such a page
+ * would not be invalidated when e.g. an image is replaced in the media library. Buffering renders the whole page
+ * first.
+ *
+ * Empty bodies stay empty, see the 404 handling in `src/middleware.ts`.
+ */
+async function renderFully(response: Response): Promise<Response> {
+	if (response.body == null) {
+		return response;
+	}
+
+	return new Response(await response.arrayBuffer(), response);
+}
+
 /** Reachable without a session: the sign-in page, and the sign-in flow. */
 const publicAdminPaths = ["/admin/login", "/api/cms/auth"];
 
@@ -82,7 +98,7 @@ export async function handleRequest(
 		/** Cheap to create: the content revision is only resolved on the first read. */
 		context.locals.content = createContentReader(context);
 
-		return next();
+		return renderFully(await next());
 	}
 
 	/**

@@ -7,10 +7,21 @@
 			"type": "text",
 			"data": {
 				"layout": "stacked",
-				"title": "Who is responsible",
 				"content": {
 					"type": "doc",
 					"content": [
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Who is responsible"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -25,10 +36,48 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "[To be completed: name and address of the controller, and a contact email address]",
+									"text": "DARIAH ERIC"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "c/o CNRS – UAR3598 – Huma-Num"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "54 boulevard Raspail"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "75006 Paris"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "France"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "info@stardast.eu",
 									"marks": [
 										{
-											"type": "bold"
+											"type": "link",
+											"attrs": {
+												"href": "mailto:info@stardast.eu"
+											}
 										}
 									]
 								}
@@ -39,42 +88,74 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "[To be completed: contact details of the data protection officer, if there is one]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
+									"text": "DARIAH ERIC publishes this website on behalf of the STARDAST consortium."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Hosting",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
 						{
 							"type": "paragraph",
 							"content": [
 								{
 									"type": "text",
-									"text": "This website is hosted by the Austrian Centre for Digital Humanities and Cultural Heritage (ACDH-CH) of the Austrian Academy of Sciences, in Vienna, Austria. "
+									"text": "Data Protection Officer: Arnaud Roi, "
 								},
 								{
 									"type": "text",
-									"text": "[To be completed: confirm the hosting arrangement, e.g. a data processing agreement with the Austrian Academy of Sciences]",
+									"text": "arnaud.roi@dariah.eu",
 									"marks": [
 										{
-											"type": "bold"
+											"type": "link",
+											"attrs": {
+												"href": "mailto:arnaud.roi@dariah.eu"
+											}
 										}
 									]
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "DARIAH ERIC runs this website and decides how personal data collected through it is used. The Austrian Centre for Digital Humanities (ACDH) hosts the website and operates the analytics and the mailing list database on behalf of DARIAH ERIC. The European Molecular Biology Laboratory (EMBL), as coordinator of the STARDAST project, is responsible for the content of this website (see "
+								},
+								{
+									"type": "text",
+									"text": "Imprint",
+									"marks": [
+										{
+											"type": "link",
+											"attrs": {
+												"href": "/imprint"
+											}
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": ")."
+								}
+							]
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Hosting"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "This website is hosted by the Austrian Centre for Digital Humanities (ACDH) of the Austrian Academy of Sciences, in Vienna, Austria."
 								}
 							]
 						},
@@ -92,27 +173,22 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "[To be completed: whether server logs are kept, and for how long - to be confirmed with ACDH-CH]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
+									"text": "This information is stored in server logs, which are deleted after 90 days."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Cookies",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Cookies"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
@@ -130,25 +206,25 @@
 									"text": "Links to the websites of our partners and to LinkedIn are ordinary links: those websites only receive information about you if you follow a link."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Analytics",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Analytics"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
 								{
 									"type": "text",
-									"text": "To understand how the website is used, we use Matomo, an open-source analytics service, run by ACDH-CH on its own servers at matomo.acdh.oeaw.ac.at. Your data is not shared with third parties."
+									"text": "To understand how the website is used, we use Matomo, an open-source analytics service, run by ACDH on its own servers at matomo.acdh.oeaw.ac.at. Your data is not shared with third parties."
 								}
 							]
 						},
@@ -250,12 +326,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "[To be completed: whether ACDH-CH's Matomo anonymises IP addresses, and how long data is kept - to be confirmed with ACDH-CH]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
+									"text": "IP addresses are anonymised before they are stored. Data about individual visits is deleted after five years. After that, only aggregated statistics are kept, which cannot be related to individual visitors."
 								}
 							]
 						},
@@ -267,25 +338,16 @@
 									"text": "The legal basis is our legitimate interest in improving the website and reporting on its use (Art. 6(1)(f) GDPR)."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Mailing list",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
 						{
-							"type": "paragraph",
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
 							"content": [
 								{
 									"type": "text",
-									"text": "If you subscribe to our mailing list, we store your first name, last name, email address, and - if you provide it - your institution. We use this information only to send you the STARDAST mailing list. It is stored in a database run by ACDH-CH."
+									"text": "Mailing list"
 								}
 							]
 						},
@@ -294,14 +356,26 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "The legal basis is your consent (Art. 6(1)(a) GDPR). You can withdraw your consent and unsubscribe at any time "
+									"text": "If you subscribe to our mailing list, we store your first name, last name, email address, and – if you provide it – your institution. We use this information only to send you the STARDAST mailing list. It is stored in a database run by ACDH. Your data is only accessible to DARIAH ERIC, ACDH, and STARDAST consortium partners."
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "The legal basis is your consent (Art. 6(1)(a) GDPR). You can withdraw your consent and unsubscribe at any time with the link at the end of every email we send, or by writing to "
 								},
 								{
 									"type": "text",
-									"text": "[To be completed: how - e.g. with the link in every email, or by writing to the contact address above]",
+									"text": "info@stardast.eu",
 									"marks": [
 										{
-											"type": "bold"
+											"type": "link",
+											"attrs": {
+												"href": "mailto:info@stardast.eu"
+											}
 										}
 									]
 								},
@@ -310,34 +384,25 @@
 									"text": ". We keep your data until you unsubscribe."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Editors",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Editors"
+								}
+							]
+						},
 						{
 							"type": "paragraph",
 							"content": [
 								{
 									"type": "text",
-									"text": "This section only concerns members of the project team who edit the website's content. Editors sign in with their GitHub account, which is processed by GitHub, Inc. in the United States. "
-								},
-								{
-									"type": "text",
-									"text": "[To be completed: legal basis for the transfer to the United States, e.g. the EU-U.S. Data Privacy Framework]",
-									"marks": [
-										{
-											"type": "bold"
-										}
-									]
+									"text": "This section only concerns members of the project team who edit the website's content. Editors sign in with their GitHub account, which is processed by GitHub, Inc. in the United States. The transfer is based on the EU-U.S. Data Privacy Framework, under which GitHub, Inc. is certified (Art. 45 GDPR)."
 								}
 							]
 						},
@@ -355,28 +420,35 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "Changes are saved in a public GitHub repository, DARIAH-ERIC/stardast-website, with the editor's name and GitHub no-reply address as the author - not their email address."
+									"text": "Changes are saved in a public GitHub repository, "
+								},
+								{
+									"type": "text",
+									"text": "DARIAH-ERIC/stardast-website",
+									"marks": [
+										{
+											"type": "link",
+											"attrs": {
+												"href": "https://github.com/DARIAH-ERIC/stardast-website"
+											}
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": ", with the editor's name and GitHub no-reply address as the author – not their email address."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Your rights",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
 						{
-							"type": "paragraph",
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
 							"content": [
 								{
 									"type": "text",
-									"text": "You have the right to access, correct, and delete your personal data, to restrict or object to its processing, and to data portability. Where processing is based on your consent, you can withdraw it at any time, without affecting the processing before. To exercise these rights, please contact us at the address above."
+									"text": "Your rights"
 								}
 							]
 						},
@@ -385,50 +457,135 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "You also have the right to lodge a complaint with a data protection supervisory authority. "
+									"text": "You have the right to access, correct, and delete your personal data, to restrict or object to its processing, and to data portability. Where processing is based on your consent, you can withdraw it at any time, without affecting the processing before. To exercise these rights, please write to "
 								},
 								{
 									"type": "text",
-									"text": "[To be completed: name and contact details of the competent supervisory authority]",
+									"text": "info@stardast.eu",
 									"marks": [
 										{
-											"type": "bold"
+											"type": "link",
+											"attrs": {
+												"href": "mailto:info@stardast.eu"
+											}
 										}
 									]
+								},
+								{
+									"type": "text",
+									"text": " or to our data protection officer, Arnaud Roi ("
+								},
+								{
+									"type": "text",
+									"text": "arnaud.roi@dariah.eu",
+									"marks": [
+										{
+											"type": "link",
+											"attrs": {
+												"href": "mailto:arnaud.roi@dariah.eu"
+											}
+										}
+									]
+								},
+								{
+									"type": "text",
+									"text": ")."
 								}
 							]
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"layout": "stacked",
-				"title": "Changes to this policy",
-				"content": {
-					"type": "doc",
-					"content": [
+						},
 						{
 							"type": "paragraph",
 							"content": [
 								{
 									"type": "text",
-									"text": "Last updated: "
+									"text": "You also have the right to lodge a complaint with a data protection supervisory authority, in particular in the EU member state where you live or work. The authority responsible for DARIAH ERIC is the French data protection authority:"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Commission Nationale de l'Informatique et des Libertés (CNIL)"
+								},
+								{
+									"type": "hardBreak"
 								},
 								{
 									"type": "text",
-									"text": "[To be completed: date of publication]",
+									"text": "3 place de Fontenoy, TSA 80715"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "75334 Paris Cedex 07"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "France"
+								},
+								{
+									"type": "hardBreak"
+								},
+								{
+									"type": "text",
+									"text": "www.cnil.fr",
 									"marks": [
 										{
-											"type": "bold"
+											"type": "link",
+											"attrs": {
+												"href": "https://www.cnil.fr"
+											}
 										}
 									]
-								},
+								}
+							]
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
 								{
 									"type": "text",
-									"text": "."
+									"text": "Other project activities"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "This policy only covers this website. Personal data processed in other STARDAST activities, such as recruitment, mentoring, training, and cascading grants, is handled by the partner organisations involved and is covered by their own privacy information."
+								}
+							]
+						},
+						{
+							"type": "heading",
+							"attrs": {
+								"level": 2
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Changes to this policy"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"content": [
+								{
+									"type": "text",
+									"text": "Last updated: 28 October 2026"
 								}
 							]
 						}

@@ -4,5 +4,5 @@
 	"logo": "logo-universitat-hamburg",
 	"url": "https://www.uni-hamburg.de",
 	"linkedin": "https://www.linkedin.com/school/unihamburg/",
-	"country": "DE"
+	"countries": ["DE"]
 }

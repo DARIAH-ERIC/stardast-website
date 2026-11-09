@@ -4,5 +4,5 @@
 	"logo": "logo-eatris",
 	"url": "https://eatris.eu",
 	"linkedin": "https://www.linkedin.com/company/eatris-eric/",
-	"country": "NL"
+	"countries": ["NL"]
 }

@@ -1,8 +1,8 @@
 ---
+import type { SectionData } from "#/src/cms/config.ts";
 import CmsImage from "#/src/components/cms-image.astro";
 import CoverImage from "#/src/components/cover-image.astro";
 import SectionHeader from "#/src/components/sections/section-header.astro";
-import type { SectionData } from "#/src/cms/config.ts";
 
 export type Props = SectionData<"cards">;
 
@@ -17,10 +17,10 @@ const Heading = title != null ? "h3" : "h2";
 <section id={anchor}>
 	<div class="content-container section-spacing">
 		<SectionHeader eyebrow={eyebrow} title={title} lead={lead} />
-		{/* A grid of cells sharing their dividing lines: each cell draws its own right and bottom edge. */}
-		<ul class="grid border-t border-l border-border-strong sm:grid-cols-2 lg:grid-cols-3" role="list">
-			{
-				cards.map((card) => {
+		{cards.length > 0 ? (
+			/* A grid of cells sharing their dividing lines: each cell draws its own right and bottom edge. */
+			<ul class="grid border-t border-l border-border-strong sm:grid-cols-2 lg:grid-cols-3" role="list">
+				{cards.map((card) => {
 					return (
 						<li class="relative flex flex-col border-r border-b border-border-strong transition-colors has-[a:hover]:bg-background-hover">
 							{/* Like news cards, with a placeholder where there is no image - or only images, where there are. */}
@@ -28,7 +28,11 @@ const Heading = title != null ? "h3" : "h2";
 								<CoverImage id={card.image} sizes={sizes} />
 							) : (
 								card.image != null && (
-									<CmsImage id={card.image} sizes={sizes} class="aspect-video w-full border-b border-border-strong object-cover" />
+									<CmsImage
+										id={card.image}
+										sizes={sizes}
+										class="aspect-video w-full border-b border-border-strong object-cover"
+									/>
 								)
 							)}
 							<div class="flex flex-col gap-3 p-6">
@@ -51,8 +55,11 @@ const Heading = title != null ? "h3" : "h2";
 							</div>
 						</li>
 					);
-				})
-			}
-		</ul>
+				})}
+			</ul>
+		) : (
+			/* Like the news and events pages, e.g. while materials are still to come. */
+			<p class="border border-dashed border-border-strong p-8 mono-label text-foreground-muted">Coming soon</p>
+		)}
 	</div>
 </section>

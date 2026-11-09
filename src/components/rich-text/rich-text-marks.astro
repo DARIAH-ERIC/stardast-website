@@ -26,12 +26,12 @@ const Element = mark != null ? elements[mark.type] : undefined;
 const attributes = mark?.type === "link" ? { href: mark.attrs?.href as string } : {};
 ---
 
-{
-	mark == null ? (
-		text
-	) : Element == null ? (
+{mark == null ? (
+	text
+) : Element == null ? (
+	<Astro.self text={text} marks={rest} />
+) : (
+	<Element {...attributes}>
 		<Astro.self text={text} marks={rest} />
-	) : (
-		<Element {...attributes}><Astro.self text={text} marks={rest} /></Element>
-	)
-}
+	</Element>
+)}

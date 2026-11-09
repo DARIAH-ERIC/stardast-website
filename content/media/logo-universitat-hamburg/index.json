@@ -1,10 +1,10 @@
 {
 	"alt": "Universität Hamburg",
-	"filename": "logo-universitat-hamburg.png",
-	"contentType": "image/png",
-	"size": 75680,
-	"width": 1621,
-	"height": 529,
+	"filename": "logo-universitat-hamburg.svg",
+	"contentType": "image/svg+xml",
+	"size": 16190,
+	"width": 392,
+	"height": 127,
 	"storage": "repo",
-	"key": "content/media/logo-universitat-hamburg/logo-universitat-hamburg.png"
+	"key": "content/media/logo-universitat-hamburg/logo-universitat-hamburg.svg"
 }

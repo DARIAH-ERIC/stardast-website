@@ -4,5 +4,5 @@
 	"logo": "logo-ceitec-masaryk-university",
 	"url": "https://www.ceitec.eu",
 	"linkedin": "https://www.linkedin.com/company/ceitec---central-european-institute-of-technology/",
-	"country": "CZ"
+	"countries": ["CZ"]
 }

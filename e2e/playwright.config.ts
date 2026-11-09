@@ -27,6 +27,8 @@ export default defineConfig({
 	retries: isInCi ? 2 : 0,
 	snapshotPathTemplate: "{testDir}/snapshots/{testFilePath}-snapshots/{arg}{-projectName}{-platform}{ext}",
 	testDir: ".",
+	/** Need a screen reader, see `./nvda.config.ts`. */
+	testIgnore: "nvda/**",
 	timeout: 30_000,
 	use: {
 		baseURL: env.PUBLIC_APP_BASE_URL,

@@ -1,4 +1,5 @@
 ---
+import logo from "#/src/assets/images/logo-stardast-eosc-horizontal-color-black.svg";
 import { socialPlatforms } from "#/src/cms/config.ts";
 import Icon from "#/src/components/icon.astro";
 import { funding, siteName } from "#/src/config/project.ts";
@@ -28,74 +29,80 @@ const socialLinks = (site?.socialLinks ?? []).map((link) => {
 
 	return { href: link.url, icon: link.platform, label: `${siteName} on ${platform?.label ?? link.platform}` };
 });
-
 ---
 
 <footer class="bg-background text-sm text-foreground">
 	<div class="content-container flex flex-col gap-8 pt-12 pb-10">
-		<div class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-			<a href="/" class="shrink-0 self-start lg:self-auto">
-				<img
-					src="/assets/images/logo-stardast-horizontal-black.svg"
-					alt="STARDAST - Home"
-					width="584"
-					height="137"
-					loading="lazy"
-					class="h-9 w-auto"
-				/>
-			</a>
-
-			<div class="flex flex-wrap items-center gap-x-8 gap-y-4">
-				{
-					mainNavigation.length > 0 && (
-						<nav aria-label="Footer">
-							<ul class="flex flex-wrap gap-x-6 gap-y-3" role="list">
-								{mainNavigation.map((link) => {
+		<div class="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+			{/* Who we are, and how to reach us. */}
+			<div class="flex shrink-0 flex-col items-start gap-6">
+				<a href="/">
+					<img
+						src={logo.src}
+						alt="STARDAST, EOSC - Home"
+						width={logo.width}
+						height={logo.height}
+						loading="lazy"
+						class="logo-backing h-9 w-auto"
+					/>
+				</a>
+				{(contactEmail != null || socialLinks.length > 0) && (
+					<div class="flex flex-wrap items-center gap-x-8 gap-y-4">
+						{contactEmail != null && (
+							<p class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+								<span class="mono-label text-foreground-muted">Contact</span>
+								<a
+									href={`mailto:${contactEmail}`}
+									class="text-foreground-strong underline decoration-1 underline-offset-4 transition-colors hover:text-primary-hover"
+								>
+									{contactEmail}
+								</a>
+							</p>
+						)}
+						{socialLinks.length > 0 && (
+							<ul class="flex gap-3" role="list">
+								{socialLinks.map((link) => {
 									return (
 										<li>
-											<a href={link.href} class="mono-label text-foreground-strong hover:text-primary-hover hover:underline underline-offset-4">
-												{link.label}
+											<a
+												href={link.href}
+												rel="me"
+												class="inline-flex size-10 items-center justify-center border border-foreground-strong text-foreground-strong transition-colors hover:bg-foreground-strong hover:text-background"
+											>
+												<Icon name={link.icon} class="size-4" />
+												<span class="sr-only">{link.label}</span>
 											</a>
 										</li>
 									);
 								})}
 							</ul>
-						</nav>
-					)
-				}
-				{
-					socialLinks.length > 0 && (
-						<ul class="flex gap-3" role="list">
-							{socialLinks.map((link) => {
-								return (
-									<li>
-										<a
-											href={link.href}
-											rel="me"
-											class="inline-flex size-10 items-center justify-center border border-foreground-strong text-foreground-strong transition-colors hover:bg-foreground-strong hover:text-background"
-										>
-											<Icon name={link.icon} class="size-4" />
-											<span class="sr-only">{link.label}</span>
-										</a>
-									</li>
-								);
-							})}
-						</ul>
-					)
-				}
+						)}
+					</div>
+				)}
 			</div>
-		</div>
 
-		{
-			contactEmail != null && (
-				<p>
-					Contact:{" "}
-					<a href={`mailto:${contactEmail}`} class="text-foreground-strong underline hover:text-primary-hover">
-						{contactEmail}
-					</a>
-				</p>
-			)
-		}
+			{mainNavigation.length > 0 && (
+				<nav aria-label="Footer">
+					<ul
+						class="flex flex-wrap gap-x-6 gap-y-3 lg:grid lg:grid-cols-[repeat(3,auto)] lg:gap-x-10 xl:flex xl:gap-x-6"
+						role="list"
+					>
+						{mainNavigation.map((link) => {
+							return (
+								<li>
+									<a
+										href={link.href}
+										class="mono-label text-foreground-strong hover:text-primary-hover hover:underline underline-offset-4"
+									>
+										{link.label}
+									</a>
+								</li>
+							);
+						})}
+					</ul>
+				</nav>
+			)}
+		</div>
 
 		{/* The emblem and the disclaimer are one funding acknowledgement, so they stand together. */}
 		<div class="flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:gap-8">
@@ -105,7 +112,7 @@ const socialLinks = (site?.socialLinks ?? []).map((link) => {
 				width="990"
 				height="220"
 				loading="lazy"
-				class="h-11 w-auto shrink-0 self-start sm:self-auto"
+				class="logo-backing h-11 w-auto shrink-0 self-start sm:self-auto"
 			/>
 			<p class="max-w-[72ch] text-[0.8125rem]/relaxed text-foreground-muted">{disclaimer}</p>
 		</div>
@@ -113,23 +120,21 @@ const socialLinks = (site?.socialLinks ?? []).map((link) => {
 		<div class="border-t border-border pt-6">
 			<div class="flex flex-col gap-4 mono-label text-foreground-muted sm:flex-row sm:items-center sm:justify-between">
 				<p>&copy; {year} STARDAST</p>
-				{
-					legalNavigation.length > 0 && (
-						<nav aria-label="Legal">
-							<ul class="flex flex-wrap gap-x-6 gap-y-2" role="list">
-								{legalNavigation.map((link) => {
-									return (
-										<li>
-											<a href={link.href} class="hover:text-foreground-strong hover:underline underline-offset-4">
-												{link.label}
-											</a>
-										</li>
-									);
-								})}
-							</ul>
-						</nav>
-					)
-				}
+				{legalNavigation.length > 0 && (
+					<nav aria-label="Legal">
+						<ul class="flex flex-wrap gap-x-6 gap-y-2" role="list">
+							{legalNavigation.map((link) => {
+								return (
+									<li>
+										<a href={link.href} class="hover:text-foreground-strong hover:underline underline-offset-4">
+											{link.label}
+										</a>
+									</li>
+								);
+							})}
+						</ul>
+					</nav>
+				)}
 			</div>
 		</div>
 	</div>
