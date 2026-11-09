@@ -3,5 +3,5 @@
 	"logo": "logo-merck-group",
 	"url": "https://www.merckgroup.com",
 	"linkedin": "https://www.linkedin.com/company/merck-group/",
-	"country": "DE"
+	"countries": ["DE"]
 }

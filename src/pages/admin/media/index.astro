@@ -1,8 +1,8 @@
 ---
-import { MediaUploader } from "#/src/components/admin/media-uploader.tsx";
-import { getLatestRevision, listMediaOptions } from "#/src/cms/admin.ts";
 import { FileText } from "lucide-react";
 
+import { getLatestRevision, listMediaOptions } from "#/src/cms/admin.ts";
+import { MediaUploader } from "#/src/components/admin/media-uploader.tsx";
 import PageHeader from "#/src/components/admin/page-header.astro";
 import AdminLayout from "#/src/layouts/admin-layout.astro";
 
@@ -10,42 +10,37 @@ const media = await listMediaOptions(await getLatestRevision());
 ---
 
 <AdminLayout title="Media">
-	<PageHeader
-		title="Media library"
-		description={`${String(media.length)} ${media.length === 1 ? "file" : "files"}`}
-	/>
+	<PageHeader title="Media library" description={`${String(media.length)} ${media.length === 1 ? "file" : "files"}`} />
 	<MediaUploader client:only="react" />
-	{
-		media.length === 0 ? (
-			<p class="mt-8 text-sm text-muted-fg">No files uploaded yet.</p>
-		) : (
-			<ul class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5" role="list">
-				{media.map((item) => {
-					return (
-						<li>
-							<a
-								href={`/admin/media/${item.id}`}
-								class="flex flex-col gap-2 rounded-lg border border-border bg-card p-2 text-xs shadow-xs transition hover:border-input hover:bg-muted"
-							>
-								{item.thumbnailUrl != null ? (
-									<img
-										src={item.thumbnailUrl}
-										alt=""
-										loading="lazy"
-										class="aspect-square w-full rounded-md bg-muted object-contain"
-									/>
-								) : (
-									<span class="flex aspect-square w-full flex-col items-center justify-center gap-1 rounded-md bg-muted text-muted-fg uppercase">
-										<FileText aria-hidden="true" className="size-6" />
-										{item.contentType?.split("/")[1] ?? "file"}
-									</span>
-								)}
-								<span class="truncate px-1 pb-1 font-medium text-fg">{item.label}</span>
-							</a>
-						</li>
-					);
-				})}
-			</ul>
-		)
-	}
+	{media.length === 0 ? (
+		<p class="mt-8 text-sm text-muted-fg">No files uploaded yet.</p>
+	) : (
+		<ul class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5" role="list">
+			{media.map((item) => {
+				return (
+					<li>
+						<a
+							href={`/admin/media/${item.id}`}
+							class="flex flex-col gap-2 rounded-lg border border-border bg-card p-2 text-xs shadow-xs transition hover:border-input hover:bg-muted"
+						>
+							{item.thumbnailUrl != null ? (
+								<img
+									src={item.thumbnailUrl}
+									alt=""
+									loading="lazy"
+									class="aspect-square w-full rounded-md bg-muted object-contain"
+								/>
+							) : (
+								<span class="flex aspect-square w-full flex-col items-center justify-center gap-1 rounded-md bg-muted text-muted-fg uppercase">
+									<FileText aria-hidden="true" className="size-6" />
+									{item.contentType?.split("/")[1] ?? "file"}
+								</span>
+							)}
+							<span class="truncate px-1 pb-1 font-medium text-fg">{item.label}</span>
+						</a>
+					</li>
+				);
+			})}
+		</ul>
+	)}
 </AdminLayout>

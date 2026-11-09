@@ -4,5 +4,5 @@
 	"logo": "logo-university-of-freiburg",
 	"url": "https://uni-freiburg.de",
 	"linkedin": "https://www.linkedin.com/school/albert-ludwigs-universitaet-freiburg/",
-	"country": "DE"
+	"countries": ["DE"]
 }

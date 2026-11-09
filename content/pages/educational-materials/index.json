@@ -8,12 +8,7 @@
 				"anchor": "courses",
 				"title": "Courses",
 				"covers": true,
-				"cards": [
-					{
-						"title": "Placeholder course",
-						"text": "Placeholder for a course - content still to come."
-					}
-				]
+				"cards": []
 			}
 		},
 		{
@@ -22,12 +17,7 @@
 				"anchor": "tutorials",
 				"title": "Tutorials",
 				"covers": true,
-				"cards": [
-					{
-						"title": "Placeholder tutorial",
-						"text": "Placeholder for a tutorial - content still to come."
-					}
-				]
+				"cards": []
 			}
 		},
 		{
@@ -36,12 +26,7 @@
 				"anchor": "documentation",
 				"title": "Documentation",
 				"covers": true,
-				"cards": [
-					{
-						"title": "Placeholder document",
-						"text": "Placeholder for a document - content still to come."
-					}
-				]
+				"cards": []
 			}
 		}
 	]

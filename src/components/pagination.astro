@@ -14,41 +14,39 @@ const linkClass =
 	"inline-flex size-10 items-center justify-center border border-border-strong font-mono text-sm font-medium text-foreground-strong transition-colors hover:bg-background-hover";
 ---
 
-{
-	pageCount > 1 && (
-		<nav aria-label="Pagination" class="mt-12 flex">
-			<ul class="flex flex-wrap items-center gap-1" role="list">
-				{page > 1 && (
+{pageCount > 1 && (
+	<nav aria-label="Pagination" class="mt-12 flex">
+		<ul class="flex flex-wrap items-center gap-1" role="list">
+			{page > 1 && (
+				<li>
+					<a href={getHref(page - 1)} rel="prev" class={linkClass}>
+						<span aria-hidden="true">&larr;</span>
+						<span class="sr-only">Previous page</span>
+					</a>
+				</li>
+			)}
+			{pages.map((number) => {
+				return (
 					<li>
-						<a href={getHref(page - 1)} rel="prev" class={linkClass}>
-							<span aria-hidden="true">&larr;</span>
-							<span class="sr-only">Previous page</span>
+						<a
+							href={getHref(number)}
+							aria-current={number === page ? "page" : undefined}
+							class:list={[linkClass, "aria-[current=page]:bg-foreground-strong aria-[current=page]:text-background"]}
+						>
+							<span class="sr-only">Page </span>
+							{number}
 						</a>
 					</li>
-				)}
-				{pages.map((number) => {
-					return (
-						<li>
-							<a
-								href={getHref(number)}
-								aria-current={number === page ? "page" : undefined}
-								class:list={[linkClass, "aria-[current=page]:bg-foreground-strong aria-[current=page]:text-background"]}
-							>
-								<span class="sr-only">Page </span>
-								{number}
-							</a>
-						</li>
-					);
-				})}
-				{page < pageCount && (
-					<li>
-						<a href={getHref(page + 1)} rel="next" class={linkClass}>
-							<span aria-hidden="true">&rarr;</span>
-							<span class="sr-only">Next page</span>
-						</a>
-					</li>
-				)}
-			</ul>
-		</nav>
-	)
-}
+				);
+			})}
+			{page < pageCount && (
+				<li>
+					<a href={getHref(page + 1)} rel="next" class={linkClass}>
+						<span aria-hidden="true">&rarr;</span>
+						<span class="sr-only">Next page</span>
+					</a>
+				</li>
+			)}
+		</ul>
+	</nav>
+)}

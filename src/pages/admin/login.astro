@@ -1,7 +1,7 @@
 ---
-import { getAuth, getSafeReturnTo } from "#/src/cms/auth.ts";
 import { LogIn } from "lucide-react";
 
+import { getAuth, getSafeReturnTo } from "#/src/cms/auth.ts";
 import { buttonStyles } from "#/src/components/admin/ui/button.tsx";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "#/src/components/admin/ui/card.tsx";
 import { Note } from "#/src/components/admin/ui/note.tsx";
@@ -32,13 +32,11 @@ const href = `/api/cms/auth/login?returnTo=${encodeURIComponent(returnTo)}`;
 			<CardDescription>Edit the website's content, and manage its media.</CardDescription>
 		</CardHeader>
 		<CardContent className="flex flex-col gap-4">
-			{
-				error != null && (
-					<Note intent="danger" role="alert">
-						{error}
-					</Note>
-				)
-			}
+			{error != null && (
+				<Note intent="danger" role="alert">
+					{error}
+				</Note>
+			)}
 			<a href={href} class={buttonStyles({ className: "w-full" })}>
 				<LogIn aria-hidden="true" />
 				Sign in with {provider.label}

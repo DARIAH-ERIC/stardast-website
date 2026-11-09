@@ -1,6 +1,7 @@
 import { defineConfig } from "oxfmt";
 
 const config = defineConfig({
+	astro: true,
 	jsdoc: true,
 	printWidth: 120,
 	sortImports: {

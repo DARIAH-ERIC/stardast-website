@@ -21,43 +21,22 @@ const cellClass = (index: number) => (index === 0 ? "px-4 py-2 text-start" : "px
 	<table aria-labelledby={labelledBy} class="w-full text-sm/6">
 		<thead class="border-b border-border bg-muted/50 text-muted-fg">
 			<tr>
-				{
-					columns.map((column, index) => {
-						return (
-							<th scope="col" class:list={[cellClass(index), "font-medium"]}>
-								{column}
-							</th>
-						);
-					})
-				}
+				{columns.map((column, index) => {
+					return (
+						<th scope="col" class:list={[cellClass(index), "font-medium"]}>
+							{column}
+						</th>
+					);
+				})}
 			</tr>
 		</thead>
 		<tbody class="divide-y divide-border">
-			{
-				rows.map((row) => {
-					return (
-						<tr>
-							{row.map((cell, index) =>
-								index === 0 ? (
-									<th scope="row" class:list={[cellClass(index), "font-normal text-fg"]}>
-										{cell}
-									</th>
-								) : (
-									<td class={cellClass(index)}>{cell}</td>
-								),
-							)}
-						</tr>
-					);
-				})
-			}
-		</tbody>
-		{
-			footer != null && (
-				<tfoot class="border-t border-border font-medium text-fg">
+			{rows.map((row) => {
+				return (
 					<tr>
-						{footer.map((cell, index) =>
+						{row.map((cell, index) =>
 							index === 0 ? (
-								<th scope="row" class={cellClass(index)}>
+								<th scope="row" class:list={[cellClass(index), "font-normal text-fg"]}>
 									{cell}
 								</th>
 							) : (
@@ -65,8 +44,23 @@ const cellClass = (index: number) => (index === 0 ? "px-4 py-2 text-start" : "px
 							),
 						)}
 					</tr>
-				</tfoot>
-			)
-		}
+				);
+			})}
+		</tbody>
+		{footer != null && (
+			<tfoot class="border-t border-border font-medium text-fg">
+				<tr>
+					{footer.map((cell, index) =>
+						index === 0 ? (
+							<th scope="row" class={cellClass(index)}>
+								{cell}
+							</th>
+						) : (
+							<td class={cellClass(index)}>{cell}</td>
+						),
+					)}
+				</tr>
+			</tfoot>
+		)}
 	</table>
 </Card>

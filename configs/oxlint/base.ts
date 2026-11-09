@@ -644,7 +644,7 @@ const config = defineConfig({
 			},
 		},
 		{
-			files: ["astro.config.ts", "env.config.ts", "env.files.ts", "playwright.config.ts"],
+			files: ["astro.config.ts", "env.config.ts", "env.files.ts", "nvda.config.ts", "playwright.config.ts"],
 			rules: {
 				"node/no-process-env": "off",
 			},

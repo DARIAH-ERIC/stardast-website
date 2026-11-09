@@ -53,6 +53,18 @@ function refPath(ref: Ref, endpoint: "ref" | "refs"): string {
 }
 
 /**
+ * Github documents 409 and 422 for failed ref writes, but not which status - or message - it answers with when the ref
+ * is not where the write expected it, and which when it refuses the write, e.g. because of branch protection, or a
+ * ruleset. After such a failure, the ref is therefore read again: only a ref which has moved is a conflict, and a
+ * refused write is thrown.
+ *
+ * @see {@link https://docs.github.com/en/rest/git/refs}
+ */
+function isRefWriteFailure(error: unknown): error is GitHubApiError {
+	return GitHubApiError.is(error) && (error.status === 409 || error.status === 422);
+}
+
+/**
  * Reads content via the git data api, by revision: a revision's tree is fetched once, with all file paths and blob
  * shas, and blobs are cached by sha. A new revision therefore only costs one tree request, plus one request per changed
  * file - which keeps well within rate limits even when every page of the site is re-rendered.
@@ -136,6 +148,15 @@ export function createGitHubStorage(params: {
 
 	function setRevision(ref: Ref, revision: Revision): void {
 		refs.set(ref, { state: Promise.resolve({ revision }), expiresAt: now() + knownRefTtl });
+	}
+
+	/** Reads a ref past the cache, which is dropped - e.g. after a failed write. */
+	async function fetchRevision(ref: Ref): Promise<Revision | undefined> {
+		refs.delete(ref);
+
+		const response = await client.request<GitRefResponse>({ path: refPath(ref, "ref") });
+
+		return response?.object.sha;
 	}
 
 	return {
@@ -296,10 +317,8 @@ export function createGitHubStorage(params: {
 					throw new Error(`Ref "${ref}" does not exist.`);
 				}
 			} catch (error) {
-				/** 422 "Update is not a fast forward": the ref has moved on since `expectedRevision`. */
-				if (GitHubApiError.is(error) && error.status === 422) {
-					refs.delete(ref);
-
+				/** E.g. "Update is not a fast forward": the ref has moved on since `expectedRevision`, or was deleted. */
+				if (isRefWriteFailure(error) && (await fetchRevision(ref)) !== expectedRevision) {
 					return Result.err(
 						new ConflictError({
 							message: `Ref "${ref}" has changed since revision "${expectedRevision}".`,
@@ -335,10 +354,8 @@ export function createGitHubStorage(params: {
 			try {
 				await client.request({ method: "POST", path: "/git/refs", body: { ref: `refs/heads/${ref}`, sha: revision } });
 			} catch (error) {
-				/** 422 "Reference already exists". */
-				if (GitHubApiError.is(error) && error.status === 422) {
-					refs.delete(ref);
-
+				/** E.g. "Reference already exists". */
+				if (isRefWriteFailure(error) && (await fetchRevision(ref)) !== undefined) {
 					return Result.err(
 						new ConflictError({ message: `Ref "${ref}" already exists.`, ref, expectedRevision: revision }),
 					);
@@ -356,8 +373,8 @@ export function createGitHubStorage(params: {
 			try {
 				await client.request({ method: "DELETE", path: refPath(ref, "refs") });
 			} catch (error) {
-				/** 422 "Reference does not exist". */
-				if (!GitHubApiError.is(error) || error.status !== 422) {
+				/** E.g. "Reference does not exist". */
+				if (!isRefWriteFailure(error) || (await fetchRevision(ref)) !== undefined) {
 					throw error;
 				}
 			}

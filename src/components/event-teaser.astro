@@ -21,7 +21,12 @@ const location = formatEventLocation(data);
 <article class="relative flex flex-col gap-1.5 py-5">
 	<Heading class="order-2 text-title text-balance text-foreground-strong">
 		{/* Stretched over the whole row, so that its text stays selectable rather than being a link label. */}
-		<a href={`/events/${id}`} class="after:absolute after:inset-0 hover:text-primary-hover hover:underline underline-offset-4">{data.title}</a>
+		<a
+			href={`/events/${id}`}
+			class="after:absolute after:inset-0 hover:text-primary-hover hover:underline underline-offset-4"
+		>
+			{data.title}
+		</a>
 	</Heading>
 	{/* Shown above the title, but read after it. */}
 	<p class="order-1 mono-label text-foreground-muted">

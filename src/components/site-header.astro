@@ -1,4 +1,5 @@
 ---
+import logo from "#/src/assets/images/logo-stardast-eosc-horizontal-color-black.svg";
 import Icon from "#/src/components/icon.astro";
 
 const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
@@ -36,113 +37,109 @@ const menuId = "mobile-navigation";
 ---
 
 <header class="relative z-10 border-b border-border-strong bg-background">
-	<div class="content-container flex h-18 items-center justify-between gap-8">
+	<div class="content-container flex h-18 items-center justify-between gap-4 sm:gap-8">
 		<a href="/" class="shrink-0">
 			<img
-				src="/assets/images/logo-stardast-horizontal-black.svg"
-				alt="STARDAST - Home"
-				width="584"
-				height="137"
-				class="h-8 w-auto"
+				src={logo.src}
+				alt="STARDAST, EOSC - Home"
+				width={logo.width}
+				height={logo.height}
+				class="logo-backing h-5.5 w-auto sm:h-7"
 			/>
 		</a>
 
 		{/* One landmark for both the inline links and the mobile menu, so the menu button is found in it too. */}
-		<nav aria-label="Main" class="flex items-center gap-x-2 lg:gap-x-4">
-			{
-				/*
-				 * Menus follow the disclosure navigation pattern of the aria authoring practices guide - buttons which show and
-				 * hide a list of links - rather than the aria `menu` pattern, which is meant for application menus. See the
-				 * script below.
-				 *
-				 * Menus are positioned absolutely, and the script aligns them with the end of their button when they would
-				 * overflow the viewport. Css anchor positioning does the same with `position-try-fallbacks: flip-inline`, but
-				 * only natively from chrome 128, firefox 147, and safari / ios 26 - below that, the polyfill re-parses all
-				 * site css at runtime, and does not cover chrome 125 - 127. Once `browserslist` targets those versions, prefer
-				 * popover and anchor positioning, and drop the measuring from the script.
-				 */
-			}
-			<ul data-disclosure-navigation class="hidden items-center gap-x-1 lg:flex" role="list">
-				{
-					entries.map((entry) => {
-						if (entry.type === "link") {
-							return (
-								<li>
-									<a
-										href={entry.href}
-										aria-current={entry.isCurrent ? "page" : undefined}
-										class:list={[
-											"block px-2.5 py-2 mono-label transition-colors",
-											entry.isCurrent
-												? "bg-foreground-strong text-background"
-												: "text-foreground-strong hover:bg-background-hover",
-										]}
-									>
-										{entry.label}
-									</a>
-								</li>
-							);
-						}
-
+		<nav aria-label="Main" class="flex items-center gap-x-2 nav:gap-x-4">
+			{/*
+			 * Menus follow the disclosure navigation pattern of the aria authoring practices guide - buttons which show and
+			 * hide a list of links - rather than the aria `menu` pattern, which is meant for application menus. See the
+			 * script below.
+			 *
+			 * Menus are positioned absolutely, and the script aligns them with the end of their button when they would
+			 * overflow the viewport. Css anchor positioning does the same with `position-try-fallbacks: flip-inline`, but
+			 * only natively from chrome 128, firefox 147, and safari / ios 26 - below that, the polyfill re-parses all
+			 * site css at runtime, and does not cover chrome 125 - 127. Once `browserslist` targets those versions, prefer
+			 * popover and anchor positioning, and drop the measuring from the script.
+			 */}
+			<ul data-disclosure-navigation class="hidden items-center gap-x-1 nav:flex" role="list">
+				{entries.map((entry) => {
+					if (entry.type === "link") {
 						return (
-							<li class="relative">
-								<button
-									type="button"
-									aria-expanded="false"
-									aria-controls={entry.id}
+							<li>
+								<a
+									href={entry.href}
+									aria-current={entry.isCurrent ? "page" : undefined}
 									class:list={[
-										"group inline-flex items-center gap-1 px-2.5 py-2 mono-label transition-colors",
+										"block px-2.5 py-2 mono-label transition-colors",
 										entry.isCurrent
-											? "bg-foreground-strong text-background"
-											: "text-foreground-strong hover:bg-background-hover aria-expanded:bg-background-hover",
+											? "bg-accent text-accent-foreground"
+											: "text-foreground-strong hover:bg-background-hover",
 									]}
 								>
 									{entry.label}
-									<svg
-										aria-hidden="true"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-										class="size-3.5 transition-transform group-aria-expanded:rotate-180"
-									>
-										<path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
-									</svg>
-								</button>
-								<ul
-									id={entry.id}
-									hidden
-									class="absolute top-full left-0 mt-px flex min-w-64 flex-col border border-border-strong bg-background data-[align=end]:right-0 data-[align=end]:left-auto"
-									role="list"
-								>
-									{entry.links.map((link) => {
-										return (
-											<li>
-												<a
-													href={link.href}
-													aria-current={link.isCurrent ? "page" : undefined}
-													class:list={[
-														"block border-b border-border px-4 py-3 text-sm font-medium text-foreground-strong last:border-b-0 hover:bg-background-hover",
-														link.isCurrent && "bg-background-hover",
-													]}
-												>
-													{link.label}
-												</a>
-											</li>
-										);
-									})}
-								</ul>
+								</a>
 							</li>
 						);
-					})
-				}
+					}
+
+					return (
+						<li class="relative">
+							<button
+								type="button"
+								aria-expanded="false"
+								aria-controls={entry.id}
+								class:list={[
+									"group inline-flex items-center gap-1 px-2.5 py-2 mono-label transition-colors",
+									entry.isCurrent
+										? "bg-accent text-accent-foreground"
+										: "text-foreground-strong hover:bg-background-hover aria-expanded:bg-background-hover",
+								]}
+							>
+								{entry.label}
+								<svg
+									aria-hidden="true"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									class="size-3.5 transition-transform group-aria-expanded:rotate-180"
+								>
+									<path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+								</svg>
+							</button>
+							<ul
+								id={entry.id}
+								hidden
+								class="absolute top-full left-0 mt-px flex min-w-64 flex-col border border-border-strong bg-background data-[align=end]:right-0 data-[align=end]:left-auto"
+								role="list"
+							>
+								{entry.links.map((link) => {
+									return (
+										<li>
+											<a
+												href={link.href}
+												aria-current={link.isCurrent ? "page" : undefined}
+												class:list={[
+													"block border-b border-border px-4 py-3 text-sm font-medium text-foreground-strong last:border-b-0 hover:bg-background-hover",
+													link.isCurrent && "bg-background-hover",
+												]}
+											>
+												{link.label}
+											</a>
+										</li>
+									);
+								})}
+							</ul>
+						</li>
+					);
+				})}
 			</ul>
 
 			{/* Between the inline links and the menu button, so that it comes last on wide screens, and first on narrow ones. */}
 			<a
 				href="/search"
 				aria-current={pathname === "/search" ? "page" : undefined}
-				class="inline-flex size-11 items-center justify-center border border-foreground-strong text-foreground-strong transition-colors hover:bg-foreground-strong hover:text-background aria-[current=page]:bg-foreground-strong aria-[current=page]:text-background"
+				class="inline-flex size-11 items-center justify-center border border-foreground-strong text-foreground-strong transition-colors hover:bg-foreground-strong hover:text-background aria-[current=page]:border-accent aria-[current=page]:bg-accent aria-[current=page]:text-accent-foreground"
 			>
 				<Icon name="search" class="size-5" />
 				<span class="sr-only">Search</span>
@@ -152,7 +149,7 @@ const menuId = "mobile-navigation";
 				type="button"
 				commandfor={menuId}
 				command="show-modal"
-				class="-me-2 inline-flex size-11 items-center justify-center text-foreground-strong hover:bg-background-hover lg:hidden"
+				class="-me-2 inline-flex size-11 items-center justify-center text-foreground-strong hover:bg-background-hover nav:hidden"
 			>
 				<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-6">
 					<path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -160,27 +157,26 @@ const menuId = "mobile-navigation";
 				<span class="sr-only">Open menu</span>
 			</button>
 
-			{
-				/*
-				 * Modal, so focus stays inside and the page behind is inert while it is open. No `display` utility on the
-				 * dialog itself - it would override the UA rule that hides it while closed. Not hidden at `lg` either: a
-				 * dialog left open while resizing would otherwise keep the page inert behind an invisible modal.
-				 */
-			}
+			{/*
+			 * Modal, so focus stays inside and the page behind is inert while it is open. No `display` utility on the
+			 * dialog itself - it would override the UA rule that hides it while closed. Not hidden at `nav` either: a
+			 * dialog left open while resizing would otherwise keep the page inert behind an invisible modal.
+			 */}
 			<dialog
 				id={menuId}
+				data-navigation-dialog
 				aria-label="Main menu"
 				closedby="any"
 				class="inset-x-0 top-0 bottom-auto m-0 max-h-dvh w-full max-w-none overflow-y-auto border-0 border-b border-border-strong bg-background p-0 text-foreground-strong backdrop:bg-backdrop"
 			>
-				<div class="content-container flex h-18 items-center justify-between gap-8 border-b border-border-strong">
+				<div class="content-container flex h-18 items-center justify-between gap-4 border-b border-border-strong sm:gap-8">
 					<a href="/" class="shrink-0">
 						<img
-							src="/assets/images/logo-stardast-horizontal-black.svg"
-							alt="STARDAST - Home"
-							width="584"
-							height="137"
-							class="h-8 w-auto"
+							src={logo.src}
+							alt="STARDAST, EOSC - Home"
+							width={logo.width}
+							height={logo.height}
+							class="logo-backing h-5.5 w-auto sm:h-7"
 						/>
 					</a>
 					<button
@@ -206,54 +202,52 @@ const menuId = "mobile-navigation";
 
 				{/* Menus are always expanded here, as labelled groups of links - the dialog has room for all of them. */}
 				<ul class="content-container flex flex-col pt-2 pb-6" role="list">
-					{
-						entries.map((entry) => {
-							if (entry.type === "link") {
-								return (
-									<li>
-										<a
-											href={entry.href}
-											aria-current={entry.isCurrent ? "page" : undefined}
-											class:list={[
-												"block border-b border-border py-3 text-base font-medium hover:text-primary-hover",
-												entry.isCurrent ? "text-primary" : "text-foreground-strong",
-											]}
-										>
-											{entry.label}
-										</a>
-									</li>
-								);
-							}
-
-							const labelId = `${entry.id}-mobile-label`;
-
+					{entries.map((entry) => {
+						if (entry.type === "link") {
 							return (
-								<li class="border-b border-border py-3">
-									<span id={labelId} class="mono-label text-foreground-muted">
+								<li>
+									<a
+										href={entry.href}
+										aria-current={entry.isCurrent ? "page" : undefined}
+										class:list={[
+											"block border-b border-border py-3 text-base font-medium hover:text-primary-hover",
+											entry.isCurrent ? "text-primary" : "text-foreground-strong",
+										]}
+									>
 										{entry.label}
-									</span>
-									<ul aria-labelledby={labelId} class="mt-1 flex flex-col" role="list">
-										{entry.links.map((link) => {
-											return (
-												<li>
-													<a
-														href={link.href}
-														aria-current={link.isCurrent ? "page" : undefined}
-														class:list={[
-															"block py-2 ps-4 text-base font-medium hover:text-primary-hover",
-															link.isCurrent ? "text-primary" : "text-foreground-strong",
-														]}
-													>
-														{link.label}
-													</a>
-												</li>
-											);
-										})}
-									</ul>
+									</a>
 								</li>
 							);
-						})
-					}
+						}
+
+						const labelId = `${entry.id}-mobile-label`;
+
+						return (
+							<li class="border-b border-border py-3">
+								<span id={labelId} class="mono-label text-foreground-muted">
+									{entry.label}
+								</span>
+								<ul aria-labelledby={labelId} class="mt-1 flex flex-col" role="list">
+									{entry.links.map((link) => {
+										return (
+											<li>
+												<a
+													href={link.href}
+													aria-current={link.isCurrent ? "page" : undefined}
+													class:list={[
+														"block py-2 ps-4 text-base font-medium hover:text-primary-hover",
+														link.isCurrent ? "text-primary" : "text-foreground-strong",
+													]}
+												>
+													{link.label}
+												</a>
+											</li>
+										);
+									})}
+								</ul>
+							</li>
+						);
+					})}
 				</ul>
 			</dialog>
 		</nav>
@@ -283,6 +277,13 @@ const menuId = "mobile-navigation";
 			});
 		}
 	}
+
+	/** Pages restored from the back/forward cache keep their state, so the menu dialog would still be open. */
+	window.addEventListener("pagehide", () => {
+		for (const dialog of document.querySelectorAll<HTMLDialogElement>("dialog[data-navigation-dialog]")) {
+			dialog.close();
+		}
+	});
 
 	/**
 	 * Disclosure navigation, see https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/.
@@ -422,6 +423,14 @@ const menuId = "mobile-navigation";
 			if (!navigation.contains(event.target as Node)) {
 				closeAll();
 			}
+		});
+
+		/**
+		 * Pages restored from the back/forward cache keep their state, so a menu whose link was followed would still be
+		 * open.
+		 */
+		window.addEventListener("pagehide", () => {
+			closeAll();
 		});
 	}
 </script>

@@ -13,7 +13,11 @@ export interface Props {
 	sizes?: string | ((image: { width?: number; height?: number }) => string);
 	widths?: ReadonlyArray<number>;
 	loading?: "eager" | "lazy";
+	/** E.g. `high` for an image which is likely the largest contentful paint. */
+	fetchpriority?: "auto" | "high" | "low";
 	class?: string;
+	/** A function of the image's size, e.g. for images which are sized by their aspect ratio. */
+	style?: (image: { width?: number; height?: number }) => string;
 }
 
 const {
@@ -22,7 +26,9 @@ const {
 	sizes = "100vw",
 	widths = [320, 640, 960, 1280, 1920],
 	loading = "lazy",
+	fetchpriority,
 	class: className,
+	style,
 } = Astro.props;
 
 /** Tags the page, so that e.g. editing the alternative text in the media library updates it. */
@@ -30,18 +36,18 @@ const entry = await Astro.locals.content.entry("media", id);
 const data = entry?.data;
 ---
 
-{
-	data != null && data.contentType.startsWith("image/") && (
-		<img
-			src={getImageUrl(id, data, { width: 960 })}
-			srcset={getImageSrcSet(id, data, widths)}
-			sizes={typeof sizes === "function" ? sizes(data) : sizes}
-			alt={alt ?? data.alt}
-			width={data.width}
-			height={data.height}
-			loading={loading}
-			decoding="async"
-			class={className}
-		/>
-	)
-}
+{data != null && data.contentType.startsWith("image/") && (
+	<img
+		src={getImageUrl(id, data, { width: 960 })}
+		srcset={getImageSrcSet(id, data, widths)}
+		sizes={typeof sizes === "function" ? sizes(data) : sizes}
+		alt={alt ?? data.alt}
+		width={data.width}
+		height={data.height}
+		loading={loading}
+		fetchpriority={fetchpriority}
+		decoding="async"
+		class={className}
+		style={style?.(data)}
+	/>
+)}

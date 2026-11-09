@@ -41,22 +41,20 @@ const hasBreadcrumbs = parents.length > 0;
 			hasBreadcrumbs ? (
 				<nav aria-label="Breadcrumb">
 					<ol class="flex flex-wrap items-center gap-x-2 gap-y-1 mono-label" role="list">
-						{
-							breadcrumbs.map((breadcrumb) => {
-								return (
-									<li class="flex items-center gap-x-2 text-foreground-muted">
-										{breadcrumb.href != null ? (
-											<a href={breadcrumb.href} class="hover:text-foreground-strong hover:underline underline-offset-4">
-												{breadcrumb.label}
-											</a>
-										) : (
-											breadcrumb.label
-										)}
-										<span aria-hidden="true">/</span>
-									</li>
-								);
-							})
-						}
+						{breadcrumbs.map((breadcrumb) => {
+							return (
+								<li class="flex items-center gap-x-2 text-foreground-muted">
+									{breadcrumb.href != null ? (
+										<a href={breadcrumb.href} class="hover:text-foreground-strong hover:underline underline-offset-4">
+											{breadcrumb.label}
+										</a>
+									) : (
+										breadcrumb.label
+									)}
+									<span aria-hidden="true">/</span>
+								</li>
+							);
+						})}
 						<li>
 							<span aria-current="page" class="text-foreground-strong">
 								{title}
@@ -70,22 +68,20 @@ const hasBreadcrumbs = parents.length > 0;
 		}
 		<h1 class="max-w-[20ch] text-display text-foreground-strong">{heading ?? title}</h1>
 		{intro != null && <p class="max-w-[38rem] text-lead">{intro}</p>}
-		{
-			sectionLinks.length > 0 && (
-				<nav aria-label="On this page" class="mt-2">
-					<ul class="flex flex-wrap gap-x-6 gap-y-2" role="list">
-						{sectionLinks.map((link) => {
-							return (
-								<li>
-									<a href={link.href} class="mono-label text-foreground-strong hover:underline underline-offset-4">
-										{link.label} <span aria-hidden="true">&darr;</span>
-									</a>
-								</li>
-							);
-						})}
-					</ul>
-				</nav>
-			)
-		}
+		{sectionLinks.length > 0 && (
+			<nav aria-label="On this page" class="mt-2">
+				<ul class="flex flex-wrap gap-x-6 gap-y-2" role="list">
+					{sectionLinks.map((link) => {
+						return (
+							<li>
+								<a href={link.href} class="mono-label text-foreground-strong hover:underline underline-offset-4">
+									{link.label} <span aria-hidden="true">&darr;</span>
+								</a>
+							</li>
+						);
+					})}
+				</ul>
+			</nav>
+		)}
 	</div>
 </header>
