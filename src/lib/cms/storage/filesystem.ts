@@ -1,4 +1,4 @@
-import { mkdir, rm } from "node:fs/promises";
+import { mkdir, rm, stat } from "node:fs/promises";
 import * as path from "node:path";
 
 import { Result } from "better-result";
@@ -54,7 +54,8 @@ async function listDirectory(directory: string): Promise<Array<string>> {
  * the current files, commits never conflict, and are applied change by change, so they are not atomic either.
  *
  * Other refs than `main` - e.g. drafts - are overlays in `.cms/refs/<ref>/`: they hold only the entries changed on that
- * ref, and read everything else from the working tree. Deleting entries on them is not supported.
+ * ref, and read everything else from the working tree. Deleting on them only works for paths which are not in the
+ * working tree - an overlay cannot hide what is there.
  */
 export function createFilesystemStorage(params: { root: string }): ContentStorage {
 	const root = path.resolve(params.root);
@@ -154,8 +155,12 @@ export function createFilesystemStorage(params: { root: string }): ContentStorag
 					}
 
 					case "delete": {
-						if (ref !== publishedRef) {
-							throw new Error("The filesystem storage does not support deleting entries on other refs than main.");
+						if (
+							ref !== publishedRef &&
+							// oxlint-disable-next-line no-await-in-loop
+							(await stat(resolveWithin(root, change.path)).catch(() => undefined)) != null
+						) {
+							throw new Error("The filesystem storage does not support deleting entries of main on other refs.");
 						}
 
 						// oxlint-disable-next-line no-await-in-loop

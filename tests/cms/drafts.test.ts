@@ -9,8 +9,9 @@ import { collection, defineConfig, fields } from "#/src/lib/cms/schema/index.ts"
 import { createFilesystemStorage } from "#/src/lib/cms/storage/filesystem.ts";
 import { createGitHubClient, createStaticTokenProvider } from "#/src/lib/cms/storage/github/client.ts";
 import { createGitHubStorage } from "#/src/lib/cms/storage/github/storage.ts";
-import { EntryConflictError, EntryExistsError } from "#/src/lib/cms/writer.ts";
+import { EntryConflictError, EntryExistsError, EntryNotFoundError } from "#/src/lib/cms/writer.ts";
 import { createFakeGitHub } from "#/tests/cms/github/fake-github.ts";
+import { getRejection } from "#/tests/helpers.ts";
 
 const config = defineConfig({
 	collections: {
@@ -181,6 +182,52 @@ describe("drafts", () => {
 		expect(github.ref(draftOfA)).toBeUndefined();
 	});
 
+	test("review requests are kept in the draft, while it is saved again, until withdrawn", async () => {
+		const { github, drafts } = setup();
+		const now = new Date("2026-10-19T12:00:00Z");
+		const published = (await drafts.load(a)).published.revision;
+		const draft = (await drafts.save({ target: a, data: { title: "A2" }, revision: published, author })).unwrap();
+
+		const requested = (await drafts.requestReview({ target: a, revision: draft.revision, author, now })).unwrap();
+
+		const reviewRequest = { requestedBy: author, requestedAt: "2026-10-19T12:00:00.000Z" };
+		expect(github.commit(requested)).toMatchObject({ message: 'content: request-review news "A2"', author });
+		expect((await drafts.load(a)).draft).toEqual({ revision: requested, data: { title: "A2" }, reviewRequest });
+		expect(github.file("main", ".cms/review/index.json")).toBeUndefined();
+
+		const saved = (await drafts.save({ target: a, data: { title: "A3" }, revision: requested, author })).unwrap();
+		expect(await drafts.getReviewRequest(saved.revision)).toEqual(reviewRequest);
+
+		const withdrawn = (await drafts.withdrawReview({ target: a, revision: saved.revision, author })).unwrap();
+		expect(await drafts.getReviewRequest(withdrawn)).toBeUndefined();
+		expect((await drafts.load(a)).draft?.data).toEqual({ title: "A3" });
+
+		/** Withdrawing again changes nothing. */
+		expect((await drafts.withdrawReview({ target: a, revision: withdrawn, author })).unwrap()).toBe(withdrawn);
+		expect(github.ref(draftOfA)).toBe(withdrawn);
+	});
+
+	test("review requests need an unchanged draft, and go away with it when published", async () => {
+		const { github, drafts, file } = setup();
+		const published = (await drafts.load(a)).published.revision;
+
+		const missing = await drafts.requestReview({ target: a, revision: published, author });
+		expect(missing.isErr() && EntryNotFoundError.is(missing.error)).toBe(true);
+
+		const first = (await drafts.save({ target: a, data: { title: "A2" }, revision: published, author })).unwrap();
+		const second = (await drafts.save({ target: a, data: { title: "A3" }, revision: first.revision, author })).unwrap();
+
+		const stale = await drafts.requestReview({ target: a, revision: first.revision, author });
+		expect(stale.isErr() && EntryConflictError.is(stale.error)).toBe(true);
+
+		const requested = (await drafts.requestReview({ target: a, revision: second.revision, author })).unwrap();
+		expect((await drafts.publish({ target: a, data: { title: "A3" }, revision: requested, author })).isOk()).toBe(true);
+
+		expect(github.ref(draftOfA)).toBeUndefined();
+		expect(file("main", "a")).toEqual({ title: "A3" });
+		expect(github.file("main", ".cms/review/index.json")).toBeUndefined();
+	});
+
 	test("removing deletes the published entry and its draft, or just a draft", async () => {
 		const { github, drafts, file } = setup();
 		const published = (await drafts.load(a)).published.revision;
@@ -268,5 +315,35 @@ describe("drafts with filesystem storage", () => {
 		expect((await drafts.discard({ target: b, revision: newDraft.revision })).isOk()).toBe(true);
 		expect(await drafts.list()).toEqual([]);
 		expect(await Bun.file(path.join(root, "content/news/b/index.json")).exists()).toBe(false);
+	});
+
+	test("requests, and withdraws, reviews", async () => {
+		root = await mkdtemp(path.join(tmpdir(), "cms-drafts-"));
+		await Bun.write(path.join(root, "content/news/a/index.json"), JSON.stringify({ title: "A" }));
+
+		const storage = createFilesystemStorage({ root });
+		const drafts = createDrafts({ config, storage });
+
+		const published = (await drafts.load(a)).published.revision;
+		const draft = (await drafts.save({ target: a, data: { title: "A2" }, revision: published, author })).unwrap();
+
+		const requested = (await drafts.requestReview({ target: a, revision: draft.revision, author })).unwrap();
+		expect((await drafts.getReviewRequest(requested))?.requestedBy).toEqual(author);
+
+		const withdrawn = (await drafts.withdrawReview({ target: a, revision: requested, author })).unwrap();
+		expect(await drafts.getReviewRequest(withdrawn)).toBeUndefined();
+		expect((await drafts.load(a)).draft?.data).toEqual({ title: "A2" });
+
+		/** Entries of main still cannot be deleted on a draft. */
+		const rejection = await getRejection(
+			storage.commit({
+				ref: getDraftRef(a),
+				expectedRevision: withdrawn,
+				changes: [{ type: "delete", path: "content/news/a" }],
+				message: "Delete a",
+				author,
+			}),
+		);
+		expect(String(rejection)).toContain("does not support deleting entries of main");
 	});
 });

@@ -90,6 +90,8 @@ const RevisionBodySchema = v.object({ revision: RevisionSchema });
 export function createEntryRoutes(getTarget: (params: APIContext["params"]) => EntryTarget): {
 	saveDraft: APIRoute;
 	discardDraft: APIRoute;
+	requestReview: APIRoute;
+	withdrawReview: APIRoute;
 	publish: APIRoute;
 	remove: APIRoute;
 } {
@@ -122,6 +124,39 @@ export function createEntryRoutes(getTarget: (params: APIContext["params"]) => E
 			const result = await drafts.discard({ target: getTarget(context.params), revision: body.data.revision });
 
 			return result.isOk() ? Response.json({}) : toErrorResponse(result.error);
+		}),
+
+		/** Anyone may ask for a review, e.g. contributors, who cannot publish themselves. */
+		requestReview: handleRateLimits(async (context) => {
+			const body = await parseBody(context.request, RevisionBodySchema);
+
+			if ("response" in body) {
+				return body.response;
+			}
+
+			const result = await drafts.requestReview({
+				target: getTarget(context.params),
+				revision: body.data.revision,
+				author: getAuthor(context.locals.session),
+			});
+
+			return result.isOk() ? Response.json({ revision: result.value }) : toErrorResponse(result.error);
+		}),
+
+		withdrawReview: handleRateLimits(async (context) => {
+			const body = await parseBody(context.request, RevisionBodySchema);
+
+			if ("response" in body) {
+				return body.response;
+			}
+
+			const result = await drafts.withdrawReview({
+				target: getTarget(context.params),
+				revision: body.data.revision,
+				author: getAuthor(context.locals.session),
+			});
+
+			return result.isOk() ? Response.json({ revision: result.value }) : toErrorResponse(result.error);
 		}),
 
 		publish: handleRateLimits(async (context) => {
