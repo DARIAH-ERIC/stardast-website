@@ -1,7 +1,7 @@
 import type { APIContext, APIRoute } from "astro";
 import * as v from "valibot";
 
-import type { Session } from "#/src/cms/auth.ts";
+import { type Session, canPublish } from "#/src/cms/auth.ts";
 import { config, mediaCollectionName } from "#/src/cms/config.ts";
 import { getMedia } from "#/src/cms/media.ts";
 import { refreshSearchIndex } from "#/src/cms/search.ts";
@@ -21,6 +21,11 @@ export function getAuthor(session: Session | undefined): Author {
 	}
 
 	return { name: session.identity.name, email: session.identity.email };
+}
+
+/** For contributors, who may not publish - the admin ui does not offer it to them either. */
+function forbidden(): Response {
+	return Response.json({ message: "Only editors can publish, or delete published entries." }, { status: 403 });
 }
 
 /** Parses a json request body, or returns a 400 response. */
@@ -120,6 +125,10 @@ export function createEntryRoutes(getTarget: (params: APIContext["params"]) => E
 		}),
 
 		publish: handleRateLimits(async (context) => {
+			if (!canPublish(context.locals.session)) {
+				return forbidden();
+			}
+
 			const body = await parseBody(context.request, DataBodySchema);
 
 			if ("response" in body) {
@@ -143,6 +152,10 @@ export function createEntryRoutes(getTarget: (params: APIContext["params"]) => E
 		}),
 
 		remove: handleRateLimits(async (context) => {
+			if (!canPublish(context.locals.session)) {
+				return forbidden();
+			}
+
 			const body = await parseBody(context.request, RevisionBodySchema);
 
 			if ("response" in body) {

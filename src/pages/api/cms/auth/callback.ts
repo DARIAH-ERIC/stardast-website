@@ -28,13 +28,11 @@ export const GET: APIRoute = async (context) => {
 			redirectUri: new URL(callbackPath, context.site ?? context.url).href,
 		});
 
-		const role = await authorizer.authorize(identity);
-
-		if (role == null) {
+		if ((await authorizer.authorize(identity)) == null) {
 			return fail(context, "forbidden");
 		}
 
-		await setSession(context, { identity, role });
+		await setSession(context, { identity });
 
 		return context.redirect(saved.returnTo);
 	} catch (error) {

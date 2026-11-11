@@ -6,12 +6,13 @@ import { githubClient } from "#/src/cms/server.ts";
 import {
 	createAllowAllAuthorizer,
 	createAllowlistAuthorizer,
+	createCachedAuthorizer,
 	createGitHubRepositoryAuthorizer,
 } from "#/src/lib/cms/auth/authorizers.ts";
 import { createDevelopmentAuthProvider } from "#/src/lib/cms/auth/providers/development.ts";
 import { createGitHubAuthProvider } from "#/src/lib/cms/auth/providers/github.ts";
 import { type SealedCodec, createRandomToken, createSealedCodec } from "#/src/lib/cms/auth/sealed.ts";
-import type { AuthProvider, Authorizer } from "#/src/lib/cms/auth/types.ts";
+import type { AuthProvider, Authorizer, Role } from "#/src/lib/cms/auth/types.ts";
 import { type UploadToken, UploadTokenSchema } from "#/src/lib/cms/media/service.ts";
 
 const IdentitySchema = v.object({
@@ -23,9 +24,22 @@ const IdentitySchema = v.object({
 	avatarUrl: v.optional(v.string()),
 });
 
-const SessionSchema = v.object({ identity: IdentitySchema, role: v.literal("editor") });
+/**
+ * Only who signed in - what they may do is decided on every request, see `Authorizer`. Cookies from before roles also
+ * hold a `role`, which is ignored.
+ */
+const SessionCookieSchema = v.object({ identity: IdentitySchema });
 
-export type Session = v.InferOutput<typeof SessionSchema>;
+type SessionCookie = v.InferOutput<typeof SessionCookieSchema>;
+
+export interface Session extends SessionCookie {
+	role: Role;
+}
+
+/** Publishing - and deleting published entries - changes the website, which contributors may not. */
+export function canPublish(session: Session | undefined): boolean {
+	return session?.role === "editor";
+}
 
 const OAuthStateSchema = v.object({ state: v.string(), codeVerifier: v.string(), returnTo: v.string() });
 
@@ -43,7 +57,7 @@ export const callbackPath = "/api/cms/auth/callback";
 interface Auth {
 	provider: AuthProvider;
 	authorizer: Authorizer;
-	sessions: SealedCodec<Session>;
+	sessions: SealedCodec<SessionCookie>;
 	oauthStates: SealedCodec<OAuthState>;
 	/** For uploads through the server, see `MediaService`. */
 	uploadTokens: SealedCodec<UploadToken>;
@@ -69,7 +83,7 @@ function createAuth(): Auth {
 		throw new Error("The admin ui requires CMS_SESSION_SECRET.");
 	}
 
-	const sessions = createSealedCodec({ secret, purpose: "session", schema: SessionSchema });
+	const sessions = createSealedCodec({ secret, purpose: "session", schema: SessionCookieSchema });
 	const oauthStates = createSealedCodec({ secret, purpose: "oauth-state", schema: OAuthStateSchema });
 	const uploadTokens = createSealedCodec({ secret, purpose: "upload", schema: UploadTokenSchema });
 
@@ -94,12 +108,15 @@ function createAuth(): Auth {
 
 	let authorizer: Authorizer;
 
-	if (env.CMS_ADMIN_USERS != null) {
-		authorizer = createAllowlistAuthorizer(env.CMS_ADMIN_USERS);
+	if (env.CMS_ADMIN_USERS != null || env.CMS_CONTRIBUTOR_USERS != null) {
+		authorizer = createAllowlistAuthorizer({ editors: env.CMS_ADMIN_USERS, contributors: env.CMS_CONTRIBUTOR_USERS });
 	} else if (githubClient != null) {
-		authorizer = createGitHubRepositoryAuthorizer(githubClient);
+		/** Asked on every request, so cached - a changed role on github takes effect within minutes. */
+		authorizer = createCachedAuthorizer(createGitHubRepositoryAuthorizer(githubClient), { ttl: 5 * 60 * 1000 });
 	} else {
-		throw new Error("Signing in with GitHub requires either CMS_ADMIN_USERS, or `github` storage.");
+		throw new Error(
+			"Signing in with GitHub requires either CMS_ADMIN_USERS or CMS_CONTRIBUTOR_USERS, or `github` storage.",
+		);
 	}
 
 	return { provider, authorizer, sessions, oauthStates, uploadTokens };
@@ -119,13 +136,28 @@ function getCookieOptions(context: Pick<APIContext, "site">, maxAge: number, pat
 	return { httpOnly: true, maxAge, path, sameSite: "lax", secure: context.site?.protocol === "https:" };
 }
 
-export async function getSession(context: Pick<APIContext, "cookies">): Promise<Session | undefined> {
+/** The signed-in user, with their current role. Signs out users who have lost access since they signed in. */
+export async function getSession(context: Pick<APIContext, "cookies" | "site">): Promise<Session | undefined> {
 	const value = context.cookies.get(sessionCookie)?.value;
+	const { sessions, authorizer } = getAuth();
+	const cookie = value != null ? await sessions.unseal(value) : undefined;
 
-	return value != null ? getAuth().sessions.unseal(value) : undefined;
+	if (cookie == null) {
+		return undefined;
+	}
+
+	const role = await authorizer.authorize(cookie.identity);
+
+	if (role == null) {
+		clearSession(context);
+
+		return undefined;
+	}
+
+	return { ...cookie, role };
 }
 
-export async function setSession(context: Pick<APIContext, "cookies" | "site">, session: Session): Promise<void> {
+export async function setSession(context: Pick<APIContext, "cookies" | "site">, session: SessionCookie): Promise<void> {
 	const value = await getAuth().sessions.seal(session, { maxAge: sessionMaxAge });
 
 	context.cookies.set(sessionCookie, value, getCookieOptions(context, sessionMaxAge));

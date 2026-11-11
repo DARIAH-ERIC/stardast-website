@@ -3,6 +3,7 @@ import * as v from "valibot";
 
 import { getCollection, loadReferenceOptions } from "#/src/cms/admin.ts";
 import { drafts } from "#/src/cms/api.ts";
+import { canPublish } from "#/src/cms/auth.ts";
 import { mediaCollectionName } from "#/src/cms/config.ts";
 import { EntryEditor } from "#/src/components/admin/entry-editor.tsx";
 import AdminLayout from "#/src/layouts/admin-layout.astro";
@@ -38,6 +39,7 @@ const referenceOptions = await loadReferenceOptions(collection.fields, published
 		initialData={draft?.data ?? published.data}
 		hasDraft={draft != null}
 		isPublished={published.data !== undefined}
+		canPublish={canPublish(Astro.locals.session)}
 		referenceOptions={referenceOptions}
 	/>
 </AdminLayout>

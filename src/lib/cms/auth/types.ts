@@ -9,7 +9,8 @@ export interface Identity {
 	avatarUrl?: string;
 }
 
-export type Role = "editor";
+/** Contributors save and discard drafts, and upload media. Editors also publish, and delete published entries. */
+export type Role = "contributor" | "editor";
 
 /**
  * Signs users in via a redirect flow, e.g. oauth: the user is redirected to `createAuthorizationUrl()`, and returns to
@@ -23,7 +24,10 @@ export interface AuthProvider {
 	handleCallback: (params: { url: URL; codeVerifier: string; redirectUri: string }) => Promise<Identity>;
 }
 
-/** Decides what a signed-in user may do, separately from how they signed in. `null` denies access. */
+/**
+ * Decides what a signed-in user may do, separately from how they signed in. `null` denies access. Asked on every
+ * request, not only at sign-in, so that a changed role - or revoked access - takes effect without signing out.
+ */
 export interface Authorizer {
 	authorize: (identity: Identity) => Promise<Role | null>;
 }
