@@ -4,7 +4,9 @@
 	"publicationDate": "2026-11-27",
 	"category": "blog",
 	"image": "screenshot-2026-11-27-at-16-10-51-csmg9o",
-	"authors": [],
+	"authors": [
+		"isabela-paredes-cisneros"
+	],
 	"content": {
 		"type": "doc",
 		"content": [
@@ -293,7 +295,23 @@
 				"content": [
 					{
 						"type": "text",
-						"text": "The consortium left Heidelberg with a clear plan and, just as importantly, a group of people looking forward to working together. Follow our progress by subscribing to the mailing list and make sure you are following us on LinkedIn!"
+						"text": "The consortium left Heidelberg with a clear plan and, just as importantly, a group of people looking forward to working together. Follow our progress by subscribing to the mailing list and make sure you are following us on "
+					},
+					{
+						"type": "text",
+						"text": "LinkedIn",
+						"marks": [
+							{
+								"type": "link",
+								"attrs": {
+									"href": "https://www.linkedin.com/company/stardast-stewardship-and-recognition-for-data-science-talent/?viewAsMember=true"
+								}
+							}
+						]
+					},
+					{
+						"type": "text",
+						"text": "!"
 					}
 				]
 			},
