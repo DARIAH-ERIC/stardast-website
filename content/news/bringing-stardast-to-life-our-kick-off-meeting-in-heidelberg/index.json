@@ -1,0 +1,307 @@
+{
+	"title": "Bringing STARDAST to life: our kick-off meeting in Heidelberg",
+	"summary": "STARDAST, a four-year Horizon Europe project that started in September 2026, sets out to change that. It will help train, recognise and retain data stewards across disciplines and sectors.",
+	"publicationDate": "2026-11-27",
+	"category": "blog",
+	"authors": [],
+	"content": {
+		"type": "doc",
+		"content": [
+			{
+				"type": "paragraph",
+				"content": [
+					{
+						"type": "text",
+						"text": "Data stewards make research data findable, reusable and trustworthy. Yet the role is often invisible, defined differently from one institution to the next, and missing a clear career path. STARDAST, a four-year Horizon Europe project that started in September 2026, sets out to change that. It will help train, recognise and retain data stewards across disciplines and sectors."
+					}
+				]
+			},
+			{
+				"type": "paragraph",
+				"content": [
+					{
+						"type": "text",
+						"text": "On 29-30 September, around 40 people from all 21 partner organisations met at EMBL Heidelberg, most in person and some online, to launch the project."
+					}
+				]
+			},
+			{
+				"type": "figure",
+				"attrs": {
+					"image": "screenshot-2026-11-27-at-15-56-22-9y7j46"
+				}
+			},
+			{
+				"type": "paragraph",
+				"content": [
+					{
+						"type": "text",
+						"text": "Meeting the people behind the project",
+						"marks": [
+							{
+								"type": "bold"
+							}
+						]
+					}
+				]
+			},
+			{
+				"type": "paragraph",
+				"content": [
+					{
+						"type": "text",
+						"text": "Looking around the room at a STARDAST meeting you will find imaging facilities next to digital humanities repositories, and pharmaceutical companies next to particle physics. These communities share many of the same data stewardship challenges but rarely sit at the same table. For most of us, the kick-off was the first meeting with many of the people we will work with for the next four years. Jan Korbel, STARDAST coordinator, interim Head of EMBL Heidelberg and co-chair of EMBL’s Data Science Centre, welcomed everyone. A round of short introductions then put a face to every partner organisation. Building a community of data stewards across Europe starts with getting to know one another."
+					}
+				]
+			},
+			{
+				"type": "figure",
+				"attrs": {
+					"image": "1-5pfjsx"
+				}
+			},
+			{
+				"type": "paragraph",
+				"content": [
+					{
+						"type": "text",
+						"text": "How we will work together",
+						"marks": [
+							{
+								"type": "bold"
+							}
+						]
+					}
+				]
+			},
+			{
+				"type": "paragraph",
+				"content": [
+					{
+						"type": "text",
+						"text": "Much of the two days went on the practicalities of collaboration. Work package leads presented their plans, and we discussed how the six work packages connect:"
+					}
+				]
+			},
+			{
+				"type": "bulletList",
+				"content": [
+					{
+						"type": "listItem",
+						"content": [
+							{
+								"type": "paragraph",
+								"content": [
+									{
+										"type": "text",
+										"text": "WP1 - Data stewardship landscape (led by UCAM): ",
+										"marks": [
+											{
+												"type": "bold"
+											}
+										]
+									},
+									{
+										"type": "text",
+										"text": "WP1 maps how data stewardship roles, skills and hiring practices currently look across our institutions and sectors. Over the first year, this will lead to a shared competence framework, practical guidance for hiring and onboarding data stewards, and a framework for recognising their work."
+									}
+								]
+							}
+						]
+					},
+					{
+						"type": "listItem",
+						"content": [
+							{
+								"type": "paragraph",
+								"content": [
+									{
+										"type": "text",
+										"text": "WP2 - Open Science, FAIR practices and infrastructure (led by MU):",
+										"marks": [
+											{
+												"type": "bold"
+											}
+										]
+									},
+									{
+										"type": "text",
+										"text": " From mid-2027, data stewards at partner institutions will pilot FAIR and Open Science tools in their everyday work. They will test what works across domains and how EOSC services fit real practice."
+									}
+								]
+							}
+						]
+					},
+					{
+						"type": "listItem",
+						"content": [
+							{
+								"type": "paragraph",
+								"content": [
+									{
+										"type": "text",
+										"text": "WP3 - Upskilling and community building (led by Euro-BioImaging Bio-Hub):",
+										"marks": [
+											{
+												"type": "bold"
+											}
+										]
+									},
+									{
+										"type": "text",
+										"text": " From mid-2027, WP3 will build a peer-learning network for data stewards, with mentoring, communities of practice and Train-the-Trainer programmes that help stewards develop their skills and pass them on."
+									}
+								]
+							}
+						]
+					},
+					{
+						"type": "listItem",
+						"content": [
+							{
+								"type": "paragraph",
+								"content": [
+									{
+										"type": "text",
+										"text": "WP4 - Knowledge dissemination (led by CERN):",
+										"marks": [
+											{
+												"type": "bold"
+											}
+										]
+									},
+									{
+										"type": "text",
+										"text": " In the second half of the project, WP4 will take data stewardship knowledge beyond the consortium. It will adapt training for researchers at all career stages and develop outreach for industry and the public."
+									}
+								]
+							}
+						]
+					},
+					{
+						"type": "listItem",
+						"content": [
+							{
+								"type": "paragraph",
+								"content": [
+									{
+										"type": "text",
+										"text": "WP5 - Curriculum consolidation and sustainability (led by UFR):",
+										"marks": [
+											{
+												"type": "bold"
+											}
+										]
+									},
+									{
+										"type": "text",
+										"text": " In the final phase, WP5 will bring the project’s training into a modular, openly available curriculum and work with institutions and policymakers so that STARDAST’s results last beyond the project."
+									}
+								]
+							}
+						]
+					},
+					{
+						"type": "listItem",
+						"content": [
+							{
+								"type": "paragraph",
+								"content": [
+									{
+										"type": "text",
+										"text": "WP6 - Project management and cascading grants (led by EMBL):",
+										"marks": [
+											{
+												"type": "bold"
+											}
+										]
+									},
+									{
+										"type": "text",
+										"text": " WP6 keeps STARDAST running smoothly and connected, handling governance, reporting, events and data management. Over the coming year, we will design the cascading grants scheme with Euro-BioImaging and, with DARIAH, plan how to reach data stewards, institutions and policymakers beyond the consortium. Throughout, we will make sure STARDAST’s outputs are easy to find, access and reuse."
+									}
+								]
+							}
+						]
+					}
+				]
+			},
+			{
+				"type": "paragraph",
+				"content": [
+					{
+						"type": "text",
+						"text": "We also agreed what each of the project’s three committees (Quality and Ethics, Sustainability and Policy, and Education) will be responsible for and selected their members. Another session looked at how STARDAST will engage beyond the consortium, including with EOSC and related initiatives."
+					}
+				]
+			},
+			{
+				"type": "figure",
+				"attrs": {
+					"image": "2-y5loky"
+				}
+			},
+			{
+				"type": "paragraph",
+				"content": [
+					{
+						"type": "text",
+						"text": "Funding exchanges beyond the consortium",
+						"marks": [
+							{
+								"type": "bold"
+							}
+						]
+					}
+				]
+			},
+			{
+				"type": "paragraph",
+				"content": [
+					{
+						"type": "text",
+						"text": "STARDAST will fund staff exchanges, secondments, co-development projects and mentoring for data stewards and related professionals outside the consortium. There will be at least two open calls, with part of the funding reserved for underrepresented regions and less-structured stewardship communities. At the meeting, partners discussed the first ideas for the scheme. Details will be announced here and through our mailing list."
+					}
+				]
+			},
+			{
+				"type": "paragraph",
+				"content": [
+					{
+						"type": "text",
+						"text": "What comes next",
+						"marks": [
+							{
+								"type": "bold"
+							}
+						]
+					}
+				]
+			},
+			{
+				"type": "paragraph",
+				"content": [
+					{
+						"type": "text",
+						"text": "The first months focus on WP1, which maps how data stewardship roles, skills and hiring practices currently look across our institutions. This baseline will shape the training, piloting and policy work that follows. In parallel, we are preparing our Data Management Plan and our Dissemination, Exploitation and Communication Plan, both due in early 2027."
+					}
+				]
+			},
+			{
+				"type": "paragraph",
+				"content": [
+					{
+						"type": "text",
+						"text": "The consortium left Heidelberg with a clear plan and, just as importantly, a group of people looking forward to working together. Follow our progress by subscribing to the mailing list and make sure you are following us on LinkedIn!"
+					}
+				]
+			},
+			{
+				"type": "paragraph"
+			},
+			{
+				"type": "paragraph"
+			}
+		]
+	}
+}
